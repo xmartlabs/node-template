@@ -1,0 +1,25 @@
+{
+  "name": "node-template",
+  "version": "1.0.0",
+  "description": "Base template for starting a new Node project",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lauta2912/node-template.git"
+  },
+  "keywords": [
+    "node",
+    "template",
+    "express",
+    "prisma"
+  ],
+  "author": "Lautaro Cardozo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lauta2912/node-template/issues"
+  },
+  "homepage": "https://github.com/lauta2912/node-template#readme"
+}
