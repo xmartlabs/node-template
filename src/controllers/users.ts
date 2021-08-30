@@ -31,7 +31,7 @@ export const update = (req : Request, res : Response) => {
 };
 
 export const destroy = (req : Request, res : Response) => {
-  const removedUser = User.destroy(req.params.id)
+  const removedUser = User.destroy(req.params.id);
 
   if (removedUser) {
     res.send(removedUser);

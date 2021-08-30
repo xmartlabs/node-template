@@ -50,25 +50,25 @@ export class User {
     users[users.length] = newUser;
 
     return newUser;
-  }
+  };
 
   static update = (id : string, userData : any) : any => {
     const indexToUpdate = users.findIndex(
-      (u : any) => String(u.id) === id
+      (u : any) => String(u.id) === id,
     );
 
     if (indexToUpdate < 0) {
       return null;
     }
-  
+
     users[indexToUpdate] = userData;
 
     return userData;
-  }
+  };
 
   static destroy = (id : string) : any => {
     const indexToDelete = users.findIndex(
-      (u : any) => String(u.id) === id
+      (u : any) => String(u.id) === id,
     );
 
     if (indexToDelete < 0) {
@@ -76,5 +76,5 @@ export class User {
     }
 
     return users.splice(indexToDelete, 1);
-  }
+  };
 }
