@@ -1,16 +1,16 @@
 import { Router } from 'express';
 
-import { Users } from '../controllers';
+import { UsersController } from '../controllers';
 
 const usersRouter = Router();
 
 usersRouter.route('/')
-  .get(Users.index)
-  .post(Users.create);
+  .get(UsersController.index)
+  .post(UsersController.create);
 
 usersRouter.route('/:id')
-  .get(Users.show)
-  .put(Users.update)
-  .delete(Users.destroy);
+  .get(UsersController.show)
+  .put(UsersController.update)
+  .delete(UsersController.destroy);
 
 export { usersRouter };
