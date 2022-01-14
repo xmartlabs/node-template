@@ -1,22 +1,48 @@
 import { Request, Response } from 'express';
 
+import { DatabaseError } from '../errors';
+
 import { User } from '../models';
 
-export const index = (_req : Request, res : Response) => {
-  res.send(User.all());
+export const index = async (_req : Request, res : Response) => {
+  try {
+    const allUsers = await User.all();
+    res.send(allUsers);
+  } catch (e) {
+    if (e instanceof DatabaseError) {
+      console.log(e.details);
+    }
+  }
 };
 
-export const create = (req : Request, res : Response) => {
-  res.send(User.create(req.body));
+export const create = async (req : Request, res : Response) => {
+  try {
+    res.send(await User.create(req.body));
+  } catch (e) {
+    if (e instanceof DatabaseError) {
+      console.log(e.details);
+    }
+  }
 };
 
-export const show = (req : Request, res : Response) => {
-  const user = User.find(req.params.id);
+export const show = async (req : Request, res : Response) => {
+  try {
+    const userId = Number(req.params.id);
+    if (Number.isNaN(userId)) {
+      // TODO: build proper error
+    }
 
-  if (user) {
-    res.send(user);
-  } else {
-    res.status(404).send();
+    const user = await User.find(userId);
+
+    if (user) {
+      res.send(user);
+    } else {
+      res.status(404).send();
+    }
+  } catch (e) {
+    if (e instanceof DatabaseError) {
+      console.log(e.details);
+    }
   }
 };
 
