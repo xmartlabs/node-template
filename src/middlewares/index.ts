@@ -3,6 +3,8 @@ import helmet from 'helmet';
 import compression from 'compression';
 import cors from 'cors';
 import globalLimiter from './rateLimiter';
+import morgan from '../config/morgan';
+import Config from '../config/config';
 
 export const applyMiddleware = (app: Application) => {
   // Set security HTTP headers
@@ -22,4 +24,9 @@ export const applyMiddleware = (app: Application) => {
 
   // Limit requests from same IP
   app.use(globalLimiter);
+
+  // Load Morgan handlers
+  app.use(morgan.successHandler);
+  app.use(morgan.errorHandler);
+  app.use(morgan.debugHandler);
 };

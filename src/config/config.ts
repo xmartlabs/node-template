@@ -1,4 +1,9 @@
 import joi from 'joi';
+import dotenv from 'dotenv';
+import * as path from 'path';
+
+// https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+dotenv.config({ path: path.join(__dirname, '../../.env') });
 
 const DEFAULT_PORT = 8080;
 const DEFAULT_LOG_LEVEL = 'info';
@@ -24,6 +29,6 @@ interface Config {
 
 export default {
   env: envVars.NODE_ENV || 'development',
-  logLevel: envVars.ACCESS_LOG_LEVEL,
+  logLevel: envVars.LOG_LEVEL,
   port: envVars.PORT,
 } as Config;
