@@ -1,4 +1,5 @@
 import express from 'express';
+import config from './config/config';
 import { applyMiddleware } from './middlewares';
 
 import routes from './routes';
@@ -10,5 +11,5 @@ applyMiddleware(app);
 app.use('/', routes);
 
 app.listen(port, () => {
-  console.log(`Server started at http://localhost:${port}`);
+  console.log(`Server started at ${config.baseUrl}:${port}`);
 });

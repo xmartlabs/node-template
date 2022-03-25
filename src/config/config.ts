@@ -13,6 +13,7 @@ const envVarsSchema = joi.object()
     NODE_ENV: joi.string().valid('production', 'development', 'test').required(),
     PORT: joi.number().default(DEFAULT_PORT),
     LOG_LEVEL: joi.string().valid('error', 'warn', 'info', 'verbose', 'debug', 'silly').default(DEFAULT_LOG_LEVEL).description('Server log level'),
+    BASE_URL: joi.string().uri().default('http://localhost:8080'),
   })
   .unknown();
 
@@ -25,4 +26,5 @@ export default {
   env: envVars.NODE_ENV || 'development',
   logLevel: envVars.LOG_LEVEL,
   port: envVars.PORT,
+  baseUrl: envVars.BASE_URL,
 } as Config;
