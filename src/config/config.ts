@@ -1,7 +1,7 @@
 import joi from 'joi';
 import dotenv from 'dotenv';
 import * as path from 'path';
-
+import { Config } from '../types';
 // https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
@@ -19,12 +19,6 @@ const envVarsSchema = joi.object()
 const { value: envVars, error } = envVarsSchema.prefs({ errors: { label: 'key' } }).validate(process.env);
 if (error) {
   throw new Error(`Config validation error: ${error.message}`);
-}
-
-interface Config {
-  env: string
-  logLevel: string
-  port: number
 }
 
 export default {
