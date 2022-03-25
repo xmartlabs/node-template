@@ -7,8 +7,8 @@ import routes from './routes';
 const app = express();
 const port = 8080;
 
-applyMiddleware(app);
 app.use('/', routes);
+applyMiddleware(app);
 
 app.listen(port, () => {
   console.log(`Server started at ${config.baseUrl}:${port}`);

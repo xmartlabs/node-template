@@ -4,7 +4,7 @@ import compression from 'compression';
 import cors from 'cors';
 import globalLimiter from './rateLimiter';
 import morgan from '../config/morgan';
-import Config from '../config/config';
+import { errorConverter, errorHandler } from './error';
 
 export const applyMiddleware = (app: Application) => {
   // Set security HTTP headers
@@ -29,4 +29,8 @@ export const applyMiddleware = (app: Application) => {
   app.use(morgan.successHandler);
   app.use(morgan.errorHandler);
   app.use(morgan.debugHandler);
+
+  // Error handling
+  app.use(errorConverter);
+  app.use(errorHandler);
 };
