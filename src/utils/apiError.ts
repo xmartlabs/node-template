@@ -1,8 +1,8 @@
-export default class ApiError extends Error {
+export class ApiError extends Error {
   statusCode;
-  // Used to check if ApiError is called intentonally
 
   isOperational;
+  // Used to check if ApiError is called intentonally
 
   additionalInfo;
 

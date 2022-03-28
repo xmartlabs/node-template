@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 
 import { User } from '../models';
-import ApiError from '../utils/apiError';
+import { ApiError } from '../utils/apiError';
 
 export const index = (_req : Request, res : Response) => {
   res.send(User.all());

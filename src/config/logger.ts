@@ -1,5 +1,5 @@
 import { createLogger, format, transports } from 'winston';
-import Config from './config';
+import { config } from './config';
 
 const {
   colorize, combine, metadata, timestamp, printf,
@@ -22,7 +22,7 @@ const changeLevelToUpperCase = format((info: any) => {
 });
 
 export const appLogger = createLogger({
-  level: Config.logLevel,
+  level: config.logLevel,
   exitOnError: false,
   format: combine(
     changeLevelToUpperCase(),
@@ -37,11 +37,10 @@ export const appLogger = createLogger({
   ],
 });
 
-export default appLogger;
 export class AccessLogStream {
   logger = appLogger;
 
   public write(message: string) {
-    this.logger.log(Config.logLevel, message);
+    this.logger.log(config.logLevel, message);
   }
 }

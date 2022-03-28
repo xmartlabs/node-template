@@ -2,8 +2,8 @@ import express, { Application } from 'express';
 import helmet from 'helmet';
 import compression from 'compression';
 import cors from 'cors';
-import globalLimiter from './rateLimiter';
-import morgan from '../config/morgan';
+import { globalLimiter } from './rateLimiter';
+import { morganHandlers } from '../config/morgan';
 import { errorConverter, errorHandler } from './error';
 
 export const applyMiddleware = (app: Application) => {
@@ -26,9 +26,9 @@ export const applyMiddleware = (app: Application) => {
   app.use(globalLimiter);
 
   // Load Morgan handlers
-  app.use(morgan.successHandler);
-  app.use(morgan.errorHandler);
-  app.use(morgan.debugHandler);
+  app.use(morganHandlers.successHandler);
+  app.use(morganHandlers.errorHandler);
+  app.use(morganHandlers.debugHandler);
 
   // Error handling
   app.use(errorConverter);

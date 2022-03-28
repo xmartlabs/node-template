@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
-import ApiError from '../utils/apiError';
-import config from '../config/config';
+import { ApiError } from '../utils/apiError';
+import { isDevelopment } from '../config/config';
 import { appLogger } from '../config/logger';
 
 export const errorConverter = (err: any, req: Request, res: Response, next: NextFunction) => {
   let error = err;
   if (!(error instanceof ApiError)) {
     const statusCode = error.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
-    const message = error.message || statusCode;
+    const message = error.message || 'Unexpected error';
     error = new ApiError(statusCode, message, false, null, err.stack);
   }
   next(error);
@@ -28,10 +28,10 @@ export const errorHandler = (err: ApiError, req: Request, res: Response, next: N
     code: statusCode,
     message,
     additionalInfo: err.additionalInfo,
-    ...(config.env === 'development' && { stack: err.stack }),
+    ...(isDevelopment && { stack: err.stack }),
   };
 
-  if (config.env === 'development') {
+  if (isDevelopment) {
     appLogger.error(err);
   }
 

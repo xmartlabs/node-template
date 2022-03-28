@@ -22,9 +22,11 @@ if (error) {
   throw new Error(`Config validation error: ${error.message}`);
 }
 
-export default {
+export const isDevelopment = envVars.NODE_ENV === 'development';
+
+export const config: Config = {
   env: envVars.NODE_ENV,
   logLevel: envVars.LOG_LEVEL,
   port: envVars.PORT,
   baseUrl: envVars.BASE_URL,
-} as Config;
+};

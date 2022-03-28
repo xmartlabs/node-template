@@ -1,8 +1,8 @@
 import express from 'express';
-import config from './config/config';
+import { config } from './config/config';
 import { applyMiddleware } from './middlewares';
 
-import routes from './routes';
+import { routes } from './routes';
 
 const app = express();
 const port = 8080;
