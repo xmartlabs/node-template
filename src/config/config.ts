@@ -14,6 +14,7 @@ const envVarsSchema = joi.object()
     PORT: joi.number().default(DEFAULT_PORT),
     LOG_LEVEL: joi.string().valid('error', 'warn', 'info', 'verbose', 'debug', 'silly').default(DEFAULT_LOG_LEVEL).description('Server log level'),
     BASE_URL: joi.string().uri(),
+    DATABASE_URL: joi.string().required(),
   })
   .unknown();
 

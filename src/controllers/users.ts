@@ -1,40 +1,31 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
+import { wrapper } from '../middlewares';
+import { UserService } from '../services';
 
-import { User } from '../models';
-import { ApiError } from '../utils/apiError';
+export const UsersController = {
+  index: wrapper(async (req : Request, res : Response) => {
+    const users = await UserService.all();
+    res.status(httpStatus.OK).send(users);
+  }),
 
-export const index = (_req : Request, res : Response) => {
-  res.send(User.all());
-};
+  create: wrapper(async (req : Request, res : Response) => {
+    const user = await UserService.create(req.body);
+    res.status(httpStatus.CREATED).send(user);
+  }),
 
-export const create = (req : Request, res : Response) => {
-  res.send(User.create(req.body));
-};
+  find: wrapper(async (req : Request, res : Response) => {
+    const user = await UserService.find(req.params.id);
+    res.status(httpStatus.OK).send(user);
+  }),
 
-export const show = (req : Request, res : Response) => {
-  const user = User.find(req.params.id);
+  update: wrapper(async (req : Request, res : Response) => {
+    const user = await UserService.update(req.params.id, req.body);
+    res.status(httpStatus.OK).send(user);
+  }),
 
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
-  res.send(user);
-};
-
-export const update = (req : Request, res : Response) => {
-  const updatedUser = User.update(req.params.id, req.body);
-
-  if (!updatedUser) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
-  res.send(updatedUser);
-};
-
-export const destroy = (req : Request, res : Response) => {
-  const removedUser = User.destroy(req.params.id);
-
-  if (!removedUser) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
-  res.send(removedUser);
+  destroy: wrapper(async (req : Request, res : Response) => {
+    await UserService.destroy(req.params.id);
+    res.status(httpStatus.NO_CONTENT).send();
+  }),
 };

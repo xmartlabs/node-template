@@ -9,7 +9,7 @@ usersRouter.route('/')
   .post(UsersController.create);
 
 usersRouter.route('/:id')
-  .get(UsersController.show)
+  .get(UsersController.find)
   .put(UsersController.update)
   .delete(UsersController.destroy);
 
