@@ -7,12 +7,12 @@ import { ReturnUser } from '../types';
 import { sendUserWithoutPassword } from '../utils/user';
 
 export class UserService {
-  static find = async (id : string) : Promise<User | null> => {
+  static find = async (id : string) : Promise<ReturnUser | null> => {
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) {
       throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
     }
-    return user;
+    return sendUserWithoutPassword(user);
   };
 
   static all = async () : Promise<User[]> => {
