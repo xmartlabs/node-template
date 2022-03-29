@@ -30,6 +30,7 @@ export const preRoutesMiddleware = (app: Application) => {
   app.use(morganHandlers.successHandler);
   app.use(morganHandlers.errorHandler);
   app.use(morganHandlers.debugHandler);
+};
 
 // Middleware separated to use our error handler when a route is not found
 export const postRoutesMiddleware = (app: Application) => {

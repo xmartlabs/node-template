@@ -2,7 +2,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
 import httpStatus from 'http-status';
 import prisma from '../../prisma/client';
-import ApiError from '../utils/apiError';
+import { ApiError } from '../utils/apiError';
 import { ReturnUser } from '../types';
 import { sendUserWithoutPassword } from '../utils/user';
 
