@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import httpStatus from 'http-status';
 import prisma from '../../prisma/client';
 import { ApiError } from '../utils/apiError';
@@ -16,15 +16,12 @@ export class UserService {
     return sendUserWithoutPassword(user);
   };
 
-  static all = async () : Promise<User[]> => {
-    const users = await prisma.user.findMany();
-    return users;
-  };
+  static all = () : Promise<User[]> => (prisma.user.findMany());
 
   static create = async (userBody : User) : Promise<ReturnUser> => {
     const { name, email, password } = userBody;
 
-    let user: User | null;
+    let user: User | null = null;
 
     // Required fields
     if (!(email && password)) {
@@ -36,12 +33,6 @@ export class UserService {
       throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid email');
     }
 
-    // Check if the email is taken
-    user = await prisma.user.findUnique({ where: { email } });
-    if (user) {
-      throw new ApiError(httpStatus.CONFLICT, 'A user with that email already exists');
-    }
-
     // Data transformation before calling the prisma service
     const cryptPassword = await bcrypt.hash(userBody.password, 8);
 
@@ -51,8 +42,17 @@ export class UserService {
       password: cryptPassword,
     };
 
-    user = await prisma.user.create({ data });
-
+    try {
+      user = await prisma.user.create({ data });
+    } catch (e) {
+      // https://www.prisma.io/docs/reference/api-reference/error-reference#p2002
+      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
+        throw new ApiError(httpStatus.CONFLICT, 'A user with that email already exists');
+      }
+    }
+    if (!user) {
+      throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Something went wrong');
+    }
     return sendUserWithoutPassword(user);
   };
 
