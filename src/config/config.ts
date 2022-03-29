@@ -23,6 +23,8 @@ if (error) {
 }
 
 export const isDevelopment = envVars.NODE_ENV === 'development';
+export const isTest = envVars.NODE_ENV === 'test';
+export const isProduction = envVars.NODE_ENV === 'production';
 
 export const config: Config = {
   env: envVars.NODE_ENV,
