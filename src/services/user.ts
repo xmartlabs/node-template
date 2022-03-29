@@ -5,6 +5,7 @@ import prisma from '../../prisma/client';
 import { ApiError } from '../utils/apiError';
 import { ReturnUser } from '../types';
 import { sendUserWithoutPassword } from '../utils/user';
+import { emailRegex } from '../utils/constants';
 
 export class UserService {
   static find = async (id : string) : Promise<ReturnUser | null> => {
@@ -31,7 +32,7 @@ export class UserService {
     }
 
     // Check if email is valid (from email-validator library)
-    if (!/^[-!#$%&'*+/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/.test(email)) {
+    if (!emailRegex.test(email)) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid email');
     }
 
