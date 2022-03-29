@@ -23,7 +23,7 @@ if (error) {
 }
 
 export default {
-  env: envVars.NODE_ENV || 'development',
+  env: envVars.NODE_ENV,
   logLevel: envVars.LOG_LEVEL,
   port: envVars.PORT,
   baseUrl: envVars.BASE_URL,
