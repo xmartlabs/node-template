@@ -1,14 +1,15 @@
 import express from 'express';
+import config from './config/config';
+import { applyMiddleware } from './middlewares';
 
-import { usersRouter } from './routes';
+import routes from './routes';
 
 const app = express();
 const port = 8080;
 
-app.use(express.json());
-
-app.use('/users', usersRouter);
+applyMiddleware(app);
+app.use('/', routes);
 
 app.listen(port, () => {
-  console.log(`server started at http://localhost:${port}`);
+  console.log(`Server started at ${config.baseUrl}:${port}`);
 });

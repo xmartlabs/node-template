@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import httpStatus from 'http-status';
 
 import { User } from '../models';
 
@@ -16,7 +17,7 @@ export const show = (req : Request, res : Response) => {
   if (user) {
     res.send(user);
   } else {
-    res.status(404).send();
+    res.status(httpStatus.NOT_FOUND).send();
   }
 };
 
@@ -26,7 +27,7 @@ export const update = (req : Request, res : Response) => {
   if (updatedUser) {
     res.send(updatedUser);
   } else {
-    res.status(404).send();
+    res.status(httpStatus.NOT_FOUND).send();
   }
 };
 
@@ -36,6 +37,6 @@ export const destroy = (req : Request, res : Response) => {
   if (removedUser) {
     res.send(removedUser);
   } else {
-    res.status(404).send();
+    res.status(httpStatus.NOT_FOUND).send();
   }
 };
