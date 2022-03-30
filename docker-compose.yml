@@ -2,11 +2,10 @@ version: '3.8'
 services:
   db:
     image: postgres:11.4
-    restart: always
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: "admin"
+      POSTGRES_PASSWORD: "admin"
+      POSTGRES_DB: "nodeTemplateDB"
     volumes:
       - db:/var/lib/postgresql/data
     ports:
