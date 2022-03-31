@@ -1,14 +1,15 @@
 import express from 'express';
 import { config } from './config/config';
-import { applyMiddleware } from './middlewares';
+import { preRoutesMiddleware, postRoutesMiddleware } from './middlewares';
 
 import { routes } from './routes';
 
 const app = express();
 const port = 8080;
 
+preRoutesMiddleware(app);
 app.use('/', routes);
-applyMiddleware(app);
+postRoutesMiddleware(app);
 
 app.listen(port, () => {
   console.log(`Server started at ${config.baseUrl}:${port}`);
