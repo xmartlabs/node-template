@@ -35,7 +35,7 @@ export const errorHandler = (err: ApiError, req: Request, res: Response, next: N
   };
 
   if (isDevelopment) {
-    appLogger.error(err);
+    appLogger.error(err.stack);
   }
 
   res.status(statusCode).send(response);
