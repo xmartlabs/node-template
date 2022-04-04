@@ -16,3 +16,10 @@ model User {
   password String
   name     String?
 }
+
+model Session {
+  id             String  @id @default(uuid())
+  userId         String  @unique
+  accessToken    String  @unique
+  refreshToken   String  @unique
+}

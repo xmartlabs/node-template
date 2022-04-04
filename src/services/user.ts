@@ -24,11 +24,6 @@ export class UserService {
 
     let user: User | null = null;
 
-    // // Required fields
-    // if (!(email && password)) {
-    //   throw new ApiError(httpStatus.BAD_REQUEST, 'Must provide all the required fields');
-    // }
-
     // Check if email is valid (from email-validator library)
     if (!emailRegex.test(email)) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid email');
@@ -64,9 +59,14 @@ export class UserService {
       throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
     }
 
+    const cryptPassword = await bcrypt.hash(userData.password, 8);
+
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
-      data: userData,
+      data: {
+        ...userData,
+        password: cryptPassword,
+      },
     });
     return sendUserWithoutPassword(updatedUser);
   };

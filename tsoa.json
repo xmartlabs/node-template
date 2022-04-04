@@ -4,9 +4,15 @@
   "controllerPathGlobs": ["src/controllers/*.ts"],
   "spec": {
     "outputDirectory": "build",
-    "specVersion": 3
+    "specVersion": 3,
+    "securityDefinitions": {
+      "idToken": {
+          "type": "jwt"
+      }
+    }
   },
   "routes": {
-    "routesDir": "build"
+    "routesDir": "build",
+    "authenticationModule": "src/middlewares/auth.ts"
   }
 }
