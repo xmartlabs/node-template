@@ -15,6 +15,10 @@ const envVarsSchema = joi.object()
     LOG_LEVEL: joi.string().valid('error', 'warn', 'info', 'verbose', 'debug', 'silly').default(DEFAULT_LOG_LEVEL).description('Server log level'),
     BASE_URL: joi.string().uri(),
     DATABASE_URL: joi.string().required(),
+    ACCESS_TOKEN_SECRET: joi.string().required(),
+    REFRESH_TOKEN_SECRET: joi.string().required(),
+    ACCESS_TOKEN_EXPIRES_IN: joi.string().required(),
+    REFRESH_TOKEN_EXPIRES_IN: joi.string().required(),
   })
   .unknown();
 
@@ -32,4 +36,8 @@ export const config: Config = {
   logLevel: envVars.LOG_LEVEL,
   port: envVars.PORT,
   baseUrl: envVars.BASE_URL,
+  accessTokenSecret: envVars.ACCESS_TOKEN_SECRET,
+  refreshTokenSecret: envVars.REFRESH_TOKEN_SECRET,
+  accessTokenExpiresIn: envVars.ACCESS_TOKEN_EXPIRES_IN,
+  refreshTokenExpiresIn: envVars.REFRESH_TOKEN_EXPIRES_IN,
 };
