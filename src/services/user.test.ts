@@ -1,4 +1,4 @@
-import { prismaMock } from '../../prisma/singleton';
+import { prismaMock } from '../tests/prismaSetup';
 import { generateUserData } from '../tests/utils/generateData';
 import { UserService } from './user';
 

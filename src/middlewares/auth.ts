@@ -1,8 +1,8 @@
 import { Request } from 'express';
-import httpStatus from 'http-status';
 import jwt from 'jsonwebtoken';
 import { config } from '../config/config';
 import { ApiError } from '../utils/apiError';
+import { errors } from '../config/errors';
 
 export function expressAuthentication(
   request: Request,
@@ -15,14 +15,14 @@ export function expressAuthentication(
 
     return new Promise((resolve, reject) => {
       if (!token) {
-        reject(new ApiError(httpStatus.UNAUTHORIZED, 'No token provided'));
+        reject(new ApiError(errors.unauthenticated));
       }
       jwt.verify(token, config.accessTokenSecret, (err: any, decoded: any) => {
         if (err) {
           if (err instanceof jwt.TokenExpiredError) {
-            reject(new ApiError(httpStatus.UNAUTHORIZED, 'Token expired'));
+            reject(new ApiError(errors.expiredToken));
           } else {
-            reject(new ApiError(httpStatus.UNAUTHORIZED, 'Invalid token'));
+            reject(new ApiError(errors.invalidToken));
           }
         }
         resolve(decoded.user);

@@ -1,4 +1,4 @@
-export { Config } from './config';
-export { ReturnUser, CreateUserParams, OptionalUserParams } from './user';
+export { Config, ErrorInterface } from './config';
+export { ReturnUser, CreateUserParams } from './user';
 export { Wrapper } from './middlewares';
 export { ReturnAuth, LoginParams, RefreshTokenParams } from './auth';

@@ -1,17 +1,17 @@
 import * as bcrypt from 'bcrypt';
 import { Prisma, User } from '@prisma/client';
-import httpStatus from 'http-status';
 import prisma from '../../prisma/client';
 import { ApiError } from '../utils/apiError';
 import { ReturnUser, CreateUserParams } from '../types';
 import { sendUserWithoutPassword } from '../utils/user';
 import { emailRegex } from '../utils/constants';
+import { errors } from '../config/errors';
 
 export class UserService {
   static find = async (id : string) : Promise<ReturnUser | null> => {
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+      throw new ApiError(errors.notFoundUser);
     }
     return sendUserWithoutPassword(user);
   };
@@ -25,7 +25,7 @@ export class UserService {
 
     // Check if email is valid (from email-validator library)
     if (!emailRegex.test(email)) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid email');
+      throw new ApiError(errors.invalidEmail);
     }
 
     // Data transformation before calling the prisma service
@@ -42,11 +42,11 @@ export class UserService {
     } catch (e) {
       // https://www.prisma.io/docs/reference/api-reference/error-reference#p2002
       if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
-        throw new ApiError(httpStatus.CONFLICT, 'A user with that email already exists');
+        throw new ApiError(errors.userAlreadyExists);
       }
     }
     if (!user) {
-      throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Something went wrong');
+      throw new ApiError(errors.userCreationFailed);
     }
     return sendUserWithoutPassword(user);
   };
@@ -55,7 +55,7 @@ export class UserService {
     const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+      throw new ApiError(errors.notFoundUser);
     }
 
     const updatedUser = await prisma.user.update({
@@ -72,7 +72,7 @@ export class UserService {
     const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+      throw new ApiError(errors.notFoundUser);
     }
 
     await prisma.user.delete({ where: { id } });
