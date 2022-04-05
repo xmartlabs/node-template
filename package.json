@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "nodemon --watch src -e ts,ejs,json --exec ts-node .",
-    "test": "echo \"No test specified\" && exit 0",
+    "test": "jest ./src --verbose",
     "lint": "npx eslint src --ext .ts"
   },
   "repository": {
@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/lauta2912/node-template#readme",
   "devDependencies": {
+    "@faker-js/faker": "^6.1.1",
     "@types/bcrypt": "^5.0.0",
     "@types/compression": "^1.7.2",
     "@types/cors": "^2.8.12",
@@ -56,6 +57,7 @@
     "helmet": "^5.0.2",
     "http-status": "^1.5.0",
     "jest-mock-extended": "^2.0.4",
+    "jest-node-exports-resolver": "^1.1.5",
     "joi": "^17.6.0",
     "morgan": "^1.10.0",
     "winston": "^3.6.0"
