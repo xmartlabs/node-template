@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
-import httpStatus from 'http-status';
 import { UserService } from '.';
 import { config } from '../config/config';
 import {
@@ -10,8 +9,9 @@ import {
   LoginParams,
   RefreshTokenParams,
 } from '../types/index';
-import { ApiError } from '../utils/apiError';
 import prisma from '../../prisma/client';
+import { ApiError } from '../utils/apiError';
+import { errors } from '../config/errors';
 
 export class AuthService {
   static register = async (userBody : CreateUserParams) : Promise<ReturnAuth> => {
@@ -34,11 +34,11 @@ export class AuthService {
     const { email, password } = loginParams;
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+      throw new ApiError(errors.notFoundUser);
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid password');
+      throw new ApiError(errors.invalidCredentials);
     }
     const session = await prisma.session.findUnique({ where: { userId: user.id } });
     const accessToken = await this.generateAccessToken(user);
@@ -70,11 +70,11 @@ export class AuthService {
     const { refreshToken } = refreshTokenParams;
     const session = await prisma.session.findUnique({ where: { refreshToken } });
     if (!session) {
-      throw new ApiError(httpStatus.UNAUTHORIZED, 'Session not found');
+      throw new ApiError(errors.unauthenticated);
     }
     const user = await prisma.user.findUnique({ where: { id: session.userId } });
     if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+      throw new ApiError(errors.notFoundUser);
     }
     const accessToken = await this.generateAccessToken(user);
     await prisma.session.update({ where: { userId: user.id }, data: { accessToken } });

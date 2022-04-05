@@ -1,14 +1,19 @@
+import { ErrorInterface } from '../types';
+
 export class ApiError extends Error {
-  statusCode;
+  httpCode;
+
+  errorCode;
 
   isOperational;
   // Used to check if ApiError is called intentonally
 
   additionalInfo;
 
-  constructor(statusCode: number, message: string, isOperational: boolean = true, additionalInfo: any = null, stack = '') {
-    super(message);
-    this.statusCode = statusCode;
+  constructor(error: ErrorInterface, isOperational: boolean = true, additionalInfo: any = null, stack = '') {
+    super(error.description);
+    this.httpCode = error.httpCode;
+    this.errorCode = error.errorCode;
     this.isOperational = isOperational;
     this.additionalInfo = additionalInfo;
     if (stack) {
