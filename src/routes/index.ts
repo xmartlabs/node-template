@@ -5,7 +5,7 @@ import { ApiError } from '../utils/apiError';
 
 export const routes = Router();
 
-routes.get('/', (_req: Request, res: Response) => res.send('<a href="docs">/docs</a>'));
+routes.get('/', (_req: Request, res: Response) => res.send('<a href="/docs">See the API docs!</a>'));
 
 routes.use('/docs', swaggerUi.serve, async (_req: Request, res: Response) => res.send(
   swaggerUi.generateHTML(await import('../../build/swagger.json')),
