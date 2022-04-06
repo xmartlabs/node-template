@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import httpStatus from 'http-status';
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { config } from '../config/config';
 import { ApiError } from '../utils/apiError';
 
