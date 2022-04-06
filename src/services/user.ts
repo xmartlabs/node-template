@@ -58,13 +58,11 @@ export class UserService {
       throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
     }
 
-    const cryptPassword = await bcrypt.hash(userData.password, 8);
-
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
       data: {
         ...userData,
-        password: cryptPassword,
+        password: user.password,
       },
     });
     return sendUserWithoutPassword(updatedUser);
