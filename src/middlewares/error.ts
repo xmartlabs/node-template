@@ -9,9 +9,9 @@ import { errors } from '../config/errors';
 export const errorConverter = (err: any, req: Request, res: Response, next: NextFunction) => {
   let error = err;
   if (error instanceof ValidateError) {
-    error = new ApiError(errors.validationError, true, err.fields);
+    error = new ApiError(errors.VALIDATION_ERROR, true, err.fields);
   } else if (!(error instanceof ApiError)) {
-    error = new ApiError(errors.internalServerError, false, null, err.stack);
+    error = new ApiError(errors.INTERNAL_SERVER_ERROR, false, null, err.stack);
   }
   next(error);
 };

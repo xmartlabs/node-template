@@ -14,5 +14,5 @@ routes.use('/docs', swaggerUi.serve, async (_req: Request, res: Response) => res
 // Send back a 404 error for any unknown api request
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 routes.use('*', (req, res, next) => {
-  throw new ApiError(errors.notFound);
+  throw new ApiError(errors.NOT_FOUND);
 });
