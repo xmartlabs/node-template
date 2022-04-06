@@ -1,60 +1,60 @@
 export const errors = {
-  invalidCredentials: {
+  INVALID_CREDENTIALS: {
     httpCode: 400,
     errorCode: 400_000,
     description: 'Invalid credentials',
   },
-  invalidUser: {
+  INVALID_USER: {
     httpCode: 400,
     errorCode: 400_001,
     description: 'Invalid user',
   },
-  invalidEmail: {
+  INVALID_EMAIL: {
     httpCode: 400,
     errorCode: 400_002,
     description: 'Invalid email',
   },
-  invalidToken: {
+  INVALID_TOKEN: {
     httpCode: 400,
     errorCode: 400_003,
     description: 'Invalid token',
   },
-  unauthenticated: {
+  UNAUTHENTICATED: {
     httpCode: 401,
     errorCode: 401_000,
     description: 'Unauthorized',
   },
-  expiredToken: {
+  EXPIRED_TOKEN: {
     httpCode: 401,
     errorCode: 401_001,
     description: 'Token expired',
   },
-  notFound: {
+  NOT_FOUND: {
     httpCode: 404,
     errorCode: 404_000,
     description: 'Not found',
   },
-  notFoundUser: {
+  NOT_FOUND_USER: {
     httpCode: 404,
     errorCode: 404_001,
     description: 'User not found',
   },
-  userAlreadyExists: {
+  USER_ALREADY_EXISTS: {
     httpCode: 409,
     errorCode: 409_000,
     description: 'User already exists',
   },
-  validationError: {
+  VALIDATION_ERROR: {
     httpCode: 422,
     errorCode: 422_000,
     description: 'Validation error',
   },
-  internalServerError: {
+  INTERNAL_SERVER_ERROR: {
     httpCode: 500,
     errorCode: 500_000,
     description: 'Internal server error',
   },
-  userCreationFailed: {
+  USER_CREATION_FAILED: {
     httpCode: 500,
     errorCode: 500_001,
     description: 'User creation failed',

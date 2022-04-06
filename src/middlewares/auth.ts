@@ -15,14 +15,14 @@ export function expressAuthentication(
 
     return new Promise((resolve, reject) => {
       if (!token) {
-        reject(new ApiError(errors.unauthenticated));
+        reject(new ApiError(errors.UNAUTHENTICATED));
       }
       jwt.verify(token, config.accessTokenSecret, (err: any, decoded: any) => {
         if (err) {
           if (err instanceof jwt.TokenExpiredError) {
-            reject(new ApiError(errors.expiredToken));
+            reject(new ApiError(errors.EXPIRED_TOKEN));
           } else {
-            reject(new ApiError(errors.invalidToken));
+            reject(new ApiError(errors.INVALID_TOKEN));
           }
         }
         resolve(decoded.user);

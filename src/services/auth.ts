@@ -34,11 +34,11 @@ export class AuthService {
     const { email, password } = loginParams;
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      throw new ApiError(errors.notFoundUser);
+      throw new ApiError(errors.NOT_FOUND_USER);
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new ApiError(errors.invalidCredentials);
+      throw new ApiError(errors.INVALID_CREDENTIALS);
     }
     const session = await prisma.session.findUnique({ where: { userId: user.id } });
     const accessToken = await this.generateAccessToken(user);
@@ -70,11 +70,11 @@ export class AuthService {
     const { refreshToken } = refreshTokenParams;
     const session = await prisma.session.findUnique({ where: { refreshToken } });
     if (!session) {
-      throw new ApiError(errors.unauthenticated);
+      throw new ApiError(errors.UNAUTHENTICATED);
     }
     const user = await prisma.user.findUnique({ where: { id: session.userId } });
     if (!user) {
-      throw new ApiError(errors.notFoundUser);
+      throw new ApiError(errors.NOT_FOUND_USER);
     }
     const accessToken = await this.generateAccessToken(user);
     await prisma.session.update({ where: { userId: user.id }, data: { accessToken } });
