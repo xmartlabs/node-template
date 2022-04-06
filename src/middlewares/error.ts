@@ -1,12 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
+import { ValidateError } from 'tsoa';
 import { ApiError } from '../utils/apiError';
 import { isDevelopment } from '../config/config';
 import { appLogger } from '../config/logger';
 
 export const errorConverter = (err: any, req: Request, res: Response, next: NextFunction) => {
   let error = err;
-  if (!(error instanceof ApiError)) {
+  if (error instanceof ValidateError) {
+    error = new ApiError(httpStatus.UNPROCESSABLE_ENTITY, 'Validation error', true, err.fields);
+  } else if (!(error instanceof ApiError)) {
     const statusCode = error.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
     const message = error.message || 'Unexpected error';
     error = new ApiError(statusCode, message, false, null, err.stack);
@@ -32,7 +35,7 @@ export const errorHandler = (err: ApiError, req: Request, res: Response, next: N
   };
 
   if (isDevelopment) {
-    appLogger.error(err);
+    appLogger.error(err.stack);
   }
 
   res.status(statusCode).send(response);

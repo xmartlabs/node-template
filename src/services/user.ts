@@ -6,6 +6,7 @@ import { ApiError } from '../utils/apiError';
 import { ReturnUser } from '../types';
 import { sendUserWithoutPassword } from '../utils/user';
 import { emailRegex } from '../utils/constants';
+import { CreateUserParams } from '../types/user';
 
 export class UserService {
   static find = async (id : string) : Promise<ReturnUser | null> => {
@@ -18,15 +19,15 @@ export class UserService {
 
   static all = () : Promise<User[]> => (prisma.user.findMany());
 
-  static create = async (userBody : User) : Promise<ReturnUser> => {
+  static create = async (userBody : CreateUserParams) : Promise<ReturnUser> => {
     const { name, email, password } = userBody;
 
     let user: User | null = null;
 
-    // Required fields
-    if (!(email && password)) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'Must provide all the required fields');
-    }
+    // // Required fields
+    // if (!(email && password)) {
+    //   throw new ApiError(httpStatus.BAD_REQUEST, 'Must provide all the required fields');
+    // }
 
     // Check if email is valid (from email-validator library)
     if (!emailRegex.test(email)) {
@@ -34,7 +35,7 @@ export class UserService {
     }
 
     // Data transformation before calling the prisma service
-    const cryptPassword = await bcrypt.hash(userBody.password, 8);
+    const cryptPassword = await bcrypt.hash(password, 8);
 
     const data = {
       name,

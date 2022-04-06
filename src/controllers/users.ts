@@ -1,31 +1,45 @@
-import { Request, Response } from 'express';
+import { User } from '@prisma/client';
 import httpStatus from 'http-status';
-import { wrapper } from '../middlewares';
+import {
+  Body,
+  Controller, Delete, Get, Path, Post, Put, Route,
+} from 'tsoa';
 import { UserService } from '../services';
+import { CreateUserParams, ReturnUser } from '../types/user';
 
-export const UsersController = {
-  index: wrapper(async (req : Request, res : Response) => {
+@Route('users')
+export class UsersController extends Controller {
+  @Get()
+  public async index(): Promise<ReturnUser[]> {
     const users = await UserService.all();
-    res.status(httpStatus.OK).send(users);
-  }),
+    this.setStatus(httpStatus.OK);
+    return users;
+  }
 
-  create: wrapper(async (req : Request, res : Response) => {
-    const user = await UserService.create(req.body);
-    res.status(httpStatus.CREATED).send(user);
-  }),
+  @Post()
+  public async create(@Body() requestBody : CreateUserParams): Promise<ReturnUser> {
+    const user = await UserService.create(requestBody);
+    this.setStatus(httpStatus.CREATED);
+    return user;
+  }
 
-  find: wrapper(async (req : Request, res : Response) => {
-    const user = await UserService.find(req.params.id);
-    res.status(httpStatus.OK).send(user);
-  }),
+  @Get('{id}')
+  public async find(@Path() id : string): Promise<ReturnUser | null> {
+    const user = await UserService.find(id);
+    this.setStatus(httpStatus.OK);
+    return user;
+  }
 
-  update: wrapper(async (req : Request, res : Response) => {
-    const user = await UserService.update(req.params.id, req.body);
-    res.status(httpStatus.OK).send(user);
-  }),
+  @Put('{id}')
+  public async update(@Path() id : string, @Body() requestBody : User): Promise<ReturnUser> {
+    const user = await UserService.update(id, requestBody);
+    this.setStatus(httpStatus.OK);
+    return user;
+  }
 
-  destroy: wrapper(async (req : Request, res : Response) => {
-    await UserService.destroy(req.params.id);
-    res.status(httpStatus.NO_CONTENT).send();
-  }),
-};
+  @Delete('{id}')
+  public async destroy(@Path() id : string): Promise<void> {
+    await UserService.destroy(id);
+    this.setStatus(httpStatus.NO_CONTENT);
+  }
+}
