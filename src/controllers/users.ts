@@ -1,4 +1,3 @@
-import { User } from '@prisma/client';
 import httpStatus from 'http-status';
 import {
   Body,
@@ -6,7 +5,8 @@ import {
 } from 'tsoa';
 import { UserService } from '../services';
 import { AuthenticatedRequest } from '../types/request';
-import { ReturnUser } from '../types/user';
+import { ReturnUser } from '../types';
+import { User } from '@prisma/client';
 
 @Route('users')
 export class UsersController extends Controller {

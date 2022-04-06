@@ -1,4 +1,4 @@
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import httpStatus from 'http-status';
 import { UserService } from '.';

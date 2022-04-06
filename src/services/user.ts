@@ -3,10 +3,9 @@ import { Prisma, User } from '@prisma/client';
 import httpStatus from 'http-status';
 import prisma from '../../prisma/client';
 import { ApiError } from '../utils/apiError';
-import { ReturnUser } from '../types';
+import { ReturnUser, CreateUserParams } from '../types';
 import { sendUserWithoutPassword } from '../utils/user';
 import { emailRegex } from '../utils/constants';
-import { CreateUserParams } from '../types/user';
 
 export class UserService {
   static find = async (id : string) : Promise<ReturnUser | null> => {
