@@ -63,10 +63,6 @@ export class AuthService {
   };
 
   static logout = async (accessToken : string) : Promise<void> => {
-    const session = await prisma.session.findUnique({ where: { accessToken } });
-    if (!session) {
-      throw new ApiError(httpStatus.UNAUTHORIZED, 'Session not found');
-    }
     await prisma.session.delete({ where: { accessToken } });
   };
 
