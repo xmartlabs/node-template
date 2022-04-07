@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { Prisma, User } from '@prisma/client';
 import prisma from '../../prisma/client';
 import { ApiError } from '../utils/apiError';
