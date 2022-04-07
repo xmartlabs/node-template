@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { UserService } from '.';
 import { config } from '../config/config';
 import {
