@@ -8,7 +8,7 @@
     "test": "jest ./src --verbose",
     "lint": "npx eslint src --ext .ts",
     "build": "tsoa spec-and-routes && tsc --project tsconfig.json",
-    "deploy": "prisma migrate deploy && node dist/src/index.js"
+    "deploy": "prisma migrate deploy && nodemon dist/src/index.js"
   },
   "repository": {
     "type": "git",
@@ -46,7 +46,6 @@
     "eslint-config-airbnb-typescript": "^14.0.0",
     "eslint-plugin-import": "^2.24.2",
     "jest": "^27.5.1",
-    "nodemon": "^2.0.12",
     "ts-jest": "^27.1.4",
     "ts-node": "^10.2.1",
     "typescript": "^4.6.3"
@@ -67,6 +66,7 @@
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
+    "nodemon": "^2.0.12",
     "prisma": "^3.11.1",
     "swagger-ui-express": "^4.3.0",
     "tsoa": "^3.14.1",

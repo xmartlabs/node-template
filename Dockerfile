@@ -8,9 +8,6 @@ COPY *.json ./
 RUN npm install --production --pure-lockfile --ignore-scripts
 RUN cp -RL node_modules/ /tmp/node_modules/
 
-# Install all dependencies
-RUN npm install --pure-lockfile --ignore-scripts
-
 # Copy source code (and all other relevant files)
 COPY . .
 
@@ -34,7 +31,5 @@ COPY --from=builder /home/node/app/prisma ./prisma
 # Copy runtime project
 COPY --from=builder /home/node/app/dist ./dist
 COPY --from=builder /home/node/app/package*.json ./
-
-EXPOSE 8080
 
 CMD [ "npm", "run", "deploy" ]
