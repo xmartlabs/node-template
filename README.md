@@ -33,8 +33,8 @@ npm test
 * Install Node 16.4.2 (as documented on [`.node-version`](./.node-version))
 * Install the appropriate version of npm: `npm i -g npm@7.18.1`
 * Install packages with `npm install`
-* Copy the `.env.example` file and rename it to `.env`.
-* Define the variables in the environment file correctly.
+* Create a new `.env` file using the `.env.example` as an example. for that run `$ cp .env.example .env`.
+* Set the variables in the new environment file `.env` you created above.
 * Start the project with `npm start`
 
 ## Project structure
