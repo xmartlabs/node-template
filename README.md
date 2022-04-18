@@ -59,7 +59,7 @@ npm test
 `prisma client` - Auto-generated and type-safe query builder for Node.js & TypeScript.
 `prisma migrate` - Prisma migration system.
 Requeriments:
-* DATABASE_URL on .env - The format is specified in .env.example
+* set a `DATABASE_URL` on .env - The format is specified in .env.example
 * Running database: There's a docker-compose file example: `docker-compose up -d`
 * Run database migrations: `npx prisma migrate dev`
 
