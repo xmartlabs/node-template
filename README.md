@@ -74,6 +74,7 @@ To generate routes and specs (mandatory to run the project) a command (`tsoa spe
 
 ### Decorators
 TSOA uses decorators to define the API routes and docs. check out the [TSOA docs](https://tsoa-community.github.io/docs/getting-started.html#defining-a-simple-controller) for more info.
+
 ### Notes
 * The security decorator acts as a middleware adding a `user` object to the request that contains the decoded JWT token (or whatever you put on the return of the function in `middlewares/auth.ts`).
 * The class `ValidateError` (extends Error) is used by TSOA to handle validation errors. Ex: If there's a missing property in the request body. A `ValidateError` is thrown and the error is handled by the `ErrorHandler` middleware.
