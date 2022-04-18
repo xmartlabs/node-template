@@ -69,6 +69,7 @@ If you want to change the database schema, you just have to change the `prisma/s
 
 ## TSOA - Swagger docs and routes generation
 [TSOA](https://tsoa-community.github.io/docs/introduction.html) is a framework with integrated OpenAPI compiler to build Node.js serve-side applications using TypeScript. It allows you to generate Swagger documentation and routes for your API.
+
 ### Generating Routes and Specs
 To generate routes and specs (mandatory to run the project) a command (`tsoa specs-and-routes`) is needed and it's included in `npm start` and `npm test`.
 
