@@ -1,18 +1,17 @@
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { Prisma, User } from '@prisma/client';
-import httpStatus from 'http-status';
 import prisma from '../../prisma/client';
 import { ApiError } from '../utils/apiError';
-import { ReturnUser } from '../types';
+import { ReturnUser, CreateUserParams } from '../types';
 import { sendUserWithoutPassword } from '../utils/user';
 import { emailRegex } from '../utils/constants';
-import { CreateUserParams } from '../types/user';
+import { errors } from '../config/errors';
 
 export class UserService {
   static find = async (id : string) : Promise<ReturnUser | null> => {
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+      throw new ApiError(errors.NOT_FOUND_USER);
     }
     return sendUserWithoutPassword(user);
   };
@@ -24,14 +23,9 @@ export class UserService {
 
     let user: User | null = null;
 
-    // // Required fields
-    // if (!(email && password)) {
-    //   throw new ApiError(httpStatus.BAD_REQUEST, 'Must provide all the required fields');
-    // }
-
     // Check if email is valid (from email-validator library)
     if (!emailRegex.test(email)) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid email');
+      throw new ApiError(errors.INVALID_EMAIL);
     }
 
     // Data transformation before calling the prisma service
@@ -48,11 +42,11 @@ export class UserService {
     } catch (e) {
       // https://www.prisma.io/docs/reference/api-reference/error-reference#p2002
       if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
-        throw new ApiError(httpStatus.CONFLICT, 'A user with that email already exists');
+        throw new ApiError(errors.USER_ALREADY_EXISTS);
       }
     }
     if (!user) {
-      throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Something went wrong');
+      throw new ApiError(errors.USER_CREATION_FAILED);
     }
     return sendUserWithoutPassword(user);
   };
@@ -61,12 +55,15 @@ export class UserService {
     const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+      throw new ApiError(errors.NOT_FOUND_USER);
     }
 
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
-      data: userData,
+      data: {
+        ...userData,
+        password: user.password,
+      },
     });
     return sendUserWithoutPassword(updatedUser);
   };
@@ -75,7 +72,7 @@ export class UserService {
     const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+      throw new ApiError(errors.NOT_FOUND_USER);
     }
 
     await prisma.user.delete({ where: { id } });

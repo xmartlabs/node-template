@@ -3,4 +3,14 @@ export interface Config {
   logLevel: string
   port: number
   baseUrl: string
+  accessTokenSecret: string
+  refreshTokenSecret: string
+  accessTokenExpiresIn: string
+  refreshTokenExpiresIn: string
+}
+
+export interface ErrorInterface {
+  httpCode: number
+  errorCode: number
+  description: string
 }
