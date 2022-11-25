@@ -15,5 +15,5 @@ app.use('/', routes);
 postRoutesMiddleware(app);
 
 app.listen(config.port, () => {
-  console.log(`Server started at ${config.baseUrl}:${port}`);
+  console.log(`Server started at ${config.baseUrl}:${config.port}`);
 });
