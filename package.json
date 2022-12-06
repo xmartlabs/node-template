@@ -25,6 +25,17 @@
   "bugs": {
     "url": "https://github.com/xmartlabs/node-template/issues"
   },
+  "_moduleAliases": {
+    "config": "dist/src/config",
+    "controllers": "dist/src/controllers",
+    "middlewares": "dist/src/middlewares",
+    "routes": "dist/src/routes",
+    "services": "dist/src/services",
+    "tests": "dist/src/tests",
+    "types": "dist/src/types",
+    "utils": "dist/src/utils",
+    "root": "dist/"
+  },
   "homepage": "https://github.com/xmartlabs/node-template#readme",
   "devDependencies": {
     "@faker-js/faker": "^6.1.1",
@@ -65,6 +76,7 @@
     "jest-node-exports-resolver": "^1.1.5",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
+    "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.12",
     "prisma": "^4.5.0",

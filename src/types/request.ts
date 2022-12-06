@@ -1,4 +1,4 @@
 import { Request } from 'express';
-import { ReturnUser } from './user';
+import { ReturnUser } from 'types/user';
 
 export type AuthenticatedRequest = Request & { user: ReturnUser };

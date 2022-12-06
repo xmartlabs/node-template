@@ -14,5 +14,19 @@
   "routes": {
     "routesDir": "build",
     "authenticationModule": "src/middlewares/auth.ts"
+  },
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "config/*": ["config/*"],
+      "controllers/*": ["controllers/*"],
+      "middlewares/*": ["middlewares/*"],
+      "routes/*": ["routes/*"],
+      "services/*": ["services/*"],
+      "tests/*": ["tests/*"],
+      "types/*": ["types/*"],
+      "utils/*": ["utils/*"],
+      "root/*": ["../*"]
+    }
   }
 }

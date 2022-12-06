@@ -1,7 +1,7 @@
 import httpStatus from 'http-status';
 import morgan from 'morgan';
-import { config } from './config';
-import { appLogger } from './logger';
+import { config } from 'config/config';
+import { appLogger } from 'config/logger';
 
 // Morgan custom tokens, used in response formats
 morgan.token('local-datetime', () => new Date().toLocaleString());

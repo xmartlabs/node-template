@@ -4,9 +4,9 @@ import {
   Controller, Delete, Get, Path, Put, Request, Route, Security,
 } from 'tsoa';
 import { User } from '@prisma/client';
-import { UserService } from '../services';
-import { AuthenticatedRequest } from '../types/request';
-import { ReturnUser } from '../types';
+import { UserService } from 'services';
+import { AuthenticatedRequest } from 'types/request';
+import { ReturnUser } from 'types';
 
 @Route('users')
 export class UsersController extends Controller {

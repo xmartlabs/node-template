@@ -1,7 +1,7 @@
-import { prismaMock } from '../tests/prismaSetup';
-import { generateUserData } from '../tests/utils/generateData';
-import { UserService } from './user';
-import { errors } from '../config/errors';
+import { prismaMock } from 'tests/prismaSetup';
+import { generateUserData } from 'tests/utils/generateData';
+import { UserService } from 'services/user';
+import { errors } from 'config/errors';
 
 describe('User service: ', () => {
   test('should create a new user with email', async () => {

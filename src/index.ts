@@ -1,9 +1,12 @@
-import express from 'express';
-import { RegisterRoutes } from '../build/routes';
-import { config } from './config/config';
-import { preRoutesMiddleware, postRoutesMiddleware } from './middlewares';
+import 'module-alias/register';
 
-import { routes } from './routes';
+import express from 'express';
+import { RegisterRoutes } from 'root/build/routes';
+import { config } from 'config/config';
+import { preRoutesMiddleware, postRoutesMiddleware } from 'middlewares';
+
+import { routes } from 'routes';
+import { appLogger } from 'config/logger';
 
 const app = express();
 
@@ -15,5 +18,5 @@ app.use('/', routes);
 postRoutesMiddleware(app);
 
 app.listen(config.port, () => {
-  console.log(`Server started at ${config.baseUrl}:${config.port}`);
+  appLogger.info(`Server started at ${config.baseUrl}:${config.port}`);
 });

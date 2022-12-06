@@ -1,8 +1,8 @@
 import { Request } from 'express';
 import jwt from 'jsonwebtoken';
-import { config } from '../config/config';
-import { ApiError } from '../utils/apiError';
-import { errors } from '../config/errors';
+import { config } from 'config/config';
+import { ApiError } from 'utils/apiError';
+import { errors } from 'config/errors';
 
 export function expressAuthentication(
   request: Request,

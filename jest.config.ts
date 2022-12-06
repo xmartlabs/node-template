@@ -5,6 +5,9 @@ module.exports = {
   },
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.ts?$',
   moduleFileExtensions: ['ts', 'js', 'json', 'node'],
-  resolver: 'jest-node-exports-resolver',
   testTimeout: 20000,
+  moduleDirectories: ['node_modules', '<rootDir>/src'],
+  moduleNameMapper: {
+    '^root/prisma/(.*)$': '<rootDir>/prisma/$1',
+  },
 };
