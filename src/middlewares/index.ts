@@ -2,10 +2,10 @@ import express, { Application } from 'express';
 import helmet from 'helmet';
 import compression from 'compression';
 import cors from 'cors';
-import { globalLimiter } from './rateLimiter';
-import { morganHandlers } from '../config/morgan';
-import { errorConverter, errorHandler } from './error';
-import { Wrapper } from '../types';
+import { globalLimiter } from 'middlewares/rateLimiter';
+import { morganHandlers } from 'config/morgan';
+import { errorConverter, errorHandler } from 'middlewares/error';
+import { Wrapper } from 'types';
 
 export const preRoutesMiddleware = (app: Application) => {
   // Set security HTTP headers

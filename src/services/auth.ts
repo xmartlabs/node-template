@@ -1,17 +1,17 @@
 import jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
-import { UserService } from '.';
-import { config } from '../config/config';
+import { config } from 'config/config';
 import {
   ReturnAuth,
   CreateUserParams,
   ReturnUser,
   LoginParams,
   RefreshTokenParams,
-} from '../types/index';
-import prisma from '../../prisma/client';
-import { ApiError } from '../utils/apiError';
-import { errors } from '../config/errors';
+} from 'types/index';
+import prisma from 'root/prisma/client';
+import { ApiError } from 'utils/apiError';
+import { errors } from 'config/errors';
+import { UserService } from '.';
 
 export class AuthService {
   static register = async (userBody : CreateUserParams) : Promise<ReturnAuth> => {

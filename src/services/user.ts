@@ -1,11 +1,11 @@
 import * as bcrypt from 'bcryptjs';
 import { Prisma, User } from '@prisma/client';
-import prisma from '../../prisma/client';
-import { ApiError } from '../utils/apiError';
-import { ReturnUser, CreateUserParams } from '../types';
-import { sendUserWithoutPassword } from '../utils/user';
-import { emailRegex } from '../utils/constants';
-import { errors } from '../config/errors';
+import prisma from 'root/prisma/client';
+import { ApiError } from 'utils/apiError';
+import { ReturnUser, CreateUserParams } from 'types';
+import { sendUserWithoutPassword } from 'utils/user';
+import { emailRegex } from 'utils/constants';
+import { errors } from 'config/errors';
 
 export class UserService {
   static find = async (id : string) : Promise<ReturnUser | null> => {

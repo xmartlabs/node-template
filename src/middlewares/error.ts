@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { ValidateError } from 'tsoa';
-import { ApiError } from '../utils/apiError';
-import { isDevelopment } from '../config/config';
-import { appLogger } from '../config/logger';
-import { errors } from '../config/errors';
+import { ApiError } from 'utils/apiError';
+import { isDevelopment } from 'config/config';
+import { appLogger } from 'config/logger';
+import { errors } from 'config/errors';
 
 export const errorConverter = (err: any, req: Request, res: Response, next: NextFunction) => {
   let error = err;
