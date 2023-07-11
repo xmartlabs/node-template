@@ -1,5 +1,5 @@
 {
-  "exec": "ts-node -r dotenv/config .",
+  "exec": "ts-node -r dotenv/config -r tsconfig-paths/register .",
   "watch": ["src"],
   "ext": "ts,ejs,json"
 }

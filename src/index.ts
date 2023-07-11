@@ -1,5 +1,3 @@
-import 'module-alias/register';
-
 import express from 'express';
 import { RegisterRoutes } from 'root/build/routes';
 import { config } from 'config/config';
