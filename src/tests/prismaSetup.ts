@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { mockDeep, mockReset } from 'jest-mock-extended';
-import { DeepMockProxy } from 'jest-mock-extended/lib/cjs/Mock';
+import { mockDeep, mockReset, DeepMockProxy } from 'jest-mock-extended';
 
 import prisma from 'root/prisma/client';
 
