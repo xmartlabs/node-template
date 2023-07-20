@@ -8,7 +8,7 @@
     "test": "tsoa spec-and-routes && jest ./src --verbose",
     "lint": "npx eslint src --ext .ts",
     "build": "tsoa spec-and-routes && tsc --project tsconfig.json",
-    "deploy": "prisma migrate deploy && nodemon dist/src/index.js"
+    "deploy": "prisma migrate deploy && ts-node -T -r dotenv/config -r tsconfig-paths/register dist/src/index.js"
   },
   "repository": {
     "type": "git",
@@ -24,17 +24,6 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/xmartlabs/node-template/issues"
-  },
-  "_moduleAliases": {
-    "config": "dist/src/config",
-    "controllers": "dist/src/controllers",
-    "middlewares": "dist/src/middlewares",
-    "routes": "dist/src/routes",
-    "services": "dist/src/services",
-    "tests": "dist/src/tests",
-    "types": "dist/src/types",
-    "utils": "dist/src/utils",
-    "root": "dist/"
   },
   "homepage": "https://github.com/xmartlabs/node-template#readme",
   "devDependencies": {
@@ -59,6 +48,7 @@
     "jest": "^27.5.1",
     "ts-jest": "^27.1.4",
     "ts-node": "^10.2.1",
+    "tsconfig-paths": "^4.1.2",
     "typescript": "^4.6.3"
   },
   "dependencies": {
@@ -76,7 +66,6 @@
     "jest-node-exports-resolver": "^1.1.5",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
-    "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.12",
     "prisma": "^4.5.0",
