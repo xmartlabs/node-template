@@ -1,5 +1,5 @@
 import { ReturnUser } from 'types';
-import { User } from '.prisma/client';
+import { User } from '@prisma/client';
 
 export const sendUserWithoutPassword = (user : User) : ReturnUser => {
   const { password, ...userWithoutPassword } = user;

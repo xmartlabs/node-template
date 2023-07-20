@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
 
 export const generateUserData = () => ({
-  id: faker.datatype.uuid(),
+  id: faker.string.uuid(),
   email: faker.internet.email(),
-  name: faker.name.findName(),
+  name: faker.person.fullName(),
   password: faker.internet.password(),
 });
