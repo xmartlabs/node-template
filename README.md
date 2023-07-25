@@ -1,9 +1,9 @@
-![node version](https://img.shields.io/badge/node-16.4.2-brightgreen)
+![node version](https://img.shields.io/badge/node-18.16.1-brightgreen)
 ![express version](https://img.shields.io/badge/express-4.17.1-brightgreen)
-![prisma version](https://img.shields.io/badge/prisma-3.11.1-brightgreen)
-![tsoa version](https://img.shields.io/badge/tsoa-3.14.1-brightgreen)
-![typescript version](https://img.shields.io/badge/typescript-4.6.3-brightgreen)
-![jest version](https://img.shields.io/badge/jest-24.0.0-brightgreen)
+![prisma version](https://img.shields.io/badge/prisma-5.0.0-brightgreen)
+![tsoa version](https://img.shields.io/badge/tsoa-5.1.1-brightgreen)
+![typescript version](https://img.shields.io/badge/typescript-5.1.6-brightgreen)
+![jest version](https://img.shields.io/badge/jest-29.6.1-brightgreen)
 
 # Xmartlabs Node.js Template
 This project contains Xmartlabs' Node.js template.
@@ -11,7 +11,7 @@ This project contains Xmartlabs' Node.js template.
 
 ## Contributing to this Template
 
-Make sure you have the appropriate version of Node (16.4.2) installed.
+Make sure you have the appropriate version of Node (18.16.1) installed.
 
 Then install the required packages:
 
@@ -30,8 +30,8 @@ npm test
 
 ## Project Setup
 
-* Install Node 16.4.2 (as documented on [`.node-version`](./.node-version))
-* Install the appropriate version of npm: `npm i -g npm@7.18.1`
+* Install Node 18.16.1 (as documented on [`.node-version`](./.node-version))
+* Install the appropriate version of npm: `npm i -g npm@9.8.1`
 * Install packages with `npm install`
 * Create a new `.env` file using the `.env.example` as an example. for that run `$ cp .env.example .env`.
 * Set the variables in the new environment file `.env` you created above.
