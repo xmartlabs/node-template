@@ -31,7 +31,7 @@ npm test
 ## Project Setup
 
 * Install Node 18.16.1 (as documented on [`.node-version`](./.node-version))
-* Install the appropriate version of npm: `npm i -g npm@7.18.1`
+* Install the appropriate version of npm: `npm i -g npm@9.8.1`
 * Install packages with `npm install`
 * Create a new `.env` file using the `.env.example` as an example. for that run `$ cp .env.example .env`.
 * Set the variables in the new environment file `.env` you created above.
