@@ -1,0 +1,25 @@
+x-common: &common
+  image: "node:18.15.0"
+  environment:
+    - VITE_API_BASE_URL=http://dummy-server
+
+pipeline:
+  setup:
+    <<: *common
+    commands:
+      - npm ci --prefer-offline
+  js-lint:
+    <<: *common
+    group: fe-build
+    commands:
+      - CI=true npm run lint
+  sass-lint:
+    <<: *common
+    group: fe-build
+    commands:
+      - CI=true npm run sass-lint
+  js-test:
+    <<: *common
+    group: fe-build
+    commands:
+      - CI=true npm run test
