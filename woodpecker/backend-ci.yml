@@ -26,3 +26,8 @@ pipeline:
     group: fe-build
     commands:
       - CI=true npm run test
+  build:
+    <<: *common
+    group: fe-build
+    commands:
+      - CI=true npm run build
