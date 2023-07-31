@@ -1,7 +1,15 @@
 x-common: &common
-  image: "node:18.15.0"
+  image: "node:18.16.1"
   environment:
-    - VITE_API_BASE_URL=http://dummy-server
+    - BASE_URL=http://dummy-server
+    - NODE_ENV= "environment"
+    - PORT=1111
+    - LOG_LEVEL=info
+    - DATABASE_URL=postgres://dbuser:dbpass@localhost:dbport/dbname
+    - ACCESS_TOKEN_SECRET=secret
+    - REFRESH_TOKEN_SECRET=secret
+    - ACCESS_TOKEN_EXPIRES_IN=1d
+    - REFRESH_TOKEN_EXPIRES_IN=1d
 
 pipeline:
   setup:
@@ -13,11 +21,6 @@ pipeline:
     group: fe-build
     commands:
       - CI=true npm run lint
-  sass-lint:
-    <<: *common
-    group: fe-build
-    commands:
-      - CI=true npm run sass-lint
   js-test:
     <<: *common
     group: fe-build
