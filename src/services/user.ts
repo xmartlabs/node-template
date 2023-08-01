@@ -6,6 +6,7 @@ import { ReturnUser, CreateUserParams } from 'types';
 import { sendUserWithoutPassword } from 'utils/user';
 import { emailRegex } from 'utils/constants';
 import { errors } from 'config/errors';
+import { sendSignUpEmail } from 'emails';
 
 export class UserService {
   static find = async (id : string) : Promise<ReturnUser | null> => {
@@ -48,6 +49,7 @@ export class UserService {
     if (!user) {
       throw new ApiError(errors.USER_CREATION_FAILED);
     }
+    await sendSignUpEmail('APP NAME', user.email);
     return sendUserWithoutPassword(user);
   };
 
