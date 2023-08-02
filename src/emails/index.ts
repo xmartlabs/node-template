@@ -29,13 +29,12 @@ export async function sendSignUpEmail(
 
   try {
     const emailTransporter = await createTransporter();
-    const info = await emailTransporter.sendMail({
+    await emailTransporter.sendMail({
       from: process.env.EMAIL_CLIENT,
       to: emailTo,
       subject,
       html,
     });
-    console.log('Message sent: %s', info);
   } catch (rawError) {
     const error = JSON.stringify(rawError);
     console.error(error);
