@@ -6,12 +6,12 @@ import { errors } from 'config/errors';
 
 
 const createTransporter = async () => {
-  const testTransporter = nodemailer.createTransport({
-    host: 'smtp.mailtrap.io',
-    port: 2525,
+  const testTransporter = nodemailer.createTransport({ 
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
     auth: {
-      user: process.env.USER_MAILTRAP_ID,
-      pass: process.env.USER_MAILTRAP_PASSWORD,
+      user: process.env.EMAIL_SERVICE_PROVIDER_USER_ID,
+      pass: process.env.EMAIL_SERVICE_PROVIDER_USER_PASSWORD,
     },
   });
   return testTransporter;

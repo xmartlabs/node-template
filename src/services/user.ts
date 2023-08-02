@@ -49,7 +49,7 @@ export class UserService {
     if (!user) {
       throw new ApiError(errors.USER_CREATION_FAILED);
     }
-    await sendSignUpEmail('APP NAME', user.email);
+    await sendSignUpEmail(process.env.APP_NAME, user.email);
     return sendUserWithoutPassword(user);
   };
 

@@ -7,6 +7,12 @@ export interface Config {
   refreshTokenSecret: string
   accessTokenExpiresIn: string
   refreshTokenExpiresIn: string
+  emailClient: string
+  emailServiceProviderUserId: string
+  emailServiceProviderUserPassword: string
+  emailHost: string
+  emailPort: number
+  appName: string
 }
 
 export interface ErrorInterface {
