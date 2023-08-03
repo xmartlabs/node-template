@@ -2,7 +2,7 @@ x-common: &common
   image: "node:18.16.1"
   environment:
     - BASE_URL=http://dummy-server
-    - NODE_ENV= "test"
+    - NODE_ENV=test
     - PORT=1111
     - LOG_LEVEL=info
     - DATABASE_URL=postgres://dbuser:dbpass@localhost:dbport/dbname
