@@ -3,15 +3,16 @@ import pug from 'pug';
 
 import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
+import { config } from 'config/config';
 
 
 const createTransporter = async () => {
   const testTransporter = nodemailer.createTransport({ 
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
+    host: config.emailHost,
+    port: config.port,
     auth: {
-      user: process.env.EMAIL_SERVICE_PROVIDER_USER_ID,
-      pass: process.env.EMAIL_SERVICE_PROVIDER_USER_PASSWORD,
+      user: config.emailServiceProviderUserId,
+      pass: config.emailServiceProviderUserPassword,
     },
   });
   return testTransporter;
@@ -30,7 +31,7 @@ export async function sendSignUpEmail(
   try {
     const emailTransporter = await createTransporter();
     await emailTransporter.sendMail({
-      from: process.env.EMAIL_CLIENT,
+      from: config.emailClient,
       to: emailTo,
       subject,
       html,
