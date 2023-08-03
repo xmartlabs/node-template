@@ -5,9 +5,8 @@ import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
 import { config } from 'config/config';
 
-
 const createTransporter = async () => {
-  const testTransporter = nodemailer.createTransport({ 
+  const testTransporter = nodemailer.createTransport({
     host: config.emailHost,
     port: config.port,
     auth: {
