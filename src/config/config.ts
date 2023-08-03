@@ -23,7 +23,7 @@ const envVarsSchema = joi.object()
     EMAIL_SERVICE_PROVIDER_USER_ID: joi.string().required(),
     EMAIL_SERVICE_PROVIDER_USER_PASSWORD: joi.string().required(),
     EMAIL_HOST: joi.string().required(),
-    EMAIL_PORT: joi.number().default(1234),
+    EMAIL_PORT: joi.number(),
     APP_NAME: joi.string().required(),
   })
   .unknown();
