@@ -2,6 +2,11 @@ import { prismaMock } from 'tests/prismaSetup';
 import { generateUserData } from 'tests/utils/generateData';
 import { UserService } from 'services/user';
 import { errors } from 'config/errors';
+import { sendSignUpEmail } from 'emails/index';
+
+jest.mock('emails/index');
+
+const mockSendSignUpEmail = sendSignUpEmail as jest.Mock;
 
 describe('User service: ', () => {
   test('should create a new user with email', async () => {
@@ -9,6 +14,8 @@ describe('User service: ', () => {
     // @ts-ignore
     prismaMock.user.create.mockResolvedValue(userData);
     prismaMock.user.update.mockResolvedValue(userData);
+    mockSendSignUpEmail.mockResolvedValue(undefined);
+  
     const {
       password, ...userWithoutPassword
     } = userData;
