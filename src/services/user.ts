@@ -8,6 +8,7 @@ import { emailRegex } from 'utils/constants';
 import { errors } from 'config/errors';
 import { sendSignUpEmail } from 'emails';
 import { config } from 'config/config';
+import cron from 'node-cron';
 
 export class UserService {
   static find = async (id : string) : Promise<ReturnUser | null> => {
@@ -50,7 +51,10 @@ export class UserService {
     if (!user) {
       throw new ApiError(errors.USER_CREATION_FAILED);
     }
-    await sendSignUpEmail(config.appName, user.email);
+    cron.schedule('* * * * *', () => {
+      if (user) sendSignUpEmail(config.appName, user.email);
+    });
+
     return sendUserWithoutPassword(user);
   };
 
