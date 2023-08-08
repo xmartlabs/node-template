@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcryptjs';
+import cron from 'node-cron';
 import { Prisma, User } from '@prisma/client';
 import prisma from 'root/prisma/client';
 import { ApiError } from 'utils/apiError';
@@ -8,7 +9,6 @@ import { emailRegex } from 'utils/constants';
 import { errors } from 'config/errors';
 import { sendSignUpEmail } from 'emails';
 import { config } from 'config/config';
-import cron from 'node-cron';
 
 export class UserService {
   static find = async (id : string) : Promise<ReturnUser | null> => {
