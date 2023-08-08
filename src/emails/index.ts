@@ -17,6 +17,23 @@ const createTransporter = async () => {
   return testTransporter;
 };
 
+export async function sendEmail(
+  emailTo: string,
+  subject: string,
+  body: string,
+  html: string,
+) {
+  const emailTransporter = await createTransporter();
+
+  return emailTransporter.sendMail({
+    from: process.env.EMAIL_CLIENT,
+    to: emailTo,
+    subject,
+    text: body,
+    html,
+  });
+}
+
 export async function sendSignUpEmail(
   appName: string,
   emailTo: string,

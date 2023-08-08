@@ -19,6 +19,11 @@ export const errors = {
     errorCode: 400_003,
     description: 'Invalid token',
   },
+  INVALID_CODE: {
+    httpCode: 400,
+    errorCode: 400_004,
+    description: 'Invalid code',
+  },
   UNAUTHENTICATED: {
     httpCode: 401,
     errorCode: 401_000,
@@ -28,6 +33,11 @@ export const errors = {
     httpCode: 401,
     errorCode: 401_001,
     description: 'Token expired',
+  },
+  CODE_EXPIRED: {
+    httpCode: 403,
+    errorCode: 403_001,
+    description: 'Code has expired',
   },
   NOT_FOUND: {
     httpCode: 404,
@@ -49,6 +59,11 @@ export const errors = {
     errorCode: 422_000,
     description: 'Validation error',
   },
+  TOO_MANY_REQUESTS: {
+    httpCode: 429,
+    errorCode: 429_000,
+    description: 'Too many requests',
+  },
   INTERNAL_SERVER_ERROR: {
     httpCode: 500,
     errorCode: 500_000,
@@ -58,5 +73,10 @@ export const errors = {
     httpCode: 500,
     errorCode: 500_001,
     description: 'User creation failed',
+  },
+  HASH_CREATION_FAILED: {
+    httpCode: 500,
+    errorCode: 500_002,
+    description: 'Hash creation failed',
   },
 };

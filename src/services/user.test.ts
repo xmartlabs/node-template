@@ -15,6 +15,7 @@ describe('User service: ', () => {
     prismaMock.user.create.mockResolvedValue(userData);
     prismaMock.user.update.mockResolvedValue(userData);
     mockSendSignUpEmail.mockResolvedValue(undefined);
+    console.log('asasdads')
     const {
       password, ...userWithoutPassword
     } = userData;
