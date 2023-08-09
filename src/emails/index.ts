@@ -8,7 +8,7 @@ import { config } from 'config/config';
 const createTransporter = async () => {
   const testTransporter = nodemailer.createTransport({
     host: config.emailHost,
-    port: config.port,
+    port: config.emailPort,
     auth: {
       user: config.emailServiceProviderUserId,
       pass: config.emailServiceProviderUserPassword,
