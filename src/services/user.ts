@@ -19,6 +19,14 @@ export class UserService {
     return sendUserWithoutPassword(user);
   };
 
+  static findByEmail = async (email : string) : Promise<ReturnUser | null> => {
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      throw new ApiError(errors.NOT_FOUND_USER);
+    }
+    return sendUserWithoutPassword(user);
+  };
+
   static all = () : Promise<User[]> => (prisma.user.findMany());
 
   static create = async (userBody : CreateUserParams) : Promise<ReturnUser> => {

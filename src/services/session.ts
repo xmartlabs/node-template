@@ -10,7 +10,7 @@ import { UserService } from './user';
 
 export class SessionService {
   static requestResetPasswordEmail = async (email: string) => {
-    const user = await UserService.find(email);
+    const user = await UserService.findByEmail(email);
     if (!user) {
       throw new ApiError(errors.NOT_FOUND_USER);
     }
@@ -27,7 +27,7 @@ export class SessionService {
     code: string,
     password: string,
   ) => {
-    const user = await UserService.find(email);
+    const user = await UserService.findByEmail(email);
     if (!user) {
       throw new ApiError(errors.NOT_FOUND_USER);
     }
