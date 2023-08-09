@@ -25,6 +25,7 @@ export class UserService {
     const { name, email, password } = userBody;
 
     let user: User | null = null;
+    const newUserQueue: string[] = [];
 
     // Check if email is valid (from email-validator library)
     if (!emailRegex.test(email)) {
@@ -51,8 +52,14 @@ export class UserService {
     if (!user) {
       throw new ApiError(errors.USER_CREATION_FAILED);
     }
+    newUserQueue.push(email);
     cron.schedule('* * * * *', () => {
-      if (user) sendSignUpEmail(config.appName, user.email);
+      if (newUserQueue.length > 0) {
+        const newUserEmail = newUserQueue.shift();
+        if (newUserEmail) {
+          sendSignUpEmail(config.appName, newUserEmail);
+        }
+      }
     });
 
     return sendUserWithoutPassword(user);
