@@ -9,7 +9,6 @@ import { verifyHash } from 'utils/hash';
 import { createStubHash } from '../../__mocks__/support/hash';
 
 jest.mock('bcryptjs');
-jest.mock('services/db');
 
 const stubExpiredHash = createStubHash();
 const stubHash = createStubHash({ expiresAt: new Date('2022-05-25') });
@@ -26,7 +25,6 @@ describe('verifyHash', () => {
   });
 
   beforeEach(() => {
-    prismaMock.hash.findFirst.mockReturnValue(stubHash)
     mockFindFirst.mockResolvedValue(stubExpiredHash);
     mockCompareSync.mockReturnValue(true);
   });
@@ -42,9 +40,9 @@ describe('verifyHash', () => {
       expect(
         verifyHash(
           '123456',
-          stubUser.email,
-          HashTypes.UPDATE_EMAIL,
-          stubUser.id,
+          userData.email,
+          HashTypes.RESET_PASSWORD,
+          userData.id,
         ),
       ).rejects.toThrowError(new ApiError(errors.INVALID_CODE));
     });
@@ -55,9 +53,9 @@ describe('verifyHash', () => {
       expect(
         verifyHash(
           '123456',
-          stubUser.email,
-          HashTypes.UPDATE_EMAIL,
-          stubUser.id,
+          userData.email,
+          HashTypes.RESET_PASSWORD,
+          userData.id,
         ),
       ).rejects.toThrowError(new ApiError(errors.INVALID_CODE));
     });
@@ -66,9 +64,9 @@ describe('verifyHash', () => {
       expect(
         verifyHash(
           '123456',
-          stubUser.email,
-          HashTypes.UPDATE_EMAIL,
-          stubUser.id,
+          userData.email,
+          HashTypes.RESET_PASSWORD,
+          userData.id,
         ),
       ).rejects.toThrowError(new ApiError(errors.CODE_EXPIRED));
     });
@@ -78,13 +76,13 @@ describe('verifyHash', () => {
     mockFindFirst.mockResolvedValue(stubHash);
 
     await expect(
-      verifyHash('123456', stubUser.email, HashTypes.UPDATE_EMAIL),
+      verifyHash('123456', userData.email, HashTypes.RESET_PASSWORD),
     ).resolves.toEqual(stubHash);
 
     expect(mockFindFirst).toHaveBeenCalledWith({
       where: {
-        sentTo: stubUser.email,
-        type: HashTypes.UPDATE_EMAIL,
+        sentTo: userData.email,
+        type: HashTypes.RESET_PASSWORD,
         userId: undefined,
       },
     });

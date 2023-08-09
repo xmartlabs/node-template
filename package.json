@@ -69,6 +69,7 @@
     "jest-node-exports-resolver": "^1.1.5",
     "joi": "^17.6.0",
     "jsonwebtoken": "^9.0.1",
+    "mockdate": "^3.0.5",
     "morgan": "^1.10.0",
     "node-cron": "^3.0.2",
     "nodemailer": "^6.9.4",
