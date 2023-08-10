@@ -2,9 +2,7 @@ import { randomBytes } from 'crypto';
 
 const DEFAULT_CODE_LENGTH = 6;
 
-const cryptoRandomNumber = (byteLength: number) =>
-  // eslint-disable-next-line linebreak-style
-  randomBytes(byteLength).readUIntBE(0, byteLength);
+const cryptoRandomNumber = (length: number) => randomBytes(length).readUIntBE(0, length);
 
 export const generateCode = (length = DEFAULT_CODE_LENGTH) => {
   const highestCode = 10 ** length - 1;
