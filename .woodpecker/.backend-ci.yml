@@ -27,6 +27,11 @@ pipeline:
     group: fe-build
     commands:
       - CI=true npm run lint
+  prettier:
+    <<: *common
+    group: fe-build
+    commands:
+      - CI=true npm run prettier
   js-test:
     <<: *common
     group: fe-build
