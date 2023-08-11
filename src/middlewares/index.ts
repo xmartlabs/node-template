@@ -41,7 +41,4 @@ export const postRoutesMiddleware = (app: Application) => {
 
 // Wrap every async route handler
 // Passes errors to next function
-export const wrapper: Wrapper =
-  fn =>
-  (...args) =>
-    fn(...args).catch(args[2]);
+export const wrapper: Wrapper = (fn) => (...args) => fn(...args).catch(args[2]);

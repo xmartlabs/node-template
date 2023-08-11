@@ -7,19 +7,18 @@ import { appLogger } from 'config/logger';
 morgan.token('local-datetime', () => new Date().toLocaleString());
 // TODO: Use error handler message once implemented
 morgan.token('message', (_req, res) => res.statusMessage);
-const getIpFormat = () =>
-  config.env === 'production' ? ':remote-addr - ' : '';
+const getIpFormat = () => (config.env === 'production' ? ':remote-addr - ' : '');
 const successResponseFormat = `${getIpFormat()}:method :url :status - :response-time ms`;
 const errorResponseFormat = `${getIpFormat()}:method :url :status - :response-time ms - message: :message`;
 
 const successHandler = morgan(successResponseFormat, {
   skip: (_req, res) => res.statusCode >= httpStatus.BAD_REQUEST,
-  stream: { write: message => appLogger.info(message.trim()) },
+  stream: { write: (message) => appLogger.info(message.trim()) },
 });
 
 const errorHandler = morgan(errorResponseFormat, {
   skip: (_req, res) => res.statusCode < httpStatus.BAD_REQUEST,
-  stream: { write: message => appLogger.error(message.trim()) },
+  stream: { write: (message) => appLogger.error(message.trim()) },
 });
 
 const debugHandler = morgan(
@@ -27,7 +26,7 @@ const debugHandler = morgan(
   {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     skip: (_req, _res) => config.logLevel !== 'debug',
-    stream: { write: message => appLogger.debug(message.trim()) },
+    stream: { write: (message) => appLogger.debug(message.trim()) },
   },
 );
 export const morganHandlers = {
