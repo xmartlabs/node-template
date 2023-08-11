@@ -6,7 +6,12 @@ import { isDevelopment } from 'config/config';
 import { appLogger } from 'config/logger';
 import { errors } from 'config/errors';
 
-export const errorConverter = (err: any, req: Request, res: Response, next: NextFunction) => {
+export const errorConverter = (
+  err: any,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   let error = err;
   if (error instanceof ValidateError) {
     error = new ApiError(errors.VALIDATION_ERROR, true, err.fields);
@@ -17,12 +22,18 @@ export const errorConverter = (err: any, req: Request, res: Response, next: Next
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const errorHandler = (err: ApiError, req: Request, res: Response, next: NextFunction) => {
+export const errorHandler = (
+  err: ApiError,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   let { httpCode, message } = err;
   if (!err.isOperational) {
-    httpCode = httpCode || (err.toString().indexOf('Not found'))
-      ? httpStatus.NOT_FOUND
-      : httpStatus.INTERNAL_SERVER_ERROR;
+    httpCode =
+      httpCode || err.toString().indexOf('Not found')
+        ? httpStatus.NOT_FOUND
+        : httpStatus.INTERNAL_SERVER_ERROR;
     message = message || httpStatus.INTERNAL_SERVER_ERROR.toString();
   }
 

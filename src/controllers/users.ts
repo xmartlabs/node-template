@@ -1,7 +1,14 @@
 import httpStatus from 'http-status';
 import {
   Body,
-  Controller, Delete, Get, Path, Put, Request, Route, Security,
+  Controller,
+  Delete,
+  Get,
+  Path,
+  Put,
+  Request,
+  Route,
+  Security,
 } from 'tsoa';
 import { UserService } from 'services';
 import { ReturnUser, UpdateUserParams, AuthenticatedRequest } from 'types';
@@ -18,7 +25,9 @@ export class UsersControllerV1 extends Controller {
 
   @Get('/me')
   @Security('jwt')
-  public async getMe(@Request() req : AuthenticatedRequest): Promise<ReturnUser | null> {
+  public async getMe(
+    @Request() req: AuthenticatedRequest,
+  ): Promise<ReturnUser | null> {
     const user = await UserService.find(req.user.id);
     this.setStatus(httpStatus.OK);
     return user;
@@ -26,7 +35,7 @@ export class UsersControllerV1 extends Controller {
 
   @Get('{id}')
   @Security('jwt')
-  public async find(@Path() id : string): Promise<ReturnUser | null> {
+  public async find(@Path() id: string): Promise<ReturnUser | null> {
     const user = await UserService.find(id);
     this.setStatus(httpStatus.OK);
     return user;
@@ -45,7 +54,7 @@ export class UsersControllerV1 extends Controller {
 
   @Delete('{id}')
   @Security('jwt')
-  public async destroy(@Path() id : string): Promise<void> {
+  public async destroy(@Path() id: string): Promise<void> {
     await UserService.destroy(id);
     this.setStatus(httpStatus.NO_CONTENT);
   }
