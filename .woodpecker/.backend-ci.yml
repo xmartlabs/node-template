@@ -31,7 +31,7 @@ pipeline:
     <<: *common
     group: fe-build
     commands:
-      - CI=true npm run prettier
+      - CI=true npx prettier --check "src/**/*.ts"
   js-test:
     <<: *common
     group: fe-build
