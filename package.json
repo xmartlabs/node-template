@@ -5,7 +5,6 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "npm run build && nodemon",
-    "watch-tsoa": "nodemon -x tsoa spec-and-routes",
     "test": "tsoa spec-and-routes && jest ./src --verbose",
     "lint": "npx eslint src --ext .ts",
     "build": "tsoa spec-and-routes && tsc --project tsconfig.json",
