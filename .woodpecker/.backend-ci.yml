@@ -10,12 +10,12 @@ x-common: &common
     - REFRESH_TOKEN_SECRET=secret
     - ACCESS_TOKEN_EXPIRES_IN=1d
     - REFRESH_TOKEN_EXPIRES_IN=1d
-    - EMAIL_CLIENT='test-client'
-    - EMAIL_SERVICE_PROVIDER_USER_ID='test'
-    - EMAIL_SERVICE_PROVIDER_USER_PASSWORD='test'
-    - EMAIL_HOST='test'
+    - EMAIL_CLIENT=test-client
+    - EMAIL_SERVICE_PROVIDER_USER_ID=test
+    - EMAIL_SERVICE_PROVIDER_USER_PASSWORD=test
+    - EMAIL_HOST=test
     - EMAIL_PORT=1111
-    - APP_NAME='APPNAME'
+    - APP_NAME=APPNAME
 
 pipeline:
   setup:
