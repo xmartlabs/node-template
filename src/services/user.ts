@@ -53,11 +53,12 @@ export class UserService {
       throw new ApiError(errors.USER_CREATION_FAILED);
     }
     newUserQueue.push(email);
-    cron.schedule('* * * * *', () => {
+    const sendEmailTask = cron.schedule('* * * * *', () => {
       if (newUserQueue.length > 0) {
         const newUserEmail = newUserQueue.shift();
         if (newUserEmail) {
           sendSignUpEmail(config.appName, newUserEmail);
+          sendEmailTask.stop()
         }
       }
     });
