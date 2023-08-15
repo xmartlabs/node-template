@@ -22,10 +22,13 @@ export class UserService {
   static all = () : Promise<User[]> => (prisma.user.findMany());
 
   static create = async (userBody : CreateUserParams) : Promise<ReturnUser> => {
+    const emailQueue = {
+      current: null as string | null,
+    };
+
     const { name, email, password } = userBody;
 
     let user: User | null = null;
-    const newUserQueue: string[] = [];
 
     // Check if email is valid (from email-validator library)
     if (!emailRegex.test(email)) {
@@ -51,18 +54,20 @@ export class UserService {
     }
     if (!user) {
       throw new ApiError(errors.USER_CREATION_FAILED);
+    } 
+    if (!emailQueue.current) {
+      emailQueue.current = email;
     }
-    newUserQueue.push(email);
-    const sendEmailTask = cron.schedule('* * * * *', () => {
-      if (newUserQueue.length > 0) {
-        const newUserEmail = newUserQueue.shift();
-        if (newUserEmail) {
-          sendSignUpEmail(config.appName, newUserEmail);
-          sendEmailTask.stop()
-        }
-      }
-    });
 
+    const sendEmailTask = cron.schedule('* * * * *', () => {
+      if (emailQueue.current) {
+        const newUserEmail = emailQueue.current;
+        sendSignUpEmail(config.appName, newUserEmail);
+        emailQueue.current = null;
+      }
+      sendEmailTask.stop()
+    });
+    
     return sendUserWithoutPassword(user);
   };
 
