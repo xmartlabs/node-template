@@ -19,6 +19,12 @@ const envVarsSchema = joi.object()
     REFRESH_TOKEN_SECRET: joi.string().required(),
     ACCESS_TOKEN_EXPIRES_IN: joi.string().required(),
     REFRESH_TOKEN_EXPIRES_IN: joi.string().required(),
+    EMAIL_CLIENT: joi.string().required(),
+    EMAIL_SERVICE_PROVIDER_USER_ID: joi.string().required(),
+    EMAIL_SERVICE_PROVIDER_USER_PASSWORD: joi.string().required(),
+    EMAIL_HOST: joi.string().required(),
+    EMAIL_PORT: joi.number(),
+    APP_NAME: joi.string().required(),
   })
   .unknown();
 
@@ -40,4 +46,10 @@ export const config: Config = {
   refreshTokenSecret: envVars.REFRESH_TOKEN_SECRET,
   accessTokenExpiresIn: envVars.ACCESS_TOKEN_EXPIRES_IN,
   refreshTokenExpiresIn: envVars.REFRESH_TOKEN_EXPIRES_IN,
+  emailClient: envVars.EMAIL_CLIENT,
+  emailServiceProviderUserId: envVars.EMAIL_SERVICE_PROVIDER_USER_ID,
+  emailServiceProviderUserPassword: envVars.EMAIL_SERVICE_PROVIDER_USER_PASSWORD,
+  emailHost: envVars.EMAIL_HOST,
+  emailPort: envVars.EMAIL_PORT,
+  appName: envVars.APP_NAME,
 };

@@ -3,7 +3,7 @@ import { Prisma, User } from '@prisma/client';
 import prisma from 'root/prisma/client';
 import { ApiError } from 'utils/apiError';
 import { ReturnUser, CreateUserParams } from 'types';
-import { sendUserWithoutPassword } from 'utils/user';
+import { sendUserWithoutPassword, startSendEmailTask } from 'utils/user';
 import { emailRegex } from 'utils/constants';
 import { errors } from 'config/errors';
 
@@ -48,6 +48,8 @@ export class UserService {
     if (!user) {
       throw new ApiError(errors.USER_CREATION_FAILED);
     }
+
+    startSendEmailTask(email);
     return sendUserWithoutPassword(user);
   };
 
