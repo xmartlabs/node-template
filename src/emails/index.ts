@@ -5,7 +5,7 @@ import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
 import { config } from 'config/config';
 
-const createTransporter = async () => {
+const createTransporter = () => {
   const testTransporter = nodemailer.createTransport({
     host: config.emailHost,
     port: config.emailPort,
@@ -45,7 +45,7 @@ export async function sendSignUpEmail(
   });
 
   try {
-    const emailTransporter = await createTransporter();
+    const emailTransporter = createTransporter();
     await emailTransporter.sendMail({
       from: config.emailClient,
       to: emailTo,

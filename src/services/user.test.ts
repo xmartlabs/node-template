@@ -2,32 +2,28 @@ import { prismaMock } from 'tests/prismaSetup';
 import { generateUserData } from 'tests/utils/generateData';
 import { UserService } from 'services/user';
 import { errors } from 'config/errors';
-import cron from 'node-cron';
-import { sendSignUpEmail } from 'emails/index';
-
-jest.mock('node-cron');
+import { sendUserWithoutPassword, startSendEmailTask } from 'utils/user';
 
 jest.mock('emails/index');
+jest.mock('utils/user');
 
-const mockSendSignUpEmail = sendSignUpEmail as jest.Mock;
+const mockStartSendEmailTask = startSendEmailTask as jest.Mock;
+const mockSendUserWithoutPassword = sendUserWithoutPassword as jest.Mock;
 
 describe('User service: ', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
   test('should create a new user with email', async () => {
-    const mockSchedule = jest.fn().mockImplementation((pattern, callback) => {
-      callback();
-    });
-    cron.schedule = mockSchedule;
     const userData = generateUserData();
 
     prismaMock.user.create.mockResolvedValue(userData);
     prismaMock.user.update.mockResolvedValue(userData);
-    mockSendSignUpEmail.mockResolvedValue(undefined);
+    mockStartSendEmailTask.mockResolvedValue(undefined);
     const {
       password, ...userWithoutPassword
     } = userData;
+    mockSendUserWithoutPassword.mockResolvedValue(userWithoutPassword);
     await expect(UserService.create(userData)).resolves.toEqual(userWithoutPassword);
   });
 

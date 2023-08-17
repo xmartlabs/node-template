@@ -1,14 +1,11 @@
 import * as bcrypt from 'bcryptjs';
-import cron from 'node-cron';
 import { Prisma, User } from '@prisma/client';
 import prisma from 'root/prisma/client';
 import { ApiError } from 'utils/apiError';
 import { ReturnUser, CreateUserParams } from 'types';
-import { sendUserWithoutPassword } from 'utils/user';
+import { sendUserWithoutPassword, startSendEmailTask } from 'utils/user';
 import { emailRegex } from 'utils/constants';
 import { errors } from 'config/errors';
-import { sendSignUpEmail } from 'emails';
-import { config } from 'config/config';
 
 export class UserService {
   static find = async (id : string) : Promise<ReturnUser | null> => {
@@ -33,7 +30,6 @@ export class UserService {
     const { name, email, password } = userBody;
 
     let user: User | null = null;
-    const newUserQueue: string[] = [];
 
     // Check if email is valid (from email-validator library)
     if (!emailRegex.test(email)) {
@@ -60,16 +56,8 @@ export class UserService {
     if (!user) {
       throw new ApiError(errors.USER_CREATION_FAILED);
     }
-    newUserQueue.push(email);
-    cron.schedule('* * * * *', () => {
-      if (newUserQueue.length > 0) {
-        const newUserEmail = newUserQueue.shift();
-        if (newUserEmail) {
-          sendSignUpEmail(config.appName, newUserEmail);
-        }
-      }
-    });
 
+    startSendEmailTask(email);
     return sendUserWithoutPassword(user);
   };
 
