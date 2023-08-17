@@ -15,7 +15,7 @@ export const startSendEmailTask = (email : string) : void => {
   };
   if (!emailQueue.current) {
     emailQueue.current = email;
-  };
+  }
   const sendEmailTask = cron.schedule('* * * * *', () => {
     if (emailQueue.current) {
       const newUserEmail = emailQueue.current;

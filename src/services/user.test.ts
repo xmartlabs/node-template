@@ -2,7 +2,7 @@ import { prismaMock } from 'tests/prismaSetup';
 import { generateUserData } from 'tests/utils/generateData';
 import { UserService } from 'services/user';
 import { errors } from 'config/errors';
-import { sendUserWithoutPassword ,startSendEmailTask } from 'utils/user';
+import { sendUserWithoutPassword, startSendEmailTask } from 'utils/user';
 
 jest.mock('emails/index');
 jest.mock('utils/user');
@@ -23,7 +23,7 @@ describe('User service: ', () => {
     const {
       password, ...userWithoutPassword
     } = userData;
-    mockSendUserWithoutPassword.mockResolvedValue(userWithoutPassword)
+    mockSendUserWithoutPassword.mockResolvedValue(userWithoutPassword);
     await expect(UserService.create(userData)).resolves.toEqual(userWithoutPassword);
   });
 
