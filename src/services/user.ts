@@ -1,14 +1,11 @@
 import * as bcrypt from 'bcryptjs';
-import cron from 'node-cron';
 import { Prisma, User } from '@prisma/client';
 import prisma from 'root/prisma/client';
 import { ApiError } from 'utils/apiError';
 import { ReturnUser, CreateUserParams } from 'types';
-import { sendUserWithoutPassword } from 'utils/user';
+import { sendUserWithoutPassword, startSendEmailTask } from 'utils/user';
 import { emailRegex } from 'utils/constants';
 import { errors } from 'config/errors';
-import { sendSignUpEmail } from 'emails';
-import { config } from 'config/config';
 
 export class UserService {
   static find = async (id : string) : Promise<ReturnUser | null> => {
@@ -22,10 +19,6 @@ export class UserService {
   static all = () : Promise<User[]> => (prisma.user.findMany());
 
   static create = async (userBody : CreateUserParams) : Promise<ReturnUser> => {
-    const emailQueue = {
-      current: null as string | null,
-    };
-
     const { name, email, password } = userBody;
 
     let user: User | null = null;
@@ -55,19 +48,8 @@ export class UserService {
     if (!user) {
       throw new ApiError(errors.USER_CREATION_FAILED);
     }
-    if (!emailQueue.current) {
-      emailQueue.current = email;
-    }
 
-    const sendEmailTask = cron.schedule('* * * * *', () => {
-      if (emailQueue.current) {
-        const newUserEmail = emailQueue.current;
-        sendSignUpEmail(config.appName, newUserEmail);
-        emailQueue.current = null;
-      }
-      sendEmailTask.stop();
-    });
-
+    startSendEmailTask(email);
     return sendUserWithoutPassword(user);
   };
 
