@@ -54,7 +54,7 @@ export class UserService {
     }
     if (!user) {
       throw new ApiError(errors.USER_CREATION_FAILED);
-    } 
+    }
     if (!emailQueue.current) {
       emailQueue.current = email;
     }
@@ -65,9 +65,9 @@ export class UserService {
         sendSignUpEmail(config.appName, newUserEmail);
         emailQueue.current = null;
       }
-      sendEmailTask.stop()
+      sendEmailTask.stop();
     });
-    
+
     return sendUserWithoutPassword(user);
   };
 
