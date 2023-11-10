@@ -1,4 +1,4 @@
-![node version](https://img.shields.io/badge/node-18.16.1-brightgreen)
+![node version](https://img.shields.io/badge/node-20.9.0-brightgreen)
 ![express version](https://img.shields.io/badge/express-4.17.1-brightgreen)
 ![prisma version](https://img.shields.io/badge/prisma-5.0.0-brightgreen)
 ![tsoa version](https://img.shields.io/badge/tsoa-5.1.1-brightgreen)
@@ -11,7 +11,7 @@ This project contains Xmartlabs' Node.js template.
 
 ## Contributing to this Template
 
-Make sure you have the appropriate version of Node (18.16.1) installed.
+Make sure you have the appropriate version of Node (20.9.0) installed.
 
 Then install the required packages:
 
@@ -30,8 +30,8 @@ npm test
 
 ## Project Setup
 
-* Install Node 18.16.1 (as documented on [`.node-version`](./.node-version))
-* Install the appropriate version of npm: `npm i -g npm@9.8.1`
+* Install Node 20.9.0 (as documented on [`.node-version`](./.node-version))
+* Install the appropriate version of npm: `npm i -g npm@10.1.0`
 * Install packages with `npm install`
 * Create a new `.env` file using the `.env.example` as an example. for that run `$ cp .env.example .env`.
 * Set the variables in the new environment file `.env` you created above.
