@@ -25,7 +25,10 @@ export function expressAuthentication(
             reject(new ApiError(errors.INVALID_TOKEN));
           }
         }
-        resolve(decoded.user);
+        resolve({
+          ...decoded.user,
+          token,
+        });
       });
     });
   }
