@@ -8,7 +8,7 @@ export const sendUserWithoutPassword = (user : DatabaseUser) : ReturnUser => {
   return userWithoutPassword;
 };
 
-export const startSendEmailTask = (email : string) : void => {
+export const startSendEmailTask = (email: string): void => {
   const emailQueue = {
     current: null as string | null,
   };

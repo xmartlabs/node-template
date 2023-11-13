@@ -1,13 +1,17 @@
 ## JIRA Ticket
-* [Ticket name](JIRA LINK)
+
+- [Ticket name](JIRA LINK)
 
 ## Type of change
-* [ ] Fix
-* [ ] Story
-* [ ] Chore
+
+- [ ] Fix
+- [ ] Story
+- [ ] Chore
 
 ## Description of the change
+
 Description here
 
 ## Related PRs
+
 Links to the related PRs

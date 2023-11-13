@@ -1,15 +1,16 @@
 import { createLogger, format, transports } from 'winston';
 import { config } from 'config/config';
 
-const {
-  colorize, combine, metadata, timestamp, printf,
-} = format;
+const { colorize, combine, metadata, timestamp, printf } = format;
 
 // Format ERROR or WARN log levels to be print in red
 const customFormat = printf((info: any) => {
   const message = `${info.timestamp} [${info.level}] ${info.message}`;
   if (info.level === 'ERROR' || info.level === 'WARN') {
-    return colorize({ level: true }).colorize(info.level.toLowerCase(), message);
+    return colorize({ level: true }).colorize(
+      info.level.toLowerCase(),
+      message
+    );
   }
 
   return message;
@@ -30,11 +31,9 @@ export const appLogger = createLogger({
     timestamp({
       format: 'YYYY-MM-DD HH:mm:ss',
     }),
-    customFormat,
+    customFormat
   ),
-  transports: [
-    new transports.Console(),
-  ],
+  transports: [new transports.Console()],
 });
 
 export class AccessLogStream {

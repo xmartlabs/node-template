@@ -5,8 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
+<<<<<<< HEAD
     branches: [ main ]
 env:
   BASE_URL: "http://dummy-server"
@@ -25,13 +26,16 @@ env:
   SMTP_PORT: "1111"
   APP_NAME: "APPNAME"
 
+=======
+    branches: [main]
+>>>>>>> 55e2d00 (run prettier)
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
+<<<<<<< HEAD
     - uses: actions/checkout@v3
     - name: Use Node.js 20.9.0
       uses: actions/setup-node@v3
@@ -46,3 +50,17 @@ jobs:
       run: npm test
     - name: Run build
       run: npm run build
+=======
+      - uses: actions/checkout@v3
+      - name: Use Node.js 20.9.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.9.0
+          cache: 'npm'
+      - name: Install libraries
+        run: npm install
+      - name: Run linter
+        run: npm run lint
+      - name: Run test
+        run: npm test
+>>>>>>> 55e2d00 (run prettier)

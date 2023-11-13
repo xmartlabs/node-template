@@ -7,7 +7,7 @@
     "specVersion": 3,
     "securityDefinitions": {
       "idToken": {
-          "type": "jwt"
+        "type": "jwt"
       }
     }
   },

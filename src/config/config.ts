@@ -45,10 +45,19 @@ export const config: Config = {
   refreshTokenSecret: envVars.REFRESH_TOKEN_SECRET,
   accessTokenExpiresIn: envVars.ACCESS_TOKEN_EXPIRES_IN,
   refreshTokenExpiresIn: envVars.REFRESH_TOKEN_EXPIRES_IN,
+<<<<<<< HEAD
   emailFrom: envVars.EMAIL_FROM,
   smtpUser: envVars.SMTP_USER,
   smtpPassword: envVars.SMTP_PASSWORD,
   smtpHost: envVars.SMTP_HOST,
   smtpPort: envVars.SMTP_PORT,
+=======
+  emailClient: envVars.EMAIL_CLIENT,
+  emailServiceProviderUserId: envVars.EMAIL_SERVICE_PROVIDER_USER_ID,
+  emailServiceProviderUserPassword:
+    envVars.EMAIL_SERVICE_PROVIDER_USER_PASSWORD,
+  emailHost: envVars.EMAIL_HOST,
+  emailPort: envVars.EMAIL_PORT,
+>>>>>>> 55e2d00 (run prettier)
   appName: envVars.APP_NAME,
 };

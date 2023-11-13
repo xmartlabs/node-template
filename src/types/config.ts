@@ -16,7 +16,7 @@ export interface Config {
 }
 
 export interface ErrorInterface {
-  httpCode: number
-  errorCode: number
-  description: string
+  httpCode: number;
+  errorCode: number;
+  description: string;
 }
