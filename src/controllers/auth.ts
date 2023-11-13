@@ -31,7 +31,7 @@ export class AuthController extends Controller {
   @Post('/logout')
   @Security('jwt')
   public async logout(@Request() req: AuthenticatedRequest): Promise<void> {
-    await AuthService.logout(req.user.id);
+    await AuthService.logout(req.user.token);
     this.setStatus(httpStatus.OK);
   }
 
