@@ -22,12 +22,7 @@ export const errorConverter = (
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const errorHandler = (
-  err: ApiError,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const errorHandler = (err: ApiError, req: Request, res: Response) => {
   let { httpCode, message } = err;
   if (!err.isOperational) {
     httpCode =
