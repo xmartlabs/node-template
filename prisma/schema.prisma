@@ -12,15 +12,19 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
-  password String
-  name     String?
+  id         String    @id @default(uuid())
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt  DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  email      String    @unique
+  password   String
+  name       String?
 }
 
 model Session {
-  id             String  @id @default(uuid())
-  userId         String  @unique
-  accessToken    String  @unique
-  refreshToken   String  @unique
+  id             String   @id @default(uuid())
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  userId         String   @unique
+  accessToken    String   @unique
+  refreshToken   String   @unique
 }
