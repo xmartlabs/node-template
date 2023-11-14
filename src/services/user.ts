@@ -6,6 +6,7 @@ import { ReturnUser, CreateUserParams } from 'types';
 import { sendUserWithoutPassword, startSendEmailTask } from 'utils/user';
 import { emailRegex } from 'utils/constants';
 import { errors } from 'config/errors';
+import { UpdateUserParams } from 'types/user';
 
 export class UserService {
   static find = async (id : string) : Promise<ReturnUser | null> => {
@@ -52,7 +53,7 @@ export class UserService {
     return sendUserWithoutPassword(user);
   };
 
-  static update = async (id : string, userData : User) : Promise<ReturnUser> => {
+  static update = async (id : string, userData : UpdateUserParams) : Promise<ReturnUser> => {
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) {
       throw new ApiError(errors.NOT_FOUND_USER);
