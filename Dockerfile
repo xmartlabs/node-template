@@ -1,5 +1,5 @@
 # Start with fully-featured Node.js base image
-FROM node:16.14.2 AS builder
+FROM node:20.9.0 AS builder
 WORKDIR /home/node/app
 
 # Copy dependency information and install production dependencies
@@ -20,7 +20,7 @@ RUN npm run build
 
 
 # Run-time stage
-FROM node:16.14.2-alpine
+FROM node:20.9.0-alpine
 
 WORKDIR /home/node/app
 

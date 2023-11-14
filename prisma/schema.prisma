@@ -12,29 +12,19 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
-  password String
-  name     String?
-  otp      OTP?
+  id         String    @id @default(uuid())
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt  DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  email      String    @unique
+  password   String
+  name       String?
 }
 
 model Session {
-  id           String @id @default(uuid())
-  userId       String @unique
-  accessToken  String @unique
-  refreshToken String @unique
-}
-
-model OTP {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
-  expiresAt DateTime @map("expires_at")
-  code      String
-  userId    String   @unique @map("user_id")
-  user      User     @relation(fields: [userId], references: [id])
-
-  @@unique([code, userId])
-  @@map("otp")
+  id             String   @id @default(uuid())
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  userId         String   @unique
+  accessToken    String   @unique
+  refreshToken   String   @unique
 }
