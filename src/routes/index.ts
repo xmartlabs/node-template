@@ -6,11 +6,11 @@ import { ApiError } from 'utils/apiError';
 export const routes = Router();
 
 routes.get('/', (_req: Request, res: Response) =>
-  res.send('<a href="/docs">See the API docs!</a>')
+  res.send('<a href="/docs">See the API docs!</a>'),
 );
 
 routes.use('/docs', swaggerUi.serve, async (_req: Request, res: Response) =>
-  res.send(swaggerUi.generateHTML(await import('root/build/swagger.json')))
+  res.send(swaggerUi.generateHTML(await import('root/build/swagger.json'))),
 );
 
 // Send back a 404 error for any unknown api request

@@ -17,7 +17,7 @@ const createTransporter = () => {
 
 export async function sendSignUpEmail(
   appName: string,
-  emailTo: string
+  emailTo: string,
 ): Promise<void> {
   const subject = ` Welcome to ${appName}!!`;
   const html = pug.renderFile('src/emails/template.pug', {

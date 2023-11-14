@@ -22,7 +22,7 @@ describe('User service: ', () => {
     const { password, ...userWithoutPassword } = userData;
     mockSendUserWithoutPassword.mockResolvedValue(userWithoutPassword);
     await expect(UserService.create(userData)).resolves.toEqual(
-      userWithoutPassword
+      userWithoutPassword,
     );
   });
 

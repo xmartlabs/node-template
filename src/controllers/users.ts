@@ -26,7 +26,7 @@ export class UsersControllerV1 extends Controller {
   @Get('/me')
   @Security('jwt')
   public async getMe(
-    @Request() req: AuthenticatedRequest
+    @Request() req: AuthenticatedRequest,
   ): Promise<ReturnUser | null> {
     const user = await UserService.find(req.user.id);
     this.setStatus(httpStatus.OK);

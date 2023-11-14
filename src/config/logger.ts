@@ -9,7 +9,7 @@ const customFormat = printf((info: any) => {
   if (info.level === 'ERROR' || info.level === 'WARN') {
     return colorize({ level: true }).colorize(
       info.level.toLowerCase(),
-      message
+      message,
     );
   }
 
@@ -31,7 +31,7 @@ export const appLogger = createLogger({
     timestamp({
       format: 'YYYY-MM-DD HH:mm:ss',
     }),
-    customFormat
+    customFormat,
   ),
   transports: [new transports.Console()],
 });

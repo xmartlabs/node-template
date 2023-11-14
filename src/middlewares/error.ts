@@ -10,7 +10,7 @@ export const errorConverter = (
   err: any,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   let error = err;
   if (error instanceof ValidateError) {

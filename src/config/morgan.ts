@@ -28,7 +28,7 @@ const debugHandler = morgan(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     skip: (_req, _res) => config.logLevel !== 'debug',
     stream: { write: (message) => appLogger.debug(message.trim()) },
-  }
+  },
 );
 export const morganHandlers = {
   successHandler,

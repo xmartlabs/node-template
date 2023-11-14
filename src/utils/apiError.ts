@@ -14,7 +14,7 @@ export class ApiError extends Error {
     error: ErrorInterface,
     isOperational: boolean = true,
     additionalInfo: any = null,
-    stack = ''
+    stack = '',
   ) {
     super(error.description);
     this.httpCode = error.httpCode;

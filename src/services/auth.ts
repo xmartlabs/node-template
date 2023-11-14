@@ -74,7 +74,7 @@ export class AuthService {
   };
 
   static refresh = async (
-    refreshTokenParams: RefreshTokenParams
+    refreshTokenParams: RefreshTokenParams,
   ): Promise<ReturnAuth> => {
     const { refreshToken } = refreshTokenParams;
     const session = await prisma.session.findUnique({
