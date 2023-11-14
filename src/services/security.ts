@@ -2,14 +2,13 @@ import { randomBytes } from 'crypto';
 
 const DEFAULT_CODE_LENGTH = 6;
 
-const cryptoRandomNumber = (length: number) => randomBytes(length).readUIntBE(0, length);
-
-export const generateCode = (length = DEFAULT_CODE_LENGTH) => {
-  const highestCode = 10 ** length - 1;
-  const bytesLength = Buffer.byteLength(highestCode.toString());
-  const randomNumber = cryptoRandomNumber(bytesLength);
-
-  return String(
-    Math.floor((randomNumber * highestCode) / 2 ** (8 * bytesLength)),
-  ).padStart(length, '0');
+const generateCode = (length = DEFAULT_CODE_LENGTH) => {
+  let code = '';
+  while (code.length < length) {
+    const randomDigit = randomBytes(1).readUInt8(0) % 10;
+    code += randomDigit.toString();
+  }
+  return code;
 };
+
+export { generateCode };

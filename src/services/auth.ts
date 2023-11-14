@@ -74,7 +74,7 @@ export class AuthService {
     }
     const user = await prisma.user.findUnique({ where: { id: session.userId } });
     if (!user) {
-      throw new ApiError(errors.NOT_FOUND_USER);
+      throw new ApiError(errors.USER_NOT_FOUND);
     }
     const accessToken = await this.generateAccessToken(user);
     await prisma.session.update({ where: { userId: user.id }, data: { accessToken } });

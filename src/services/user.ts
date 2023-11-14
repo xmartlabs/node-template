@@ -11,7 +11,7 @@ export class UserService {
   static find = async (id : string) : Promise<ReturnUser | null> => {
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) {
-      throw new ApiError(errors.NOT_FOUND_USER);
+      throw new ApiError(errors.USER_NOT_FOUND);
     }
     return sendUserWithoutPassword(user);
   };
@@ -19,7 +19,7 @@ export class UserService {
   static findByEmail = async (email : string) : Promise<ReturnUser | null> => {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
-      throw new ApiError(errors.NOT_FOUND_USER);
+      throw new ApiError(errors.USER_NOT_FOUND);
     }
     return sendUserWithoutPassword(user);
   };
@@ -65,7 +65,7 @@ export class UserService {
     const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
-      throw new ApiError(errors.NOT_FOUND_USER);
+      throw new ApiError(errors.USER_NOT_FOUND);
     }
 
     const updatedUser = await prisma.user.update({
@@ -82,7 +82,7 @@ export class UserService {
     const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {
-      throw new ApiError(errors.NOT_FOUND_USER);
+      throw new ApiError(errors.USER_NOT_FOUND);
     }
 
     await prisma.user.delete({ where: { id } });

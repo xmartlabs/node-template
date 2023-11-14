@@ -44,7 +44,7 @@ export const errors = {
     errorCode: 404_000,
     description: 'Not found',
   },
-  NOT_FOUND_USER: {
+  USER_NOT_FOUND: {
     httpCode: 404,
     errorCode: 404_001,
     description: 'User not found',

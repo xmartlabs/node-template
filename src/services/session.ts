@@ -2,8 +2,7 @@ import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
 import { sendEmail } from 'emails';
 import { config } from 'config/config';
-import { generateHashAndCode, verifyHash } from 'utils/hash';
-import { HashTypes } from 'types/hash';
+import { generateOTPCode, verifyCode } from 'utils/hash';
 import * as bcrypt from 'bcryptjs';
 import prisma from 'root/prisma/client';
 import { UserService } from './user';
@@ -12,14 +11,12 @@ export class SessionService {
   static requestResetPasswordEmail = async (email: string) => {
     const user = await UserService.findByEmail(email);
     if (!user) {
-      throw new ApiError(errors.NOT_FOUND_USER);
+      throw new ApiError(errors.USER_NOT_FOUND);
     }
-    const newCode = await generateHashAndCode(
-      email,
-      HashTypes.RESET_PASSWORD,
+    const code = await generateOTPCode(
       user.id,
     );
-    await sendEmail(email, `${config.appName} one time use code`, newCode, '');
+    await sendEmail(email, `${config.appName} one time use code`, code, '');
   };
 
   static resetPassword = async (
@@ -29,19 +26,26 @@ export class SessionService {
   ) => {
     const user = await UserService.findByEmail(email);
     if (!user) {
-      throw new ApiError(errors.NOT_FOUND_USER);
+      throw new ApiError(errors.USER_NOT_FOUND);
     }
-    const hash = await verifyHash(code, email, HashTypes.RESET_PASSWORD, user.id);
+
+    let hash;
+    try {
+      hash = await verifyCode(code, user.id);
+    } catch (error) {
+      throw new ApiError(errors.INVALID_CODE);
+    }
+
     const cryptPassword = await bcrypt.hash(password, 8);
     try {
       await prisma.$transaction([
-        prisma.hash.delete({ where: { id: hash.id } }),
+        prisma.oTP.delete({ where: { id: hash.id } }),
         prisma.user.update({
           where: { id: user.id },
           data: { password: cryptPassword },
         }),
       ]);
-    } catch {
+    } catch (error) {
       throw new ApiError(errors.INTERNAL_SERVER_ERROR);
     }
   };

@@ -3,76 +3,64 @@ import { errors } from 'config/errors';
 import { addMinutes } from 'date-fns';
 import prisma from 'root/prisma/client';
 import { generateCode } from 'services/security';
-import { HashTypes } from 'types/hash';
 import { ApiError } from 'utils/apiError';
 
-export const generateHashAndCode = async (
-  sentTo: string,
-  hashType: HashTypes,
-  userId?: string,
+export const generateOTPCode = async (
+  userId: string,
 ) => {
-  const hash = await prisma.hash.findFirst({
+  const now = new Date();
+  let code = await prisma.oTP.findFirst({
     where: {
-      sentTo,
-      type: hashType,
       userId,
     },
   });
 
-  if (hash && new Date() < addMinutes(hash.updatedAt, 1)) {
+  if (code && now < addMinutes(code.updatedAt, 1)) {
     throw new ApiError(errors.TOO_MANY_REQUESTS);
   }
+  
 
   const newCode = generateCode();
-
-  const newHash = await bcrypt.hash(newCode, 8);
+  const expiresAt = addMinutes(now, 15);
 
   try {
-    await prisma.hash.upsert({
+    await prisma.oTP.upsert({
       create: {
-        sentTo,
-        expiresAt: addMinutes(new Date(), 15),
-        hash: newHash,
-        type: hashType,
+        expiresAt,
+        code: newCode,
         userId,
       },
       update: {
-        hash: newHash,
-        expiresAt: addMinutes(new Date(), 15),
-        userId,
+        code: newCode,
+        expiresAt,
       },
-      where: {
-        sentTo_type: { sentTo, type: hashType },
-      },
+      where: {  userId },
+
     });
-  } catch {
+  } catch (error) {
     throw new ApiError(errors.HASH_CREATION_FAILED);
   }
 
   return newCode;
 };
 
-export const verifyHash = async (
+export const verifyCode = async (
   code: string,
-  sentTo: string,
-  hashType: HashTypes,
-  userId?: string,
+  userId: string,
 ) => {
-  const hash = await prisma.hash.findFirst({
-    where: { sentTo, type: hashType, userId },
+  const otp = await prisma.otp.findFirst({
+    where: {  userId },
   });
-
-  if (!hash) {
-    throw new ApiError(errors.INVALID_CODE);
+console.log('hash',otp)
+  if (!otp) {
+    throw new ApiError(errors.INVALID_USER);
   }
 
-  if (!bcrypt.compareSync(code, hash.hash)) {
-    throw new ApiError(errors.INVALID_CODE);
+  const isCodeValid = await bcrypt.compare(code, otp.code);
+  console.log('isCodeValid', isCodeValid)
+  if (!isCodeValid || otp.expiresAt < new Date()) {
+    throw new ApiError(isCodeValid ? errors.CODE_EXPIRED : errors.INVALID_CODE);
   }
 
-  if (hash.expiresAt < new Date()) {
-    throw new ApiError(errors.CODE_EXPIRED);
-  }
-
-  return hash;
+  return code;
 };
