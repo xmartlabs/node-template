@@ -2,17 +2,20 @@ import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
 import { sendEmail } from 'emails';
 import { config } from 'config/config';
-import { generateOTPCode, verifyCode } from 'utils/hash';
+import { generateOTPCode, verifyCode } from 'utils/otpCode';
 import * as bcrypt from 'bcryptjs';
 import prisma from 'root/prisma/client';
+import { emailRegex } from 'utils/constants';
+import { User } from '@prisma/client';
 import { UserService } from './user';
 
 export class SessionService {
   static requestResetPasswordEmail = async (email: string) => {
-    const user = await UserService.findByEmail(email);
-    if (!user) {
-      throw new ApiError(errors.USER_NOT_FOUND);
+    if (!emailRegex.test(email)) {
+      throw new ApiError(errors.INVALID_EMAIL);
     }
+    const user = await UserService.findByEmail(email) as User;
+
     const code = await generateOTPCode(
       user.id,
     );
@@ -29,24 +32,17 @@ export class SessionService {
       throw new ApiError(errors.USER_NOT_FOUND);
     }
 
-    let hash;
-    try {
-      hash = await verifyCode(code, user.id);
-    } catch (error) {
-      throw new ApiError(errors.INVALID_CODE);
-    }
+    await verifyCode(code, user.id);
 
     const cryptPassword = await bcrypt.hash(password, 8);
-    try {
-      await prisma.$transaction([
-        prisma.oTP.delete({ where: { id: hash.id } }),
-        prisma.user.update({
-          where: { id: user.id },
-          data: { password: cryptPassword },
-        }),
-      ]);
-    } catch (error) {
-      throw new ApiError(errors.INTERNAL_SERVER_ERROR);
-    }
+    await prisma.$transaction(async () => {
+      await prisma.oTP.delete({ where: { userId: user.id } });
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { password: cryptPassword },
+      });
+    }).catch((error) => {
+      throw error;
+    });
   };
 }

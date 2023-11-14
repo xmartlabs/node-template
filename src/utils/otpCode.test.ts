@@ -3,7 +3,7 @@ import { errors } from 'config/errors';
 import MockDate from 'mockdate';
 import { prismaMock } from 'tests/prismaSetup';
 import { ApiError } from 'utils/apiError';
-import { verifyCode } from 'utils/hash';
+import { verifyCode } from 'utils/otpCode';
 import { generateUserData } from 'tests/utils/generateData';
 import { createStubHash } from '../../__mocks__/support/hash';
 
@@ -15,7 +15,6 @@ const userData = generateUserData();
 
 const mockFindFirst = jest.fn();
 const mockCompare = compare as jest.Mock;
-
 
 describe('verifyCode', () => {
   beforeAll(() => {
@@ -58,7 +57,7 @@ describe('verifyCode', () => {
 
     it('code has expired', () => {
       MockDate.set('2020-01-25');
-      prismaMock.otp.findFirst.mockResolvedValueOnce(stubHash)
+      prismaMock.oTP.findFirst.mockResolvedValueOnce(stubHash);
       mockCompare.mockReturnValue(true);
 
       expect(
@@ -68,21 +67,21 @@ describe('verifyCode', () => {
         ),
       ).rejects.toThrowError(new ApiError(errors.CODE_EXPIRED));
     });
-//   });
+    //   });
 
-//   it('success case', async () => {
-//     mockFindFirst.mockResolvedValue(stubHash);
+    //   it('success case', async () => {
+    //     mockFindFirst.mockResolvedValue(stubHash);
 
-//     await expect(
-//       verifyCode('123456', userData.email, HashTypes.RESET_PASSWORD),
-//     ).resolves.toEqual(stubHash);
+    //     await expect(
+    //       verifyCode('123456', userData.email, HashTypes.RESET_PASSWORD),
+    //     ).resolves.toEqual(stubHash);
 
-//     expect(mockFindFirst).toHaveBeenCalledWith({
-//       where: {
-//         sentTo: userData.email,
-//         type: HashTypes.RESET_PASSWORD,
-//         userId: undefined,
-//       },
-//     });
+    //     expect(mockFindFirst).toHaveBeenCalledWith({
+    //       where: {
+    //         sentTo: userData.email,
+    //         type: HashTypes.RESET_PASSWORD,
+    //         userId: undefined,
+    //       },
+    //     });
   });
 });

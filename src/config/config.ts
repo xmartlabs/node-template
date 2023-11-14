@@ -25,6 +25,7 @@ const envVarsSchema = joi.object()
     EMAIL_HOST: joi.string().required(),
     EMAIL_PORT: joi.number(),
     APP_NAME: joi.string().required(),
+    OTP_CODE_EXPIRES_IN_MINUTES: joi.number().required(),
   })
   .unknown();
 
@@ -52,4 +53,5 @@ export const config: Config = {
   emailHost: envVars.EMAIL_HOST,
   emailPort: envVars.EMAIL_PORT,
   appName: envVars.APP_NAME,
+  otpCodeExpiresInMinutes: envVars.OTP_CODE_EXPIRES_IN_MINUTES,
 };

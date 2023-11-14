@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import {
-  Body, Controller, Post, Route, Security,
+  Body, Controller, Post, Route,
 } from 'tsoa';
 import { SessionService } from 'services/session';
 import { RequestResetPassword, RequestResetPasswordCode } from 'types/session';
@@ -8,7 +8,6 @@ import { RequestResetPassword, RequestResetPasswordCode } from 'types/session';
 @Route('sessions')
 export class SessionsController extends Controller {
   @Post('/requestResetPasswordCode')
-  @Security('jwt')
   public async sendResetPasswordEmail(
     @Body() body: RequestResetPasswordCode,
   ): Promise<void> {
@@ -17,7 +16,6 @@ export class SessionsController extends Controller {
   }
 
   @Post('/resetPassword')
-  @Security('jwt')
   public async resetPassword(
     @Body() body: RequestResetPassword,
   ): Promise<void> {

@@ -54,15 +54,15 @@ export const errors = {
     errorCode: 409_000,
     description: 'User already exists',
   },
+  UNVALIDATED_CODE_ALREADY_EXISTS: {
+    httpCode: 409,
+    errorCode: 409_000,
+    description: 'Unvalidated code already exists',
+  },
   VALIDATION_ERROR: {
     httpCode: 422,
     errorCode: 422_000,
     description: 'Validation error',
-  },
-  TOO_MANY_REQUESTS: {
-    httpCode: 429,
-    errorCode: 429_000,
-    description: 'Too many requests',
   },
   INTERNAL_SERVER_ERROR: {
     httpCode: 500,
@@ -73,10 +73,5 @@ export const errors = {
     httpCode: 500,
     errorCode: 500_001,
     description: 'User creation failed',
-  },
-  HASH_CREATION_FAILED: {
-    httpCode: 500,
-    errorCode: 500_002,
-    description: 'Hash creation failed',
   },
 };

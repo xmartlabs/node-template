@@ -20,18 +20,13 @@ export async function sendEmail(
   body: string,
   html: string,
 ) {
-  try {
-    await emailTransporter.sendMail({
-      from: config.emailClient,
-      to: emailTo,
-      subject,
-      text: body,
-      html,
-    });
-  } catch (error) {
-    console.error(error);
-    throw new ApiError(errors.INTERNAL_SERVER_ERROR);
-  }
+  await emailTransporter.sendMail({
+    from: config.emailClient,
+    to: emailTo,
+    subject,
+    text: body,
+    html,
+  });
 }
 
 export async function sendSignUpEmail(

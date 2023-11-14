@@ -13,6 +13,7 @@ export interface Config {
   emailHost: string
   emailPort: number
   appName: string
+  otpCodeExpiresInMinutes: number
 }
 
 export interface ErrorInterface {
