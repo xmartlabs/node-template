@@ -16,6 +16,7 @@ x-common: &common
     - EMAIL_HOST=test
     - EMAIL_PORT=1111
     - APP_NAME=APPNAME
+    - OTP_CODE_EXPIRES_IN_MINUTES=15
 
 pipeline:
   setup:
