@@ -31,7 +31,7 @@ model Session {
 }
 
 model OTP {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
   expiresAt DateTime @map("expires_at") @db.Timestamp(6)
