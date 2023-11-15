@@ -7,9 +7,9 @@ import { generateUserData, generateOTPCodeData, generateOTPExpiredCodeData } fro
 jest.mock('bcryptjs');
 
 const OTPExpiredCodeData = generateOTPExpiredCodeData();
+const OTPCodeData = generateOTPCodeData();
+
 const userData = generateUserData();
-
-
 
 describe('verifyCode', () => {
   describe('error cases', () => {
@@ -22,7 +22,7 @@ describe('verifyCode', () => {
         ),
       ).rejects.toThrowError(new ApiError(errors.INVALID_USER));
     });
-    it('can not find user', () => {
+    it('expired code', () => {
       prismaMock.oTP.findFirst.mockResolvedValue(OTPExpiredCodeData);
       expect(
         verifyCode(
@@ -30,6 +30,24 @@ describe('verifyCode', () => {
           userData.id,
         ),
       ).rejects.toThrowError(new ApiError(errors.CODE_EXPIRED));
+    });
+    it('expired code', () => {
+      prismaMock.oTP.findFirst.mockResolvedValue(OTPCodeData);
+      expect(
+        verifyCode(
+          '123456',
+          userData.id,
+        ),
+      ).rejects.toThrowError(new ApiError(errors.INVALID_CODE));
+    });
+  });
+  describe('Verify code successfully', () => {
+    it('Verify code successfully', () => {
+      prismaMock.oTP.findFirst.mockResolvedValue({ ...OTPCodeData, code: '123456' });
+      expect(verifyCode(
+        '123456',
+        userData.id,
+      )).resolves.toEqual(true);
     });
   });
 });
