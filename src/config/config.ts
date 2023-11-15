@@ -1,36 +1,45 @@
-import joi from 'joi';
+import { z } from 'zod';
 import dotenv from 'dotenv';
 import * as path from 'path';
 import { Config } from 'types';
-// https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+
 dotenv.config({ path: path.join(__dirname, 'root/.env') });
 
 const DEFAULT_PORT = 8080;
 const DEFAULT_LOG_LEVEL = 'info';
 
-const envVarsSchema = joi.object()
-  .keys({
-    NODE_ENV: joi.string().valid('production', 'development', 'test').required(),
-    PORT: joi.number().default(DEFAULT_PORT),
-    LOG_LEVEL: joi.string().valid('error', 'warn', 'info', 'verbose', 'debug', 'silly').default(DEFAULT_LOG_LEVEL).description('Server log level'),
-    BASE_URL: joi.string().uri(),
-    DATABASE_URL: joi.string().required(),
-    ACCESS_TOKEN_SECRET: joi.string().required(),
-    REFRESH_TOKEN_SECRET: joi.string().required(),
-    ACCESS_TOKEN_EXPIRES_IN: joi.string().required(),
-    REFRESH_TOKEN_EXPIRES_IN: joi.string().required(),
-    EMAIL_CLIENT: joi.string().required(),
-    EMAIL_SERVICE_PROVIDER_USER_ID: joi.string().required(),
-    EMAIL_SERVICE_PROVIDER_USER_PASSWORD: joi.string().required(),
-    EMAIL_HOST: joi.string().required(),
-    EMAIL_PORT: joi.number(),
-    APP_NAME: joi.string().required(),
-  })
-  .unknown();
+const envVarsSchema = z.object({
+  NODE_ENV: z.enum(['production', 'development', 'test']),
+  PORT: z.string()
+    .transform((val) => (val ? Number(val) : DEFAULT_PORT))
+    .refine((val) => !Number.isNaN(val), 'PORT must be a number'),
+  LOG_LEVEL: z.enum(['error', 'warn', 'info', 'verbose', 'debug', 'silly']).default(DEFAULT_LOG_LEVEL),
+  BASE_URL: z.string().url(),
+  DATABASE_URL: z.string(),
+  ACCESS_TOKEN_SECRET: z.string(),
+  REFRESH_TOKEN_SECRET: z.string(),
+  ACCESS_TOKEN_EXPIRES_IN: z.string(),
+  REFRESH_TOKEN_EXPIRES_IN: z.string(),
+  EMAIL_CLIENT: z.string(),
+  EMAIL_SERVICE_PROVIDER_USER_ID: z.string(),
+  EMAIL_SERVICE_PROVIDER_USER_PASSWORD: z.string(),
+  EMAIL_HOST: z.string(),
+  EMAIL_PORT: z.string()
+    .transform((val) => Number(val))
+    .refine((val) => !Number.isNaN(val), 'EMAIL PORT must be a number'),
+  APP_NAME: z.string(),
+}).passthrough();
 
-const { value: envVars, error } = envVarsSchema.prefs({ errors: { label: 'key' } }).validate(process.env);
-if (error) {
-  throw new Error(`Config validation error: ${error.message}`);
+let envVars;
+try {
+  envVars = envVarsSchema.parse(process.env);
+} catch (error) {
+  if (error instanceof z.ZodError) {
+    const errorMessages = error.errors.map((e) => `${e.path.join('.')}: ${e.message}`).join(', ');
+    throw new Error(`Config validation error: ${errorMessages}`);
+  } else {
+    throw new Error(`Unexpected error: ${error}`);
+  }
 }
 
 export const isDevelopment = envVars.NODE_ENV === 'development';
