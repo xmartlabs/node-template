@@ -1,10 +1,9 @@
 import cron from 'node-cron';
-import { ReturnUser } from 'types';
-import { User } from '@prisma/client';
+import { ReturnUser, DatabaseUser } from 'types';
 import { sendSignUpEmail } from 'emails';
 import { config } from 'config/config';
 
-export const sendUserWithoutPassword = (user : User) : ReturnUser => {
+export const sendUserWithoutPassword = (user : DatabaseUser) : ReturnUser => {
   const { password, ...userWithoutPassword } = user;
   return userWithoutPassword;
 };

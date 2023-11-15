@@ -1,12 +1,16 @@
 import * as bcrypt from 'bcryptjs';
-import { Prisma, User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import prisma from 'root/prisma/client';
 import { ApiError } from 'utils/apiError';
-import { ReturnUser, CreateUserParams } from 'types';
+import {
+  ReturnUser,
+  CreateUserParams,
+  UpdateUserParams,
+  DatabaseUser,
+} from 'types';
 import { sendUserWithoutPassword, startSendEmailTask } from 'utils/user';
 import { emailRegex } from 'utils/constants';
 import { errors } from 'config/errors';
-import { UpdateUserParams } from 'types/user';
 
 export class UserService {
   static find = async (id : string) : Promise<ReturnUser | null> => {
@@ -17,12 +21,15 @@ export class UserService {
     return sendUserWithoutPassword(user);
   };
 
-  static all = () : Promise<User[]> => (prisma.user.findMany());
+  static all = async () : Promise<ReturnUser[]> => {
+    const users = await prisma.user.findMany();
+    return users.map(sendUserWithoutPassword);
+  };
 
   static create = async (userBody : CreateUserParams) : Promise<ReturnUser> => {
     const { name, email, password } = userBody;
 
-    let user: User | null = null;
+    let user: DatabaseUser | null = null;
 
     // Check if email is valid (from email-validator library)
     if (!emailRegex.test(email)) {

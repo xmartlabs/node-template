@@ -4,9 +4,7 @@ import {
   Controller, Delete, Get, Path, Put, Request, Route, Security,
 } from 'tsoa';
 import { UserService } from 'services';
-import { AuthenticatedRequest } from 'types/request';
-import { ReturnUser } from 'types';
-import { UpdateUserParams } from 'types/user';
+import { ReturnUser, UpdateUserParams, AuthenticatedRequest } from 'types';
 
 @Route('users')
 export class UsersController extends Controller {

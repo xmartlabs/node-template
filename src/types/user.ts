@@ -1,4 +1,13 @@
-import { User } from '@prisma/client';
+export { User as DatabaseUser } from '@prisma/client';
+
+type User = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  email: string;
+  password: string;
+  name: string | null;
+};
 
 export type ReturnUser = Omit<User, 'password'>;
 

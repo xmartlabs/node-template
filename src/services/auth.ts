@@ -7,7 +7,7 @@ import {
   ReturnUser,
   LoginParams,
   RefreshTokenParams,
-} from 'types/index';
+} from 'types';
 import prisma from 'root/prisma/client';
 import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
