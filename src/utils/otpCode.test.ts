@@ -10,7 +10,6 @@ import { createStubHash } from '../../__mocks__/support/hash';
 jest.mock('bcryptjs');
 
 const stubExpiredHash = createStubHash();
-const stubHash = createStubHash({ expiresAt: new Date('2022-05-25') });
 const userData = generateUserData();
 
 const mockFindFirst = jest.fn();
@@ -43,7 +42,5 @@ describe('verifyCode', () => {
         ),
       ).rejects.toThrowError(new ApiError(errors.INVALID_USER));
     });
-
-   
   });
 });
