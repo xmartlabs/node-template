@@ -16,7 +16,7 @@ export class UserService {
     return sendUserWithoutPassword(user);
   };
 
-  static findByEmail = async (email : string) : Promise<ReturnUser | null> => {
+  static findByEmail = async (email : string) : Promise<ReturnUser> => {
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       throw new ApiError(errors.USER_NOT_FOUND);
