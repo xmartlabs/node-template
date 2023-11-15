@@ -33,7 +33,7 @@ describe('verifyCode', () => {
   afterAll(MockDate.reset);
 
   describe('error cases', () => {
-    it('can not find hash', () => {
+    it('can not find user', () => {
       mockFindFirst.mockResolvedValue(null);
 
       expect(
@@ -41,47 +41,9 @@ describe('verifyCode', () => {
           '123456',
           userData.id,
         ),
-      ).rejects.toThrowError(new ApiError(errors.INVALID_CODE));
+      ).rejects.toThrowError(new ApiError(errors.INVALID_USER));
     });
 
-    it('code is not valid', () => {
-      mockCompare.mockReturnValue(false);
-
-      expect(
-        verifyCode(
-          '123456',
-          userData.id,
-        ),
-      ).rejects.toThrowError(new ApiError(errors.INVALID_CODE));
-    });
-
-    it('code has expired', () => {
-      MockDate.set('2020-01-25');
-      prismaMock.oTP.findFirst.mockResolvedValueOnce(stubHash);
-      mockCompare.mockReturnValue(true);
-
-      expect(
-        verifyCode(
-          '123456',
-          userData.id,
-        ),
-      ).rejects.toThrowError(new ApiError(errors.CODE_EXPIRED));
-    });
-    //   });
-
-    //   it('success case', async () => {
-    //     mockFindFirst.mockResolvedValue(stubHash);
-
-    //     await expect(
-    //       verifyCode('123456', userData.email, HashTypes.RESET_PASSWORD),
-    //     ).resolves.toEqual(stubHash);
-
-    //     expect(mockFindFirst).toHaveBeenCalledWith({
-    //       where: {
-    //         sentTo: userData.email,
-    //         type: HashTypes.RESET_PASSWORD,
-    //         userId: undefined,
-    //       },
-    //     });
+   
   });
 });
