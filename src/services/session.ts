@@ -27,9 +27,6 @@ export class SessionService {
     password: string,
   ) => {
     const user = await UserService.findByEmail(email);
-    if (!user) {
-      throw new ApiError(errors.USER_NOT_FOUND);
-    }
 
     await verifyCode(code, user.id);
 

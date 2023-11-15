@@ -3,16 +3,12 @@ import { prismaMock } from 'tests/prismaSetup';
 import { ApiError } from 'utils/apiError';
 import { verifyCode, generateOTPCode } from 'utils/otpCode';
 import * as securityService from 'services/security';
-
 import { generateUserData, generateOTPCodeData, generateOTPExpiredCodeData } from 'tests/utils/generateData';
-
-jest.mock('bcryptjs');
 
 jest.spyOn(securityService, 'generateCode').mockImplementation(() => '123456');
 
 const OTPExpiredCodeData = generateOTPExpiredCodeData();
 const OTPCodeData = generateOTPCodeData();
-
 const userData = generateUserData();
 
 describe('verifyCode', () => {
