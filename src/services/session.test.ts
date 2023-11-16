@@ -28,6 +28,7 @@ describe('Request Reset Password Email', () => {
     });
 
     it('User not found', async () => {
+      UserService.findByEmail = jest.fn().mockRejectedValue(new ApiError(errors.USER_NOT_FOUND));
       await expect(SessionService.requestResetPasswordEmail('mail12345@gmail.com'))
         .rejects.toThrow(new ApiError(errors.USER_NOT_FOUND));
     });
