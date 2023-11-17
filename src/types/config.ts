@@ -7,11 +7,11 @@ export interface Config {
   refreshTokenSecret: string
   accessTokenExpiresIn: string
   refreshTokenExpiresIn: string
-  emailClient: string
-  emailServiceProviderUserId: string
-  emailServiceProviderUserPassword: string
-  emailHost: string
-  emailPort: number
+  emailFrom: string
+  smtpUser: string
+  smtpPassword: string
+  smtpHost: string
+  smtpPort: number
   appName: string
 }
 

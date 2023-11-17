@@ -20,11 +20,11 @@ const envVarsSchema = z.object({
   REFRESH_TOKEN_SECRET: z.string(),
   ACCESS_TOKEN_EXPIRES_IN: z.string(),
   REFRESH_TOKEN_EXPIRES_IN: z.string(),
-  EMAIL_CLIENT: z.string(),
-  EMAIL_SERVICE_PROVIDER_USER_ID: z.string(),
-  EMAIL_SERVICE_PROVIDER_USER_PASSWORD: z.string(),
-  EMAIL_HOST: z.string(),
-  EMAIL_PORT: z.string()
+  EMAIL_FROM: z.string(),
+  SMTP_USER: z.string(),
+  SMTP_PASSWORD: z.string(),
+  SMTP_HOST: z.string(),
+  SMTP_PORT: z.string()
     .transform((val) => Number(val))
     .refine((val) => !Number.isNaN(val), 'EMAIL PORT must be a number'),
   APP_NAME: z.string(),
@@ -55,10 +55,10 @@ export const config: Config = {
   refreshTokenSecret: envVars.REFRESH_TOKEN_SECRET,
   accessTokenExpiresIn: envVars.ACCESS_TOKEN_EXPIRES_IN,
   refreshTokenExpiresIn: envVars.REFRESH_TOKEN_EXPIRES_IN,
-  emailClient: envVars.EMAIL_CLIENT,
-  emailServiceProviderUserId: envVars.EMAIL_SERVICE_PROVIDER_USER_ID,
-  emailServiceProviderUserPassword: envVars.EMAIL_SERVICE_PROVIDER_USER_PASSWORD,
-  emailHost: envVars.EMAIL_HOST,
-  emailPort: envVars.EMAIL_PORT,
+  emailFrom: envVars.EMAIL_FROM,
+  smtpUser: envVars.SMTP_USER,
+  smtpPassword: envVars.SMTP_PASSWORD,
+  smtpHost: envVars.SMTP_HOST,
+  smtpPort: envVars.SMTP_PORT,
   appName: envVars.APP_NAME,
 };
