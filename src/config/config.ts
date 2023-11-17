@@ -30,7 +30,7 @@ const envVarsSchema = z.object({
   APP_NAME: z.string(),
 }).passthrough();
 
-let envVars = envVarsSchema.parse(process.env);
+const envVars = envVarsSchema.parse(process.env);
 
 export const isDevelopment = envVars.NODE_ENV === 'development';
 export const isTest = envVars.NODE_ENV === 'test';
