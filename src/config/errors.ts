@@ -4,10 +4,10 @@ export const errors = {
     errorCode: 400_000,
     description: 'Invalid credentials',
   },
-  INVALID_USER: {
+  INVALID_VERIFICATION_CODE: {
     httpCode: 400,
     errorCode: 400_001,
-    description: 'Invalid user',
+    description: 'Invalid verification code',
   },
   INVALID_EMAIL: {
     httpCode: 400,

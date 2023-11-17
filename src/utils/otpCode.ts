@@ -28,7 +28,7 @@ export const verifyCode = async (code: string, userId: string) => {
   const otpCode = await prisma.otpCode.findFirst({ where: { userId } });
 
   if (!otpCode) {
-    throw new ApiError(errors.INVALID_USER);
+    throw new ApiError(errors.INVALID_VERIFICATION_CODE);
   }
   if (otpCode.expiresAt < new Date()) {
     throw new ApiError(errors.CODE_EXPIRED);

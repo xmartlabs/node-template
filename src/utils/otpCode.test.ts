@@ -20,7 +20,7 @@ describe('verifyCode', () => {
           '123456',
           userData.id,
         ),
-      ).rejects.toThrowError(new ApiError(errors.INVALID_USER));
+      ).rejects.toThrowError(new ApiError(errors.INVALID_VERIFICATION_CODE));
     });
     it('expired code', () => {
       prismaMock.otpCode.findFirst.mockResolvedValue(OTPExpiredCodeData);
