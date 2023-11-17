@@ -32,7 +32,7 @@ export class SessionService {
 
     const cryptPassword = await bcrypt.hash(password, 8);
     await prisma.$transaction(async () => {
-      await prisma.oTP.delete({ where: { userId: user.id } });
+      await prisma.otpCode.delete({ where: { userId: user.id } });
       await prisma.user.update({
         where: { id: user.id },
         data: { password: cryptPassword },

@@ -8,7 +8,7 @@ import { errors } from 'config/errors';
 export const generateOTPCode = async (userId: string) => {
   const now = new Date();
 
-  const otpCode = await prisma.oTP.findFirst({ where: { userId } });
+  const otpCode = await prisma.otpCode.findFirst({ where: { userId } });
   if (otpCode && otpCode.expiresAt > now) {
     throw new ApiError(errors.UNVALIDATED_CODE_ALREADY_EXISTS);
   }
@@ -16,7 +16,7 @@ export const generateOTPCode = async (userId: string) => {
   const expiresAt = addMinutes(now, config.otpCodeExpiresInMinutes);
   const code = generateCode();
 
-  await prisma.oTP.upsert({
+  await prisma.otpCode.upsert({
     where: { userId },
     update: { expiresAt, code },
     create: { userId, expiresAt, code },
@@ -25,7 +25,7 @@ export const generateOTPCode = async (userId: string) => {
 };
 
 export const verifyCode = async (code: string, userId: string) => {
-  const otpCode = await prisma.oTP.findFirst({ where: { userId } });
+  const otpCode = await prisma.otpCode.findFirst({ where: { userId } });
 
   if (!otpCode) {
     throw new ApiError(errors.INVALID_USER);

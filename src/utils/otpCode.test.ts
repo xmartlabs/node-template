@@ -14,7 +14,7 @@ const userData = generateUserData();
 describe('verifyCode', () => {
   describe('error cases', () => {
     it('can not find user', () => {
-      prismaMock.oTP.findFirst.mockResolvedValue(null);
+      prismaMock.otpCode.findFirst.mockResolvedValue(null);
       expect(
         verifyCode(
           '123456',
@@ -23,7 +23,7 @@ describe('verifyCode', () => {
       ).rejects.toThrowError(new ApiError(errors.INVALID_USER));
     });
     it('expired code', () => {
-      prismaMock.oTP.findFirst.mockResolvedValue(OTPExpiredCodeData);
+      prismaMock.otpCode.findFirst.mockResolvedValue(OTPExpiredCodeData);
       expect(
         verifyCode(
           '123456',
@@ -32,7 +32,7 @@ describe('verifyCode', () => {
       ).rejects.toThrowError(new ApiError(errors.CODE_EXPIRED));
     });
     it('expired code', () => {
-      prismaMock.oTP.findFirst.mockResolvedValue(OTPCodeData);
+      prismaMock.otpCode.findFirst.mockResolvedValue(OTPCodeData);
       expect(
         verifyCode(
           '123456',
@@ -43,7 +43,7 @@ describe('verifyCode', () => {
   });
   describe('Verify code successfully', () => {
     it('Verify code successfully', () => {
-      prismaMock.oTP.findFirst.mockResolvedValue({ ...OTPCodeData, code: '123456' });
+      prismaMock.otpCode.findFirst.mockResolvedValue({ ...OTPCodeData, code: '123456' });
       expect(verifyCode(
         '123456',
         userData.id,
@@ -55,7 +55,7 @@ describe('verifyCode', () => {
 describe('generateCode', () => {
   describe('error cases', () => {
     it('Unvalidated code already exists', () => {
-      prismaMock.oTP.findFirst.mockResolvedValue(OTPCodeData);
+      prismaMock.otpCode.findFirst.mockResolvedValue(OTPCodeData);
       expect(
         generateOTPCode(
           userData.id,
@@ -65,8 +65,8 @@ describe('generateCode', () => {
   });
   describe('generate code successfully', () => {
     it('generate code successfully', async () => {
-      prismaMock.oTP.findFirst.mockResolvedValue(null);
-      prismaMock.oTP.upsert.mockResolvedValue({ ...OTPCodeData, code: '123456' });
+      prismaMock.otpCode.findFirst.mockResolvedValue(null);
+      prismaMock.otpCode.upsert.mockResolvedValue({ ...OTPCodeData, code: '123456' });
 
       const code = await generateOTPCode(userData.id);
       expect(code).toEqual('123456');

@@ -18,7 +18,7 @@ model User {
   email     String   @unique
   password  String
   name      String?
-  OTP       OTP?
+  OtpCode   OtpCode?
 }
 
 model Session {
@@ -30,7 +30,7 @@ model Session {
   refreshToken String   @unique
 }
 
-model OTP {
+model OtpCode {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
@@ -38,4 +38,6 @@ model OTP {
   code      String
   userId    String   @unique @map("user_id")
   user      User     @relation(fields: [userId], references: [id])
+
+  @@map("otp_codes")
 }
