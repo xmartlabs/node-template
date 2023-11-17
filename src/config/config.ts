@@ -30,17 +30,7 @@ const envVarsSchema = z.object({
   APP_NAME: z.string(),
 }).passthrough();
 
-let envVars;
-try {
-  envVars = envVarsSchema.parse(process.env);
-} catch (error) {
-  if (error instanceof z.ZodError) {
-    const errorMessages = error.errors.map((e) => `${e.path.join('.')}: ${e.message}`).join(', ');
-    throw new Error(`Config validation error: ${errorMessages}`);
-  } else {
-    throw new Error(`Unexpected error: ${error}`);
-  }
-}
+let envVars = envVarsSchema.parse(process.env);
 
 export const isDevelopment = envVars.NODE_ENV === 'development';
 export const isTest = envVars.NODE_ENV === 'test';
