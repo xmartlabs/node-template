@@ -28,7 +28,7 @@ describe('User service: ', () => {
 
   test('should not create a new user', async () => {
     const userData = generateUserData();
-    const referenceError = new Error('somethuing went wrong');
+    const referenceError = new Error('something went wrong');
 
     prismaMock.user.create.mockRejectedValue(referenceError);
     await expect(
