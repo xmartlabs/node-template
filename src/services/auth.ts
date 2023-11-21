@@ -36,10 +36,12 @@ export class AuthService {
     if (!user) {
       throw new ApiError(errors.INVALID_CREDENTIALS);
     }
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw new ApiError(errors.INVALID_CREDENTIALS);
     }
+
     const session = await prisma.session.findUnique({ where: { userId: user.id } });
     const accessToken = await this.generateAccessToken(user);
     if (session) {
@@ -49,6 +51,7 @@ export class AuthService {
         refreshToken: session.refreshToken,
       };
     }
+
     const refreshToken = await this.generateRefreshToken(user);
     const sessionData = {
       userId: user.id,
@@ -72,10 +75,12 @@ export class AuthService {
     if (!session) {
       throw new ApiError(errors.UNAUTHENTICATED);
     }
+
     const user = await prisma.user.findUnique({ where: { id: session.userId } });
     if (!user) {
       throw new ApiError(errors.NOT_FOUND_USER);
     }
+
     const accessToken = await this.generateAccessToken(user);
     await prisma.session.update({ where: { userId: user.id }, data: { accessToken } });
     return {

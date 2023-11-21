@@ -54,9 +54,4 @@ export const errors = {
     errorCode: 500_000,
     description: 'Internal server error',
   },
-  USER_CREATION_FAILED: {
-    httpCode: 500,
-    errorCode: 500_001,
-    description: 'User creation failed',
-  },
 };
