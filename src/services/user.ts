@@ -44,9 +44,8 @@ export class UserService {
       if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
         throw new ApiError(errors.USER_ALREADY_EXISTS);
       }
-    }
-    if (!user) {
-      throw new ApiError(errors.USER_CREATION_FAILED);
+
+      throw (e);
     }
 
     startSendEmailTask(email);
@@ -55,7 +54,6 @@ export class UserService {
 
   static update = async (id : string, userData : User) : Promise<ReturnUser> => {
     const user = await prisma.user.findUnique({ where: { id } });
-
     if (!user) {
       throw new ApiError(errors.NOT_FOUND_USER);
     }

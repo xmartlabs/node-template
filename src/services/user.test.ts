@@ -1,7 +1,6 @@
 import { prismaMock } from 'tests/prismaSetup';
 import { generateUserData } from 'tests/utils/generateData';
 import { UserService } from 'services/user';
-import { errors } from 'config/errors';
 import { sendUserWithoutPassword, startSendEmailTask } from 'utils/user';
 
 jest.mock('emails/index');
@@ -29,10 +28,11 @@ describe('User service: ', () => {
 
   test('should not create a new user', async () => {
     const userData = generateUserData();
-    // @ts-ignore
-    prismaMock.user.create.mockRejectedValue(new Error(errors.USER_CREATION_FAILED));
+    const referenceError = new Error('something went wrong');
+
+    prismaMock.user.create.mockRejectedValue(referenceError);
     await expect(
       UserService.create(userData),
-    ).rejects.toEqual(new Error(`${errors.USER_CREATION_FAILED.description}`));
+    ).rejects.toEqual(referenceError);
   });
 });

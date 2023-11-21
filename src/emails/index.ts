@@ -1,8 +1,6 @@
 import nodemailer from 'nodemailer';
 import pug from 'pug';
 
-import { ApiError } from 'utils/apiError';
-import { errors } from 'config/errors';
 import { config } from 'config/config';
 
 const createTransporter = () => {
@@ -27,17 +25,11 @@ export async function sendSignUpEmail(
     username: emailTo,
   });
 
-  try {
-    const emailTransporter = createTransporter();
-    await emailTransporter.sendMail({
-      from: config.emailFrom,
-      to: emailTo,
-      subject,
-      html,
-    });
-  } catch (rawError) {
-    const error = JSON.stringify(rawError);
-    console.error(error);
-    throw new ApiError(errors.INTERNAL_SERVER_ERROR);
-  }
+  const emailTransporter = createTransporter();
+  await emailTransporter.sendMail({
+    from: config.emailFrom,
+    to: emailTo,
+    subject,
+    html,
+  });
 }
