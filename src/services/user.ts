@@ -56,7 +56,7 @@ export class UserService {
         throw new ApiError(errors.USER_ALREADY_EXISTS);
       }
 
-      throw (e);
+      throw e;
     }
 
     startSendEmailTask(email);

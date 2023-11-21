@@ -83,6 +83,10 @@ export class AuthService {
     if (!session) {
       throw new ApiError(errors.UNAUTHENTICATED);
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> e1fe918 (fix prettier)
     const user = await prisma.user.findUnique({
       where: { id: session.userId },
     });
