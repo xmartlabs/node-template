@@ -5,11 +5,11 @@ import { config } from 'config/config';
 
 const createTransporter = () => {
   const testTransporter = nodemailer.createTransport({
-    host: config.emailHost,
-    port: config.emailPort,
+    host: config.smtpHost,
+    port: config.smtpPort,
     auth: {
-      user: config.emailServiceProviderUserId,
-      pass: config.emailServiceProviderUserPassword,
+      user: config.smtpUser,
+      pass: config.smtpPassword,
     },
   });
   return testTransporter;
@@ -27,7 +27,7 @@ export async function sendSignUpEmail(
 
   const emailTransporter = createTransporter();
   await emailTransporter.sendMail({
-    from: config.emailClient,
+    from: config.emailFrom,
     to: emailTo,
     subject,
     html,
