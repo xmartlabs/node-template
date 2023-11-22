@@ -10,5 +10,17 @@ services:
       - db:/var/lib/postgresql/data
     ports:
       - '5432:5432'
+  redis-server:
+    image: bitnami/redis:latest
+    environment:
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+      - ALLOW_EMPTY_PASSWORD=false
+      - REDIS_PASSWORD=my-password
+      - REDIS_USERNAME=default
+    volumes: 
+      - redis-data:/bitnami/redis/data
+    ports:
+      - '6379:6379'
 volumes:
   db:
+  redis-data:
