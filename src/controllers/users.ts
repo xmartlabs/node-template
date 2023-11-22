@@ -3,10 +3,8 @@ import {
   Body,
   Controller, Delete, Get, Path, Put, Request, Route, Security,
 } from 'tsoa';
-import { User } from '@prisma/client';
 import { UserService } from 'services';
-import { AuthenticatedRequest } from 'types/request';
-import { ReturnUser } from 'types';
+import { ReturnUser, UpdateUserParams, AuthenticatedRequest } from 'types';
 
 @Route('users')
 export class UsersController extends Controller {
@@ -36,7 +34,10 @@ export class UsersController extends Controller {
 
   @Put('{id}')
   @Security('jwt')
-  public async update(@Path() id : string, @Body() requestBody : User): Promise<ReturnUser> {
+  public async update(
+    @Path() id : string,
+      @Body() requestBody : UpdateUserParams,
+  ): Promise<ReturnUser> {
     const user = await UserService.update(id, requestBody);
     this.setStatus(httpStatus.OK);
     return user;

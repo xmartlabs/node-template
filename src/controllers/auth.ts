@@ -8,9 +8,13 @@ import {
   Security,
 } from 'tsoa';
 import { AuthService } from 'services/auth';
-import { CreateUserParams, ReturnAuth, RefreshTokenParams } from 'types';
-import { LoginParams } from 'types/auth';
-import { AuthenticatedRequest } from 'types/request';
+import {
+  CreateUserParams,
+  ReturnAuth,
+  RefreshTokenParams,
+  AuthenticatedRequest,
+  LoginParams,
+} from 'types';
 
 @Route('auth')
 export class AuthController extends Controller {
