@@ -14,13 +14,10 @@ const workerConnectionOptions = {
 export const redisConnection = new IORedis(workerConnectionOptions);
 
 redisConnection.on('error', (err) => {
-  appLogger.error(err.message);
-  redisConnection.disconnect();
-  throw new Error();
+  throw err;
 });
 
 redisConnection.on('close', () => {
   appLogger.error('Redis connection closed');
-  redisConnection.disconnect();
   throw new Error();
 });

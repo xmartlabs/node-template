@@ -28,6 +28,7 @@ env:
   REDIS_PASSWORD: "my-password"
   REDIS_PORT: "6379"
   REDIS_USERNAME: "default"
+  JOBS_RETENTION_HOURS: "24"
 
 
 jobs:

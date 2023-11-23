@@ -33,6 +33,9 @@ const envVarsSchema = z.object({
   REDIS_PORT: z.string()
     .transform((val) => Number(val))
     .refine((val) => !Number.isNaN(val), 'REDIS PORT must be a number'),
+  JOBS_RETENTION_HOURS: z.string()
+    .transform((val) => Number(val))
+    .refine((val) => !Number.isNaN(val), 'JOBS RETENTION HOURS must be a number'),
   REDIS_USERNAME: z.string(),
 }).passthrough();
 
@@ -61,4 +64,5 @@ export const config: Config = {
   redisPassword: envVars.REDIS_PASSWORD,
   redisPort: envVars.REDIS_PORT,
   redisUsername: envVars.REDIS_USERNAME,
+  jobsRetentionHours: envVars.JOBS_RETENTION_HOURS,
 };

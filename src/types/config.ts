@@ -17,6 +17,7 @@ export interface Config {
   redisPassword: string
   redisPort: number
   redisUsername: string
+  jobsRetentionHours: number
 }
 
 export interface ErrorInterface {
