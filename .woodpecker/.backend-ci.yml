@@ -16,6 +16,11 @@ x-common: &common
     - SMTP_HOST=test
     - SMTP_PORT=1111
     - APP_NAME=APPNAME
+    - REDIS_HOST=localhost
+    - REDIS_PASSWORD=my-password
+    - REDIS_PORT=6379
+    - REDIS_USERNAME=default
+
 
 pipeline:
   setup:
