@@ -6,8 +6,8 @@ import {
 import { UserService } from 'services';
 import { ReturnUser, UpdateUserParams, AuthenticatedRequest } from 'types';
 
-@Route('users')
-export class UsersController extends Controller {
+@Route('v1/users')
+export class UsersControllerV1 extends Controller {
   @Get()
   @Security('jwt')
   public async index(): Promise<ReturnUser[]> {

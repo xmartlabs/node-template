@@ -16,8 +16,8 @@ import {
   LoginParams,
 } from 'types';
 
-@Route('auth')
-export class AuthController extends Controller {
+@Route('v1/auth')
+export class AuthControllerV1 extends Controller {
   @Post('/register')
   public async register(@Body() user: CreateUserParams): Promise<ReturnAuth> {
     const authReturn = await AuthService.register(user);

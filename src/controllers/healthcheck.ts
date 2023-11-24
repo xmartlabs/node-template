@@ -4,8 +4,8 @@ import {
   Route,
 } from 'tsoa';
 
-@Route('healthcheck')
-export class HealthCheckController extends Controller {
+@Route('v1/healthcheck')
+export class HealthCheckControllerV1 extends Controller {
   @Get('/')
   public async checkHealth(): Promise<void> {
     this.setStatus(200);
