@@ -7,50 +7,29 @@ on:
   push:
     branches: [main]
   pull_request:
-<<<<<<< HEAD
-    branches: [ main ]
-env:
-  BASE_URL: "http://dummy-server"
-  NODE_ENV: "test"
-  PORT: "1111"
-  LOG_LEVEL: "info"
-  DATABASE_URL: "postgres://dbuser:dbpass@localhost:dbport/dbname"
-  ACCESS_TOKEN_SECRET: "secret"
-  REFRESH_TOKEN_SECRET: "secret"
-  ACCESS_TOKEN_EXPIRES_IN: "1d"
-  REFRESH_TOKEN_EXPIRES_IN: "1d"
-  EMAIL_FROM: "test-client"
-  SMTP_USER: "test"
-  SMTP_PASSWORD: "test"
-  SMTP_HOST: "test"
-  SMTP_PORT: "1111"
-  APP_NAME: "APPNAME"
-
-=======
     branches: [main]
->>>>>>> 55e2d00 (run prettier)
+env:
+  BASE_URL: 'http://dummy-server'
+  NODE_ENV: 'test'
+  PORT: '1111'
+  LOG_LEVEL: 'info'
+  DATABASE_URL: 'postgres://dbuser:dbpass@localhost:dbport/dbname'
+  ACCESS_TOKEN_SECRET: 'secret'
+  REFRESH_TOKEN_SECRET: 'secret'
+  ACCESS_TOKEN_EXPIRES_IN: '1d'
+  REFRESH_TOKEN_EXPIRES_IN: '1d'
+  EMAIL_FROM: 'test-client'
+  SMTP_USER: 'test'
+  SMTP_PASSWORD: 'test'
+  SMTP_HOST: 'test'
+  SMTP_PORT: '1111'
+  APP_NAME: 'APPNAME'
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-<<<<<<< HEAD
-    - uses: actions/checkout@v3
-    - name: Use Node.js 20.9.0
-      uses: actions/setup-node@v3
-      with:
-        node-version: 20.9.0
-        cache: 'npm'
-    - name: Install libraries
-      run: npm ci --prefer-offline
-    - name: Run linter
-      run: npm run lint
-    - name: Run test
-      run: npm test
-    - name: Run build
-      run: npm run build
-=======
       - uses: actions/checkout@v3
       - name: Use Node.js 20.9.0
         uses: actions/setup-node@v3
@@ -58,9 +37,10 @@ jobs:
           node-version: 20.9.0
           cache: 'npm'
       - name: Install libraries
-        run: npm install
+        run: npm ci --prefer-offline
       - name: Run linter
         run: npm run lint
       - name: Run test
         run: npm test
->>>>>>> 55e2d00 (run prettier)
+      - name: Run build
+        run: npm run build

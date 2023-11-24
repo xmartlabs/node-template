@@ -21,7 +21,7 @@ export class UserService {
     return sendUserWithoutPassword(user);
   };
 
-  static all = async () : Promise<ReturnUser[]> => {
+  static all = async (): Promise<ReturnUser[]> => {
     const users = await prisma.user.findMany();
     return users.map(sendUserWithoutPassword);
   };
@@ -63,7 +63,10 @@ export class UserService {
     return sendUserWithoutPassword(user);
   };
 
-  static update = async (id : string, userData : UpdateUserParams) : Promise<ReturnUser> => {
+  static update = async (
+    id: string,
+    userData: UpdateUserParams,
+  ): Promise<ReturnUser> => {
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) {
       throw new ApiError(errors.NOT_FOUND_USER);

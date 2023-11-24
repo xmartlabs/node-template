@@ -44,8 +44,8 @@ export class UsersControllerV1 extends Controller {
   @Put('{id}')
   @Security('jwt')
   public async update(
-    @Path() id : string,
-      @Body() requestBody : UpdateUserParams,
+    @Path() id: string,
+    @Body() requestBody: UpdateUserParams,
   ): Promise<ReturnUser> {
     const user = await UserService.update(id, requestBody);
     this.setStatus(httpStatus.OK);
