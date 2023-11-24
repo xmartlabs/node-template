@@ -3,10 +3,9 @@ import { appLogger } from 'config/logger';
 import { WorkerQueues } from 'types/worker';
 import { redisConnection as connection } from 'utils/redis';
 
-async function mailWorkerJobHandler(job: Job) {
+const mailWorkerJobHandler = async (job: Job) => {
   appLogger.info(`handling job: [${job.id}]`);
-  console.log({ jobName: job.name, jobId: job.id, data: job.data });
-}
+};
 
 const mailWorker = new Worker(WorkerQueues.MAIL_QUEUE, mailWorkerJobHandler, {
   connection,
