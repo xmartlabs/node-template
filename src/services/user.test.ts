@@ -1,15 +1,19 @@
-import { prismaMock } from 'tests/prismaSetup';
 import { generateUserData } from 'tests/utils/generateData';
 import { UserService } from 'services/user';
 import { sendUserWithoutPassword } from 'utils/user';
 import { addToMailQueue } from 'queue/queue';
 import { EmailTypes } from 'types';
+import { sendUserWithoutPassword, startSendEmailTask } from 'utils/user';
+import prisma from 'root/prisma/client';
+import { ApiError } from 'utils/apiError';
+import { errors } from 'config/errors';
 
 jest.mock('utils/user');
 jest.mock('queue/queue');
 
 const mockMailQueueAdd = addToMailQueue as jest.Mock;
 const mockSendUserWithoutPassword = sendUserWithoutPassword as jest.Mock;
+const mockStartSendEmailTask = startSendEmailTask as jest.Mock;
 
 describe('User service: ', () => {
   beforeEach(() => {
@@ -20,9 +24,6 @@ describe('User service: ', () => {
 
   test('should create a new user with email', async () => {
     const userData = generateUserData();
-
-    prismaMock.user.create.mockResolvedValue(userData);
-    prismaMock.user.update.mockResolvedValue(userData);
 
     const { password, ...userWithoutPassword } = userData;
     mockSendUserWithoutPassword.mockResolvedValue(userWithoutPassword);
@@ -39,9 +40,11 @@ describe('User service: ', () => {
 
   test('should not create a new user', async () => {
     const userData = generateUserData();
-    const referenceError = new Error('something went wrong');
+    const referenceError = new ApiError(errors.USER_ALREADY_EXISTS);
 
-    prismaMock.user.create.mockRejectedValue(referenceError);
+    await prisma.user.create({
+      data: userData,
+    });
 
     await expect(UserService.create(userData)).rejects.toEqual(referenceError);
     expect(mockMailQueueAdd).toBeCalledTimes(0);

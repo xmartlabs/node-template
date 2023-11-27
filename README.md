@@ -19,7 +19,11 @@ Then install the required packages:
 npm install
 ```
 
-To run tests you'll need to create a `.env` file. You can simply copy the example file (`.env.example`) and rename it. You can check config.ts file for valid values.
+To run tests you'll need to create a `.env.test` file. You can simply copy the example file (`.env.example`) and rename it. You can check config.ts file for valid values. Before using the command to run the test, you'll need to start the docker container for the database use for testing, you can do this by using the command: 
+
+```shell
+docker-compose up db-testing
+```
 
 Tests are run using the typical command:
 
