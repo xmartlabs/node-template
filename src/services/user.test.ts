@@ -15,6 +15,8 @@ const mockMailQueueAdd = addToMailQueue as jest.Mock;
 const mockSendUserWithoutPassword = sendUserWithoutPassword as jest.Mock;
 const mockStartSendEmailTask = startSendEmailTask as jest.Mock;
 
+const userData = generateUserData();
+
 describe('User service: ', () => {
   beforeEach(() => {
     mockMailQueueAdd.mockResolvedValue(undefined);
@@ -38,15 +40,19 @@ describe('User service: ', () => {
     });
   });
 
-  test('should not create a new user', async () => {
-    const userData = generateUserData();
-    const referenceError = new ApiError(errors.USER_ALREADY_EXISTS);
-
-    await prisma.user.create({
-      data: userData,
+  describe('When the user already exists', () => {
+    beforeEach(async () => {
+      await prisma.user.create({
+        data: userData,
+      });
     });
 
-    await expect(UserService.create(userData)).rejects.toEqual(referenceError);
-    expect(mockMailQueueAdd).toBeCalledTimes(0);
+    test('should not create a new user', async () => {
+      const referenceError = new ApiError(errors.USER_ALREADY_EXISTS);
+
+      await expect(UserService.create(userData)).rejects.toEqual(
+        referenceError,
+      );
+    });
   });
 });

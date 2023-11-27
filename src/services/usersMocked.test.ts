@@ -8,6 +8,8 @@ jest.mock('utils/user');
 
 const mockStartSendEmailTask = startSendEmailTask as jest.Mock;
 
+const userData = generateUserData();
+
 /*
 Currently leaving this file to have an example of a test with prisma mocked.
 Might delete this when we add the test for the rest of the functionalities,
@@ -19,8 +21,6 @@ describe('User service: ', () => {
     jest.clearAllMocks();
   });
   test('should create a new user with email', async () => {
-    const userData = generateUserData();
-
     prismaMock.user.create.mockResolvedValue(userData);
     prismaMock.user.update.mockResolvedValue(userData);
     mockStartSendEmailTask.mockResolvedValue(undefined);
@@ -30,13 +30,14 @@ describe('User service: ', () => {
     await expect(UserService.create(userData)).resolves.toEqual(userWithoutPassword);
   });
 
-  test('should not create a new user', async () => {
-    const userData = generateUserData();
-    const referenceError = new Error('something went wrong');
+  describe('When the user already exists', () => {
+    test('should not create a new user', async () => {
+      const referenceError = new Error('something went wrong');
 
-    prismaMock.user.create.mockRejectedValue(referenceError);
-    await expect(
-      UserService.create(userData),
-    ).rejects.toEqual(referenceError);
+      prismaMock.user.create.mockRejectedValue(referenceError);
+      await expect(
+        UserService.create(userData),
+      ).rejects.toEqual(referenceError);
+    });
   });
 });
