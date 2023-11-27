@@ -7,7 +7,7 @@
     "start": "npm run build && nodemon",
     "start-server": "ts-node -r dotenv/config -r tsconfig-paths/register .",
     "start-worker": "ts-node -r dotenv/config -r tsconfig-paths/register ./worker/worker.ts",
-    "test": "tsoa spec-and-routes && dotenv -e .env.test -- jest ./src --verbose --maxWorkers=50%",
+    "test": "dotenv -e .env.test -- npx prisma migrate deploy && tsoa spec-and-routes && dotenv -e .env.test -- jest ./src --verbose --maxWorkers=50%",
     "lint": "npx eslint src --ext .ts",
     "build": "tsoa spec-and-routes && tsc --project tsconfig.json",
     "deploy": "prisma migrate deploy && concurrently \"npm run deploy-server\" \"npm run deploy-worker\"",

@@ -5,7 +5,7 @@ x-common: &common
     - NODE_ENV=test
     - PORT=1111
     - LOG_LEVEL=info
-    - DATABASE_URL=postgres://test_user:password123@localhost:5432/nodeTemplateTesting
+    - DATABASE_URL=postgres://test_user:password123@postgres-service:5432/nodeTemplateTesting
     - ACCESS_TOKEN_SECRET=secret
     - REFRESH_TOKEN_SECRET=secret
     - ACCESS_TOKEN_EXPIRES_IN=1d
@@ -62,3 +62,4 @@ services:
     environment:
       POSTGRES_USER: test_user
       POSTGRES_PASSWORD: password123
+    ports: 5432:5432
