@@ -27,7 +27,9 @@ describe('User service: ', () => {
 
     const userWithoutPassword = sendUserWithoutPassword(userData);
 
-    await expect(UserService.create(userData)).resolves.toEqual(userWithoutPassword);
+    await expect(UserService.create(userData)).resolves.toEqual(
+      userWithoutPassword,
+    );
   });
 
   describe('When the user already exists', () => {
@@ -35,9 +37,9 @@ describe('User service: ', () => {
       const referenceError = new Error('something went wrong');
 
       prismaMock.user.create.mockRejectedValue(referenceError);
-      await expect(
-        UserService.create(userData),
-      ).rejects.toEqual(referenceError);
+      await expect(UserService.create(userData)).rejects.toEqual(
+        referenceError,
+      );
     });
   });
 });
