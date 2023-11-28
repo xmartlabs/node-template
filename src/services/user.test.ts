@@ -19,11 +19,11 @@ describe('User service: ', () => {
     prismaMock.user.create.mockResolvedValue(userData);
     prismaMock.user.update.mockResolvedValue(userData);
     mockStartSendEmailTask.mockResolvedValue(undefined);
-    const {
-      password, ...userWithoutPassword
-    } = userData;
+    const { password, ...userWithoutPassword } = userData;
     mockSendUserWithoutPassword.mockResolvedValue(userWithoutPassword);
-    await expect(UserService.create(userData)).resolves.toEqual(userWithoutPassword);
+    await expect(UserService.create(userData)).resolves.toEqual(
+      userWithoutPassword,
+    );
   });
 
   test('should not create a new user', async () => {
@@ -31,8 +31,6 @@ describe('User service: ', () => {
     const referenceError = new Error('something went wrong');
 
     prismaMock.user.create.mockRejectedValue(referenceError);
-    await expect(
-      UserService.create(userData),
-    ).rejects.toEqual(referenceError);
+    await expect(UserService.create(userData)).rejects.toEqual(referenceError);
   });
 });

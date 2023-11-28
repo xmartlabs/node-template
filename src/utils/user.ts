@@ -3,12 +3,12 @@ import { ReturnUser, DatabaseUser } from 'types';
 import { sendSignUpEmail } from 'emails';
 import { config } from 'config/config';
 
-export const sendUserWithoutPassword = (user : DatabaseUser) : ReturnUser => {
+export const sendUserWithoutPassword = (user: DatabaseUser): ReturnUser => {
   const { password, ...userWithoutPassword } = user;
   return userWithoutPassword;
 };
 
-export const startSendEmailTask = (email : string) : void => {
+export const startSendEmailTask = (email: string): void => {
   const emailQueue = {
     current: null as string | null,
   };

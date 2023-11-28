@@ -1,5 +1,5 @@
 x-common: &common
-  image: "node:20.9.0"
+  image: 'node:20.9.0'
   environment:
     - BASE_URL=http://dummy-server
     - NODE_ENV=test
@@ -27,6 +27,11 @@ pipeline:
     group: fe-build
     commands:
       - CI=true npm run lint
+  prettier:
+    <<: *common
+    group: fe-build
+    commands:
+      - CI=true npx prettier --check "src/**/*.ts"
   js-test:
     <<: *common
     group: fe-build

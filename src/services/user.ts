@@ -13,7 +13,7 @@ import { emailRegex } from 'utils/constants';
 import { errors } from 'config/errors';
 
 export class UserService {
-  static find = async (id : string) : Promise<ReturnUser | null> => {
+  static find = async (id: string): Promise<ReturnUser | null> => {
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) {
       throw new ApiError(errors.NOT_FOUND_USER);
@@ -21,12 +21,12 @@ export class UserService {
     return sendUserWithoutPassword(user);
   };
 
-  static all = async () : Promise<ReturnUser[]> => {
+  static all = async (): Promise<ReturnUser[]> => {
     const users = await prisma.user.findMany();
     return users.map(sendUserWithoutPassword);
   };
 
-  static create = async (userBody : CreateUserParams) : Promise<ReturnUser> => {
+  static create = async (userBody: CreateUserParams): Promise<ReturnUser> => {
     const { name, email, password } = userBody;
 
     let user: DatabaseUser | null = null;
@@ -49,18 +49,24 @@ export class UserService {
       user = await prisma.user.create({ data });
     } catch (e) {
       // https://www.prisma.io/docs/reference/api-reference/error-reference#p2002
-      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2002'
+      ) {
         throw new ApiError(errors.USER_ALREADY_EXISTS);
       }
 
-      throw (e);
+      throw e;
     }
 
     startSendEmailTask(email);
     return sendUserWithoutPassword(user);
   };
 
-  static update = async (id : string, userData : UpdateUserParams) : Promise<ReturnUser> => {
+  static update = async (
+    id: string,
+    userData: UpdateUserParams,
+  ): Promise<ReturnUser> => {
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) {
       throw new ApiError(errors.NOT_FOUND_USER);
@@ -76,7 +82,7 @@ export class UserService {
     return sendUserWithoutPassword(updatedUser);
   };
 
-  static destroy = async (id : string) : Promise<void> => {
+  static destroy = async (id: string): Promise<void> => {
     const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) {

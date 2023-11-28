@@ -10,7 +10,12 @@ export class ApiError extends Error {
 
   additionalInfo;
 
-  constructor(error: ErrorInterface, isOperational: boolean = true, additionalInfo: any = null, stack = '') {
+  constructor(
+    error: ErrorInterface,
+    isOperational: boolean = true,
+    additionalInfo: any = null,
+    stack = '',
+  ) {
     super(error.description);
     this.httpCode = error.httpCode;
     this.errorCode = error.errorCode;

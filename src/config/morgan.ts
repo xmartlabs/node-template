@@ -7,7 +7,8 @@ import { appLogger } from 'config/logger';
 morgan.token('local-datetime', () => new Date().toLocaleString());
 // TODO: Use error handler message once implemented
 morgan.token('message', (_req, res) => res.statusMessage);
-const getIpFormat = () => (config.env === 'production' ? ':remote-addr - ' : '');
+const getIpFormat = () =>
+  config.env === 'production' ? ':remote-addr - ' : '';
 const successResponseFormat = `${getIpFormat()}:method :url :status - :response-time ms`;
 const errorResponseFormat = `${getIpFormat()}:method :url :status - :response-time ms - message: :message`;
 

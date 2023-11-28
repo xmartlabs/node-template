@@ -1,12 +1,5 @@
 import httpStatus from 'http-status';
-import {
-  Body,
-  Controller,
-  Post,
-  Request,
-  Route,
-  Security,
-} from 'tsoa';
+import { Body, Controller, Post, Request, Route, Security } from 'tsoa';
 import { AuthService } from 'services/auth';
 import {
   CreateUserParams,
@@ -40,7 +33,9 @@ export class AuthControllerV1 extends Controller {
   }
 
   @Post('/refresh')
-  public async refresh(@Body() refreshToken: RefreshTokenParams): Promise<ReturnAuth> {
+  public async refresh(
+    @Body() refreshToken: RefreshTokenParams,
+  ): Promise<ReturnAuth> {
     const authReturn = await AuthService.refresh(refreshToken);
     this.setStatus(httpStatus.OK);
     return authReturn;
