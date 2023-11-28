@@ -17,7 +17,7 @@ services:
       - ALLOW_EMPTY_PASSWORD=false
       - REDIS_PASSWORD=my-password
       - REDIS_USERNAME=default
-    volumes: 
+    volumes:
       - redis-data:/bitnami/redis/data
     ports:
       - '6379:6379'

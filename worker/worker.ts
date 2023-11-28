@@ -18,7 +18,9 @@ mailWorker.on('error', (err) => {
 });
 
 mailWorker.on('failed', (job, err) => {
-  appLogger.error(`${mailWorker.name} has failed for job ${job?.id}, with error ${err.message}`);
+  appLogger.error(
+    `${mailWorker.name} has failed for job ${job?.id}, with error ${err.message}`,
+  );
 });
 
 mailWorker.on('ioredis:close', () => {

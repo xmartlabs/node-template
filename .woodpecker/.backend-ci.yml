@@ -22,7 +22,6 @@ x-common: &common
     - REDIS_USERNAME=default
     - JOBS_RETENTION_HOURS=24
 
-
 pipeline:
   setup:
     <<: *common
