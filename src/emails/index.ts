@@ -3,8 +3,7 @@ import pug from 'pug';
 
 import { config } from 'config/config';
 
-const createTransporter = () => {
-  const testTransporter = nodemailer.createTransport({
+const emailTransporter = nodemailer.createTransport({
     host: config.smtpHost,
     port: config.smtpPort,
     auth: {
@@ -12,20 +11,13 @@ const createTransporter = () => {
       pass: config.smtpPassword,
     },
   });
-  return testTransporter;
-};
 
-export async function sendSignUpEmail(
-  appName: string,
+const sendEmail = async (
   emailTo: string,
-): Promise<void> {
-  const subject = ` Welcome to ${appName}!!`;
-  const html = pug.renderFile('src/emails/template.pug', {
-    appName,
-    username: emailTo,
-  });
+  subject: string,
+  html: string,
+): Promise<void> => {
 
-  const emailTransporter = createTransporter();
   await emailTransporter.sendMail({
     from: config.emailFrom,
     to: emailTo,
@@ -33,3 +25,37 @@ export async function sendSignUpEmail(
     html,
   });
 }
+
+export async function sendSignUpEmail(
+  emailTo: string,
+): Promise<void> {
+  const subject = `Welcome to ${config.appName}!!`;
+  const html = pug.renderFile('src/emails/signUpTemplate.pug', {
+    appName: config.appName,
+    username: emailTo,
+  });
+
+  await sendEmail(
+    emailTo,
+    subject,
+    html,
+  );
+}
+
+export const sendResetPasswordCode = async (
+  emailTo: string,
+  code: string,
+): Promise<void> => {
+  const subject = `${config.appName} password recovery code`;
+  const html = pug.renderFile('src/emails/resetPasswordCodeTemplate.pug', {
+    appName: config.appName,
+    username: emailTo,
+    code,
+  });
+
+  await sendEmail(
+    emailTo,
+    subject,
+    html
+  );
+};

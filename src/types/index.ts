@@ -10,3 +10,4 @@ export { ReturnAuth, LoginParams, RefreshTokenParams } from 'types/auth';
 export { AuthenticatedRequest } from 'types/request';
 export { EmailTypes } from 'types/emails';
 export { WorkerQueues } from 'types/worker';
+export { PasswordResetCodeRequest, ResetPassword } from 'types/session';

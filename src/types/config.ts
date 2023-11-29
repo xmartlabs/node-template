@@ -18,6 +18,7 @@ export interface Config {
   redisPort: number;
   redisUsername: string;
   jobsRetentionHours: number;
+  otpExpirationTime: number;
 }
 
 export interface ErrorInterface {

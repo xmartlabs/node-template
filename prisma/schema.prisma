@@ -18,6 +18,7 @@ model User {
   email      String    @unique
   password   String
   name       String?
+  hash       Hash[]
 }
 
 model Session {
@@ -27,4 +28,21 @@ model Session {
   userId         String   @unique
   accessToken    String   @unique
   refreshToken   String   @unique
+}
+
+model Hash {
+  id         String    @id @default(uuid())
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt  DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  hash       String
+  type       TypeHash
+  expiresAt  DateTime  @map("expires_at")
+  userId     String?   @map("user_id")
+  user       User?     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, type])
+}
+
+enum TypeHash {
+  RESET_PASSWORD
 }
