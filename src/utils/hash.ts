@@ -11,11 +11,11 @@ export const generateCodeAndHash = async () => {
     specialChars: false,
     lowerCaseAlphabets: false,
     upperCaseAlphabets: false,
-  })
+  });
 
   const hash = await bcrypt.hash(code, 8);
 
-  return {code, hash};
+  return { code, hash };
 };
 
 export const verifyHash = async (
@@ -25,9 +25,8 @@ export const verifyHash = async (
 ) => {
   const hash = await prisma.hash.findUnique({
     where: {
-      userId_type: {userId, type: hashType},
-
-    }
+      userId_type: { userId, type: hashType },
+    },
   });
 
   if (!hash || !bcrypt.compareSync(code, hash.hash)) {
@@ -39,4 +38,4 @@ export const verifyHash = async (
   }
 
   return hash;
-}
+};

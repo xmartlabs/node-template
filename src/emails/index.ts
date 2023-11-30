@@ -4,42 +4,35 @@ import pug from 'pug';
 import { config } from 'config/config';
 
 const emailTransporter = nodemailer.createTransport({
-    host: config.smtpHost,
-    port: config.smtpPort,
-    auth: {
-      user: config.smtpUser,
-      pass: config.smtpPassword,
-    },
-  });
+  host: config.smtpHost,
+  port: config.smtpPort,
+  auth: {
+    user: config.smtpUser,
+    pass: config.smtpPassword,
+  },
+});
 
 const sendEmail = async (
   emailTo: string,
   subject: string,
   html: string,
 ): Promise<void> => {
-
   await emailTransporter.sendMail({
     from: config.emailFrom,
     to: emailTo,
     subject,
     html,
   });
-}
+};
 
-export async function sendSignUpEmail(
-  emailTo: string,
-): Promise<void> {
+export async function sendSignUpEmail(emailTo: string): Promise<void> {
   const subject = `Welcome to ${config.appName}!!`;
   const html = pug.renderFile('src/emails/signUpTemplate.pug', {
     appName: config.appName,
     username: emailTo,
   });
 
-  await sendEmail(
-    emailTo,
-    subject,
-    html,
-  );
+  await sendEmail(emailTo, subject, html);
 }
 
 export const sendResetPasswordCode = async (
@@ -53,9 +46,5 @@ export const sendResetPasswordCode = async (
     code,
   });
 
-  await sendEmail(
-    emailTo,
-    subject,
-    html
-  );
+  await sendEmail(emailTo, subject, html);
 };

@@ -1,10 +1,5 @@
 import httpStatus from 'http-status';
-import {
-  Body,
-  Controller,
-  Post,
-  Route,
-} from 'tsoa';
+import { Body, Controller, Post, Route } from 'tsoa';
 import { PasswordResetCodeRequest, ResetPassword } from 'types';
 import { SessionService } from 'services/session';
 
@@ -22,7 +17,7 @@ export class SessionControllerV1 extends Controller {
   public async resetPassword(
     @Body() requestBody: ResetPassword,
   ): Promise<void> {
-    const {email, code, newPassword} = requestBody;
+    const { email, code, newPassword } = requestBody;
     await SessionService.resetPassword(email, code, newPassword);
     this.setStatus(httpStatus.OK);
   }

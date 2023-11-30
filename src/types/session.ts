@@ -1,9 +1,9 @@
 export type PasswordResetCodeRequest = {
-  email: string
-}
+  email: string;
+};
 
 export type ResetPassword = {
-  email: string,
-  code: string,
-  newPassword: string,
-}
+  email: string;
+  code: string;
+  newPassword: string;
+};

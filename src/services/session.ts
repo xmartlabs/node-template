@@ -19,19 +19,19 @@ export class SessionService {
     const user = await prisma.user.findUnique({
       where: {
         email,
-      }
-    })
+      },
+    });
     if (!user) throw new ApiError(errors.INVALID_EMAIL);
 
-    const {code, hash} = await generateCodeAndHash();
+    const { code, hash } = await generateCodeAndHash();
     const expirationDate = addMinutes(new Date(), config.otpExpirationTime);
-    
+
     await prisma.hash.upsert({
       create: {
         userId: user.id,
         hash,
         expiresAt: expirationDate,
-        type: TypeHash.RESET_PASSWORD
+        type: TypeHash.RESET_PASSWORD,
       },
       update: {
         hash,
@@ -42,8 +42,8 @@ export class SessionService {
         userId_type: {
           userId: user.id,
           type: TypeHash.RESET_PASSWORD,
-        }
-      }
+        },
+      },
     });
 
     await sendResetPasswordCode(email, code);
@@ -57,23 +57,19 @@ export class SessionService {
     const user = await prisma.user.findUnique({
       where: {
         email,
-      }
-    })
+      },
+    });
     if (!user) throw new ApiError(errors.INVALID_EMAIL);
 
     const hash = await verifyHash(user.id, TypeHash.RESET_PASSWORD, code);
     const hashedNewPassword = await bcrypt.hash(newPassword, 8);
 
-    try {
-      await prisma.$transaction([
-        prisma.hash.delete({ where: { id: hash.id } }),
-        prisma.user.update({
-          where: { id: user.id },
-          data: { password: hashedNewPassword },
-        }),
-      ]);
-    } catch (err) {
-      throw err;
-    }
+    await prisma.$transaction([
+      prisma.hash.delete({ where: { id: hash.id } }),
+      prisma.user.update({
+        where: { id: user.id },
+        data: { password: hashedNewPassword },
+      }),
+    ]);
   };
 }
