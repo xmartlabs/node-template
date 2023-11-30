@@ -1,10 +1,18 @@
 import { Job, Worker } from 'bullmq';
+import { config } from 'config/config';
 import { appLogger } from 'config/logger';
-import { WorkerQueues } from 'types/worker';
+import { sendSignUpEmail } from 'emails';
+import { EmailTypes, WorkerQueues } from 'types';
 import { redisConnection as connection } from 'utils/redis';
 
 const mailWorkerJobHandler = async (job: Job) => {
-  appLogger.info(`handling job: [${job.id}]`);
+  appLogger.info(`Handling job: [${job.id}]`);
+  switch (job.data.emailType) {
+    case EmailTypes.SIGN_UP:
+      sendSignUpEmail(config.appName, job.data.email);
+    default:
+      return
+  }
 };
 
 const mailWorker = new Worker(WorkerQueues.MAIL_QUEUE, mailWorkerJobHandler, {

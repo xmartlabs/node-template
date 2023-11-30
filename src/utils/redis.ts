@@ -1,5 +1,5 @@
 import IORedis, { RedisOptions } from 'ioredis';
-import { config } from 'config/config';
+import { config, isProduction } from 'config/config';
 
 const workerConnectionOptions = {
   host: config.redisHost,
@@ -8,7 +8,7 @@ const workerConnectionOptions = {
   username: config.redisUsername,
   maxRetriesPerRequest: null,
   enableOfflineQueue: false,
-  showFriendlyErrorStack: config.env !== 'production',
+  showFriendlyErrorStack: !isProduction,
 } as RedisOptions;
 
 export const redisConnection = new IORedis(workerConnectionOptions);

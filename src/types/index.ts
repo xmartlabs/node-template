@@ -1,3 +1,5 @@
+import { format } from 'path';
+
 export { Config, ErrorInterface } from 'types/config';
 export {
   ReturnUser,
@@ -8,3 +10,5 @@ export {
 export { Wrapper } from 'types/middlewares';
 export { ReturnAuth, LoginParams, RefreshTokenParams } from 'types/auth';
 export { AuthenticatedRequest } from 'types/request';
+export { EmailTypes } from 'types/emails';
+export { WorkerQueues } from 'types/worker';
