@@ -34,6 +34,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      redis-server:
+        image: bitnami/redis:latest
+        env:
+          - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+          - ALLOW_EMPTY_PASSWORD=false
+          - REDIS_PASSWORD=my-password
+          - REDIS_USERNAME=default
+
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 20.9.0

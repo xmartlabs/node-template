@@ -1,5 +1,3 @@
-import { format } from 'path';
-
 export { Config, ErrorInterface } from 'types/config';
 export {
   ReturnUser,
