@@ -5,7 +5,8 @@ import { redisConnection as connection } from 'utils/redis';
 import { config } from 'config/config';
 
 const SECONDS_TO_HOURS = 3600;
-const MAX_WORKERS_ATTEMPTS = 2;
+const MILLISECONDS_TO_SECONDS = 1000;
+const MAX_WORKERS_ATTEMPTS = 5;
 
 export const options = {
   removeOnComplete: {
@@ -15,6 +16,10 @@ export const options = {
     age: config.jobsRetentionHours * SECONDS_TO_HOURS,
   },
   attempts: MAX_WORKERS_ATTEMPTS,
+  backoff: {
+    type: 'exponential',
+    delay: MILLISECONDS_TO_SECONDS * 60,
+  },
 } as JobsOptions;
 
 export const mailQueue = new Queue(WorkerQueues.MAIL_QUEUE, {
