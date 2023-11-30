@@ -31,5 +31,5 @@ mailQueue.on('ioredis:close', () => {
 });
 
 export const addToMailQueue = (jobName: string, data: any) => {
-  mailQueue.add(jobName, data)
-}
+  mailQueue.add(jobName, data);
+};

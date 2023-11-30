@@ -11,7 +11,7 @@ const mailWorkerJobHandler = async (job: Job) => {
     case EmailTypes.SIGN_UP:
       sendSignUpEmail(config.appName, job.data.email);
     default:
-      return
+      return;
   }
 };
 
