@@ -7,7 +7,7 @@
     "start": "npm run build && nodemon",
     "start-server": "ts-node -r dotenv/config -r tsconfig-paths/register .",
     "start-worker": "ts-node -r dotenv/config -r tsconfig-paths/register ./worker/worker.ts",
-    "test": "tsoa spec-and-routes && jest ./src --verbose",
+    "test": "tsoa spec-and-routes && jest ./src --verbose --forceExit",
     "lint": "npx eslint src --ext .ts",
     "build": "tsoa spec-and-routes && tsc --project tsconfig.json",
     "deploy": "prisma migrate deploy && concurrently \"npm run deploy-server\" \"npm run deploy-worker\"",
