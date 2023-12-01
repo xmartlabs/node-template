@@ -7,6 +7,7 @@ import { config } from 'config/config';
 const SECONDS_TO_HOURS = 3600;
 const MILLISECONDS_TO_SECONDS = 1000;
 const MAX_WORKERS_ATTEMPTS = 5;
+const BACKOFF_DELAY = 60;
 
 export const options = {
   removeOnComplete: {
@@ -18,7 +19,7 @@ export const options = {
   attempts: MAX_WORKERS_ATTEMPTS,
   backoff: {
     type: 'exponential',
-    delay: MILLISECONDS_TO_SECONDS * 60,
+    delay: MILLISECONDS_TO_SECONDS * BACKOFF_DELAY,
   },
 } as JobsOptions;
 
