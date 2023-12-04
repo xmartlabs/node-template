@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   db:
-    image: postgres:11.4
+    image: postgres:15
     environment:
       POSTGRES_USER: 'admin'
       POSTGRES_PASSWORD: 'admin'
@@ -21,6 +21,15 @@ services:
       - redis-data:/bitnami/redis/data
     ports:
       - '6379:6379'
+  db-testing:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: 'admin'
+      POSTGRES_PASSWORD: 'admin'
+      POSTGRES_DB: 'nodeTemplateDBTesting'
+    ports:
+      - '5433:5432'
 volumes:
   db:
   redis-data:

@@ -1,51 +1,47 @@
+import { prismaMock } from 'tests/prismaSetup';
 import { generateUserData } from 'tests/utils/generateData';
 import { UserService } from 'services/user';
 import { sendUserWithoutPassword } from 'utils/user';
 import { addToMailQueue } from 'queue/queue';
-import { EmailTypes } from 'types';
-import prisma from 'root/prisma/client';
-import { ApiError } from 'utils/apiError';
-import { errors } from 'config/errors';
 
+jest.mock('emails/index');
 jest.mock('utils/user');
 jest.mock('queue/queue');
 
 const mockMailQueueAdd = addToMailQueue as jest.Mock;
-const mockSendUserWithoutPassword = sendUserWithoutPassword as jest.Mock;
-
 const userData = generateUserData();
+
+/*
+Currently leaving this file to have an example of a test with prisma mocked.
+Might delete this when we add the test for the rest of the functionalities,
+since we might have a test with prisma mocked in there.
+*/
 
 describe('User service: ', () => {
   beforeEach(() => {
     mockMailQueueAdd.mockResolvedValue(undefined);
   });
 
-  afterEach(jest.clearAllMocks);
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   test('should create a new user with email', async () => {
-    const { password, ...userWithoutPassword } = userData;
-    mockSendUserWithoutPassword.mockResolvedValue(userWithoutPassword);
+    prismaMock.user.create.mockResolvedValue(userData);
+    prismaMock.user.update.mockResolvedValue(userData);
+
+    const userWithoutPassword = sendUserWithoutPassword(userData);
 
     await expect(UserService.create(userData)).resolves.toEqual(
       userWithoutPassword,
     );
-
-    expect(mockMailQueueAdd).toHaveBeenCalledWith('Sign up Email', {
-      emailType: EmailTypes.SIGN_UP,
-      email: userData.email,
-    });
   });
 
   describe('When the user already exists', () => {
-    beforeEach(async () => {
-      await prisma.user.create({
-        data: userData,
-      });
-    });
-
     test('should not create a new user', async () => {
-      const referenceError = new ApiError(errors.USER_ALREADY_EXISTS);
+      const referenceError = new Error('something went wrong');
 
+      prismaMock.user.create.mockRejectedValue(referenceError);
       await expect(UserService.create(userData)).rejects.toEqual(
         referenceError,
       );

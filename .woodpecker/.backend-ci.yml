@@ -5,7 +5,7 @@ x-common: &common
     - NODE_ENV=test
     - PORT=1111
     - LOG_LEVEL=info
-    - DATABASE_URL=postgres://dbuser:dbpass@localhost:dbport/dbname
+    - DATABASE_URL=postgres://test_user:password123@postgres-service:5432/nodeTemplateTesting
     - ACCESS_TOKEN_SECRET=secret
     - REFRESH_TOKEN_SECRET=secret
     - ACCESS_TOKEN_EXPIRES_IN=1d
@@ -57,3 +57,8 @@ services:
       - ALLOW_EMPTY_PASSWORD=false
       - REDIS_PASSWORD=my-password
       - REDIS_USERNAME=default
+  postgres-service:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: password123
