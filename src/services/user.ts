@@ -17,7 +17,7 @@ import { errors } from 'config/errors';
 import { addToMailQueue } from 'queue/queue';
 import { generateCodeAndHash, verifyHash } from 'utils/hash';
 import { config } from 'config/config';
-import { sendResetPasswordCode } from 'emails';
+// import { sendResetPasswordCode } from 'emails';
 
 export class UserService {
   static find = async (id: string): Promise<ReturnUser | null> => {
@@ -134,7 +134,11 @@ export class UserService {
       },
     });
 
-    await sendResetPasswordCode(email, code);
+    addToMailQueue('Reset password code', {
+      emailType: EmailTypes.RESET_PASSWORD_CODE,
+      email,
+      code,
+    });
   };
 
   static resetPassword = async (
