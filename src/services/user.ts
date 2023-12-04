@@ -7,10 +7,12 @@ import {
   CreateUserParams,
   UpdateUserParams,
   DatabaseUser,
+  EmailTypes,
 } from 'types';
-import { sendUserWithoutPassword, startSendEmailTask } from 'utils/user';
+import { sendUserWithoutPassword } from 'utils/user';
 import { emailRegex } from 'utils/constants';
 import { errors } from 'config/errors';
+import { addToMailQueue } from 'queue/queue';
 
 export class UserService {
   static find = async (id: string): Promise<ReturnUser | null> => {
@@ -59,7 +61,11 @@ export class UserService {
       throw e;
     }
 
-    startSendEmailTask(email);
+    addToMailQueue('Sign up Email', {
+      emailType: EmailTypes.SIGN_UP,
+      email,
+    });
+
     return sendUserWithoutPassword(user);
   };
 

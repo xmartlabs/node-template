@@ -10,4 +10,5 @@ module.exports = {
   moduleNameMapper: {
     '^root/prisma/(.*)$': '<rootDir>/prisma/$1',
   },
+  setupFilesAfterEnv: ['<rootDir>/src/tests/setup.ts'],
 };

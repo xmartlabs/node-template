@@ -13,6 +13,11 @@ export interface Config {
   smtpHost: string;
   smtpPort: number;
   appName: string;
+  redisHost: string;
+  redisPassword: string;
+  redisPort: number;
+  redisUsername: string;
+  jobsRetentionHours: number;
 }
 
 export interface ErrorInterface {

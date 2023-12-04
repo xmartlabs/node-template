@@ -33,6 +33,20 @@ const envVarsSchema = z
       .transform((val) => Number(val))
       .refine((val) => !Number.isNaN(val), 'EMAIL PORT must be a number'),
     APP_NAME: z.string(),
+    REDIS_HOST: z.string(),
+    REDIS_PASSWORD: z.string(),
+    REDIS_PORT: z
+      .string()
+      .transform((val) => Number(val))
+      .refine((val) => !Number.isNaN(val), 'REDIS PORT must be a number'),
+    JOBS_RETENTION_HOURS: z
+      .string()
+      .transform((val) => Number(val))
+      .refine(
+        (val) => !Number.isNaN(val),
+        'JOBS RETENTION HOURS must be a number',
+      ),
+    REDIS_USERNAME: z.string(),
   })
   .passthrough();
 
@@ -57,4 +71,9 @@ export const config: Config = {
   smtpHost: envVars.SMTP_HOST,
   smtpPort: envVars.SMTP_PORT,
   appName: envVars.APP_NAME,
+  redisHost: envVars.REDIS_HOST,
+  redisPassword: envVars.REDIS_PASSWORD,
+  redisPort: envVars.REDIS_PORT,
+  redisUsername: envVars.REDIS_USERNAME,
+  jobsRetentionHours: envVars.JOBS_RETENTION_HOURS,
 };

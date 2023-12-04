@@ -24,10 +24,24 @@ env:
   SMTP_HOST: 'test'
   SMTP_PORT: '1111'
   APP_NAME: 'APPNAME'
+  REDIS_HOST: 'redis-server'
+  REDIS_PASSWORD: 'my-password'
+  REDIS_PORT: '6379'
+  REDIS_USERNAME: 'default'
+  JOBS_RETENTION_HOURS: '24'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      redis-server:
+        image: bitnami/redis:latest
+        env:
+          - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+          - ALLOW_EMPTY_PASSWORD=false
+          - REDIS_PASSWORD=my-password
+          - REDIS_USERNAME=default
 
     steps:
       - uses: actions/checkout@v3

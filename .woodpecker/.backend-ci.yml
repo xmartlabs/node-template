@@ -16,6 +16,11 @@ x-common: &common
     - SMTP_HOST=test
     - SMTP_PORT=1111
     - APP_NAME=APPNAME
+    - REDIS_HOST=redis-server
+    - REDIS_PASSWORD=my-password
+    - REDIS_PORT=6379
+    - REDIS_USERNAME=default
+    - JOBS_RETENTION_HOURS=24
 
 pipeline:
   setup:
@@ -36,9 +41,19 @@ pipeline:
     <<: *common
     group: fe-build
     commands:
+      - sleep 15
       - CI=true npm run test
   build:
     <<: *common
     group: fe-build
     commands:
       - CI=true npm run build
+
+services:
+  redis-server:
+    image: bitnami/redis:latest
+    environment:
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL,CONFIG
+      - ALLOW_EMPTY_PASSWORD=false
+      - REDIS_PASSWORD=my-password
+      - REDIS_USERNAME=default
