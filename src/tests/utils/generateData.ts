@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import { TypeHash, User, Hash } from '@prisma/client';
+import { User, Tokens, TypeToken } from '@prisma/client';
 import { endOfTomorrow } from 'date-fns';
 
 export const generateUserData = (opts?: Partial<User>) => ({
@@ -13,13 +13,13 @@ export const generateUserData = (opts?: Partial<User>) => ({
   ...opts,
 });
 
-export const generateHashData = (opts?: Partial<Hash>) => ({
+export const generateTokenData = (opts?: Partial<Tokens>) => ({
   id: faker.string.uuid(),
   createdAt: faker.date.anytime(),
   updatedAt: faker.date.anytime(),
   expiresAt: endOfTomorrow(),
-  type: TypeHash.RESET_PASSWORD,
+  type: TypeToken.RESET_PASSWORD,
   userId: faker.string.uuid(),
-  hash: faker.string.alphanumeric(),
+  token: faker.string.alphanumeric(),
   ...opts,
 });

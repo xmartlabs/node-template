@@ -1,16 +1,15 @@
 import { startOfYesterday } from 'date-fns';
-import * as bcrypt from 'bcryptjs';
 import { faker } from '@faker-js/faker';
 
 import prisma from 'root/prisma/client';
-import { generateHashData, generateUserData } from 'tests/utils/generateData';
+import { generateTokenData, generateUserData } from 'tests/utils/generateData';
 import { UserService } from 'services/user';
 import { sendUserWithoutPassword } from 'utils/user';
 import { addToMailQueue } from 'queue/queue';
 import { EmailTypes } from 'types';
 import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
-import { verifyHash, generateCodeAndHash } from 'utils/hash';
+import { verifyToken, generateCodeAndHash } from 'utils/hash';
 
 jest.mock('utils/user');
 jest.mock('queue/queue');
@@ -19,14 +18,14 @@ jest.mock('utils/hash');
 const mockMailQueueAdd = addToMailQueue as jest.Mock;
 const mockSendUserWithoutPassword = sendUserWithoutPassword as jest.Mock;
 const mockGenerateCodeAndHash = generateCodeAndHash as jest.Mock;
-const mockVerifyHash = verifyHash as jest.Mock;
+const mockVerifyToken = verifyToken as jest.Mock;
 
 const mockCode = String(Math.floor(100000 + Math.random() * 900000));
 
 const userData = generateUserData();
-const hashData = generateHashData({
+const tokenData = generateTokenData({
   userId: userData.id,
-  hash: bcrypt.hashSync(mockCode, 8),
+  token: mockCode,
 });
 
 describe('User service: ', () => {
@@ -72,7 +71,7 @@ describe('User service: ', () => {
     beforeEach(async () => {
       mockGenerateCodeAndHash.mockResolvedValue({
         code: mockCode,
-        hash: hashData.hash,
+        hash: tokenData.token,
       });
     });
 
@@ -104,14 +103,14 @@ describe('User service: ', () => {
   });
 
   describe('Reset Password', () => {
-    mockVerifyHash.mockResolvedValue(hashData);
+    mockVerifyToken.mockResolvedValue(tokenData);
 
     test('should update the password successfully', async () => {
       await prisma.user.create({
         data: userData,
       });
-      await prisma.hash.create({
-        data: hashData,
+      await prisma.tokens.create({
+        data: tokenData,
       });
 
       await expect(
@@ -132,14 +131,16 @@ describe('User service: ', () => {
         await prisma.user.create({
           data: userData,
         });
-        await prisma.hash.create({
-          data: generateHashData({
-            hash: 'wrong hash',
+        await prisma.tokens.create({
+          data: generateTokenData({
+            token: 'wrong token',
             userId: userData.id,
           }),
         });
 
-        mockVerifyHash.mockRejectedValueOnce(new ApiError(errors.INVALID_CODE));
+        mockVerifyToken.mockRejectedValueOnce(
+          new ApiError(errors.INVALID_CODE),
+        );
 
         await expect(
           UserService.resetPassword(
@@ -154,15 +155,17 @@ describe('User service: ', () => {
         await prisma.user.create({
           data: userData,
         });
-        await prisma.hash.create({
-          data: generateHashData({
-            hash: hashData.hash,
+        await prisma.tokens.create({
+          data: generateTokenData({
+            token: tokenData.token,
             expiresAt: startOfYesterday(),
             userId: userData.id,
           }),
         });
 
-        mockVerifyHash.mockRejectedValueOnce(new ApiError(errors.CODE_EXPIRED));
+        mockVerifyToken.mockRejectedValueOnce(
+          new ApiError(errors.CODE_EXPIRED),
+        );
 
         await expect(
           UserService.resetPassword(

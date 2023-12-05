@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcryptjs';
 import { addMinutes } from 'date-fns';
 
-import { Prisma, TypeHash } from '@prisma/client';
+import { Prisma, TypeToken } from '@prisma/client';
 import prisma from 'root/prisma/client';
 import { ApiError } from 'utils/apiError';
 import {
@@ -15,9 +15,8 @@ import { sendUserWithoutPassword } from 'utils/user';
 import { emailRegex } from 'utils/constants';
 import { errors } from 'config/errors';
 import { addToMailQueue } from 'queue/queue';
-import { generateCodeAndHash, verifyHash } from 'utils/hash';
+import { generateCodeAndHash, verifyToken } from 'utils/hash';
 import { config } from 'config/config';
-// import { sendResetPasswordCode } from 'emails';
 
 export class UserService {
   static find = async (id: string): Promise<ReturnUser | null> => {
@@ -112,24 +111,25 @@ export class UserService {
     if (!user) throw new ApiError(errors.INVALID_EMAIL);
 
     const { code, hash } = await generateCodeAndHash();
-    const expirationDate = addMinutes(new Date(), config.otpExpirationTime);
 
-    await prisma.hash.upsert({
+    const expirationDate = addMinutes(new Date(), config.otpExpirationMinutes);
+
+    await prisma.tokens.upsert({
       create: {
         userId: user.id,
-        hash,
+        token: hash,
         expiresAt: expirationDate,
-        type: TypeHash.RESET_PASSWORD,
+        type: TypeToken.RESET_PASSWORD,
       },
       update: {
-        hash,
+        token: hash,
         expiresAt: expirationDate,
         userId: user.id,
       },
       where: {
         userId_type: {
           userId: user.id,
-          type: TypeHash.RESET_PASSWORD,
+          type: TypeToken.RESET_PASSWORD,
         },
       },
     });
@@ -153,11 +153,11 @@ export class UserService {
     });
     if (!user) throw new ApiError(errors.INVALID_EMAIL);
 
-    const hash = await verifyHash(user.id, TypeHash.RESET_PASSWORD, code);
+    const token = await verifyToken(user.id, TypeToken.RESET_PASSWORD, code);
     const hashedNewPassword = await bcrypt.hash(newPassword, 8);
 
     await prisma.$transaction([
-      prisma.hash.delete({ where: { id: hash.id } }),
+      prisma.tokens.delete({ where: { id: token.id } }),
       prisma.user.update({
         where: { id: user.id },
         data: { password: hashedNewPassword },

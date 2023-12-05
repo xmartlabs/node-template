@@ -47,7 +47,7 @@ const envVarsSchema = z
         'JOBS RETENTION HOURS must be a number',
       ),
     REDIS_USERNAME: z.string(),
-    OTP_EXPIRATION_TIME: z
+    OTP_EXPIRATION_MINUTES: z
       .string()
       .transform((val) => Number(val))
       .refine(
@@ -83,5 +83,5 @@ export const config: Config = {
   redisPort: envVars.REDIS_PORT,
   redisUsername: envVars.REDIS_USERNAME,
   jobsRetentionHours: envVars.JOBS_RETENTION_HOURS,
-  otpExpirationTime: envVars.OTP_EXPIRATION_TIME,
+  otpExpirationMinutes: envVars.OTP_EXPIRATION_MINUTES,
 };

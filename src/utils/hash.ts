@@ -1,41 +1,46 @@
 import * as bcrypt from 'bcryptjs';
-import { generate } from 'otp-generator';
 
-import { TypeHash } from '@prisma/client';
+import { TypeToken } from '@prisma/client';
 import { errors } from 'config/errors';
 import prisma from 'root/prisma/client';
 import { ApiError } from './apiError';
 
-export const generateCodeAndHash = async () => {
-  const code = generate(6, {
-    specialChars: false,
-    lowerCaseAlphabets: false,
-    upperCaseAlphabets: false,
-  });
+const generateCode = (length: number) => {
+  const digits = '0123456789';
+  let OTP = '';
 
+  for (let i = 0; i < length; i += 1) {
+    OTP += digits[Math.floor(Math.random() * 10)];
+  }
+
+  return OTP;
+};
+
+export const generateCodeAndHash = async () => {
+  const code = generateCode(6);
   const hash = await bcrypt.hash(code, 8);
 
   return { code, hash };
 };
 
-export const verifyHash = async (
+export const verifyToken = async (
   userId: string,
-  hashType: TypeHash,
+  tokenType: TypeToken,
   code: string,
 ) => {
-  const hash = await prisma.hash.findUnique({
+  const token = await prisma.tokens.findUnique({
     where: {
-      userId_type: { userId, type: hashType },
+      userId_type: { userId, type: tokenType },
     },
   });
 
-  if (!hash || !bcrypt.compareSync(code, hash.hash)) {
+  if (!token || !bcrypt.compareSync(code, token.token)) {
     throw new ApiError(errors.INVALID_CODE);
   }
 
-  if (hash.expiresAt < new Date()) {
+  if (token.expiresAt < new Date()) {
     throw new ApiError(errors.CODE_EXPIRED);
   }
 
-  return hash;
+  return token;
 };

@@ -21,7 +21,7 @@ x-common: &common
     - REDIS_PORT=6379
     - REDIS_USERNAME=default
     - JOBS_RETENTION_HOURS=24
-    - OTP_EXPIRATION_TIME=15
+    - OTP_EXPIRATION_MINUTES=15
 
 pipeline:
   setup:
