@@ -95,7 +95,7 @@ describe('User service: ', () => {
       test('user with email does not exist', async () => {
         await expect(
           UserService.requestResetPasswordCode(userData.email),
-        ).rejects.toThrow(new ApiError(errors.INVALID_EMAIL));
+        ).resolves.toEqual(undefined);
 
         expect(mockMailQueueAdd).toHaveBeenCalledTimes(0);
       });
@@ -124,7 +124,7 @@ describe('User service: ', () => {
 
         await expect(
           UserService.resetPassword(userData.email, mockCode, newPassword),
-        ).rejects.toThrow(new ApiError(errors.INVALID_EMAIL));
+        ).resolves.toEqual(undefined);
       });
 
       test('code does not verify with hash', async () => {

@@ -108,7 +108,7 @@ export class UserService {
         email,
       },
     });
-    if (!user) throw new ApiError(errors.INVALID_EMAIL);
+    if (!user) return;
 
     const { code, hash } = await generateCodeAndHash();
 
@@ -151,7 +151,7 @@ export class UserService {
         email,
       },
     });
-    if (!user) throw new ApiError(errors.INVALID_EMAIL);
+    if (!user) return;
 
     const token = await verifyToken(user.id, TypeToken.RESET_PASSWORD, code);
     const hashedNewPassword = await bcrypt.hash(newPassword, 8);
