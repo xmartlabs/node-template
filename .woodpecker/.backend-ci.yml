@@ -22,6 +22,7 @@ x-common: &common
     - REDIS_USERNAME=default
     - JOBS_RETENTION_HOURS=24
     - OTP_EXPIRATION_MINUTES=15
+    - APPLY_RATE_LIMIT=true
 
 pipeline:
   setup:

@@ -2,7 +2,7 @@ import express, { Application } from 'express';
 import helmet from 'helmet';
 import compression from 'compression';
 import cors from 'cors';
-import { globalLimiter } from 'middlewares/rateLimiter';
+import { applyRateLimit } from 'middlewares/rateLimiter';
 import { morganHandlers } from 'config/morgan';
 import { errorConverter, errorHandler } from 'middlewares/error';
 import { Wrapper } from 'types';
@@ -24,7 +24,7 @@ export const preRoutesMiddleware = (app: Application) => {
   app.use(cors());
 
   // Limit requests from same IP
-  app.use(globalLimiter);
+  applyRateLimit(app);
 
   // Load Morgan handlers
   app.use(morganHandlers.successHandler);
