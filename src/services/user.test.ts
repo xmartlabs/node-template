@@ -5,15 +5,18 @@ import { faker } from '@faker-js/faker';
 import prisma from 'root/prisma/client';
 import { generateTokenData, generateUserData } from 'tests/utils/generateData';
 import { UserService } from 'services/user';
+import { addToMailQueue } from 'queue/queue';
 import { sendUserWithoutPassword } from 'utils/user';
 import * as queues from 'queue/queue';
 import { EmailTypes } from 'types';
 import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
 
+jest.mock('emails/index');
 jest.mock('utils/user');
 jest.mock('queue/queue');
 
+const mockAddToMailQueue = addToMailQueue as jest.Mock;
 const mockSendUserWithoutPassword = sendUserWithoutPassword as jest.Mock;
 
 const mockCode = String(Math.floor(100000 + Math.random() * 900000));
@@ -28,9 +31,9 @@ const tokenData = generateTokenData({
 describe('User service: ', () => {
   afterEach(jest.clearAllMocks);
 
-  describe('create function', () => {
+  describe('create functionality', () => {
     test('should create a new user with email', async () => {
-      const spyAddToMailQueue = jest.spyOn(queues, 'addToMailQueue');
+      mockAddToMailQueue.mockResolvedValue(undefined);
       const { password, ...userWithoutPassword } = userData;
       mockSendUserWithoutPassword.mockResolvedValue(userWithoutPassword);
 
@@ -38,7 +41,7 @@ describe('User service: ', () => {
         userWithoutPassword,
       );
 
-      expect(spyAddToMailQueue).toHaveBeenCalledWith('Sign up Email', {
+      expect(mockAddToMailQueue).toHaveBeenCalledWith('Sign up Email', {
         emailType: EmailTypes.SIGN_UP,
         email: userData.email,
       });
@@ -57,6 +60,8 @@ describe('User service: ', () => {
         await expect(UserService.create(userData)).rejects.toEqual(
           referenceError,
         );
+
+        expect(mockAddToMailQueue).not.toHaveBeenCalled();
       });
     });
   });
@@ -167,6 +172,73 @@ describe('User service: ', () => {
             userData.password,
           ),
         ).rejects.toThrow(new ApiError(errors.CODE_EXPIRED));
+      });
+    });
+    describe('find functionality', () => {
+      test('should return user', async () => {
+        await prisma.user.create({
+          data: userData,
+        });
+        const { password, ...userWithoutPassword } = userData;
+        mockSendUserWithoutPassword.mockResolvedValue(userWithoutPassword);
+
+        await expect(UserService.find(userData.id)).resolves.toEqual(
+          userWithoutPassword,
+        );
+      });
+
+      test('user does not exist', async () => {
+        await expect(UserService.find(faker.string.uuid())).rejects.toThrow(
+          new ApiError(errors.NOT_FOUND_USER),
+        );
+      });
+    });
+
+    describe('update functionality', () => {
+      test('should update user', async () => {
+        const updatedUser = {
+          ...userData,
+          name: 'New name',
+        };
+
+        await prisma.user.create({
+          data: userData,
+        });
+
+        const { password, ...userWithoutPassword } = userData;
+        mockSendUserWithoutPassword.mockResolvedValue(userWithoutPassword);
+
+        await expect(
+          UserService.update(userData.id, updatedUser),
+        ).resolves.toEqual(userWithoutPassword);
+      });
+
+      describe('invalid data', () => {
+        test('user does not exist', async () => {
+          await expect(
+            UserService.update(userData.id, userData),
+          ).rejects.toThrow(new ApiError(errors.NOT_FOUND_USER));
+        });
+      });
+    });
+
+    describe('update functionality', () => {
+      test('should update user', async () => {
+        await prisma.user.create({
+          data: userData,
+        });
+
+        await expect(UserService.destroy(userData.id)).resolves.toEqual(
+          undefined,
+        );
+      });
+
+      describe('invalid data', () => {
+        test('user does not exist', async () => {
+          await expect(UserService.destroy(userData.id)).rejects.toThrow(
+            new ApiError(errors.NOT_FOUND_USER),
+          );
+        });
       });
     });
   });

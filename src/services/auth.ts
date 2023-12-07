@@ -1,23 +1,21 @@
-import jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
-import { config } from 'config/config';
 import {
   ReturnAuth,
   CreateUserParams,
-  ReturnUser,
   LoginParams,
   RefreshTokenParams,
 } from 'types';
 import prisma from 'root/prisma/client';
 import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
+import { generateAccessToken, generateRefreshToken } from 'utils/token';
 import { UserService } from '.';
 
 export class AuthService {
   static register = async (userBody: CreateUserParams): Promise<ReturnAuth> => {
     const user = await UserService.create(userBody);
-    const accessToken = await this.generateAccessToken(user);
-    const refreshToken = await this.generateRefreshToken(user);
+    const accessToken = await generateAccessToken(user);
+    const refreshToken = await generateRefreshToken(user);
     const sessionData = {
       userId: user.id,
       accessToken,
@@ -44,7 +42,7 @@ export class AuthService {
     const session = await prisma.session.findUnique({
       where: { userId: user.id },
     });
-    const accessToken = await this.generateAccessToken(user);
+    const accessToken = await generateAccessToken(user);
     if (session) {
       await prisma.session.update({
         where: { id: session.id },
@@ -56,7 +54,7 @@ export class AuthService {
       };
     }
 
-    const refreshToken = await this.generateRefreshToken(user);
+    const refreshToken = await generateRefreshToken(user);
     const sessionData = {
       userId: user.id,
       accessToken,
@@ -90,7 +88,7 @@ export class AuthService {
       throw new ApiError(errors.NOT_FOUND_USER);
     }
 
-    const accessToken = await this.generateAccessToken(user);
+    const accessToken = await generateAccessToken(user);
     await prisma.session.update({
       where: { userId: user.id },
       data: { accessToken },
@@ -100,14 +98,4 @@ export class AuthService {
       refreshToken,
     };
   };
-
-  static generateAccessToken = async (user: ReturnUser): Promise<string> =>
-    jwt.sign({ user }, config.accessTokenSecret, {
-      expiresIn: config.accessTokenExpiresIn,
-    });
-
-  static generateRefreshToken = async (user: ReturnUser): Promise<string> =>
-    jwt.sign({ user }, config.refreshTokenSecret, {
-      expiresIn: config.refreshTokenExpiresIn,
-    });
 }

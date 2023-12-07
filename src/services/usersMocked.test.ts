@@ -2,13 +2,11 @@ import { prismaMock } from 'tests/prismaSetup';
 import { generateUserData } from 'tests/utils/generateData';
 import { UserService } from 'services/user';
 import { sendUserWithoutPassword } from 'utils/user';
-import { addToMailQueue } from 'queue/queue';
 
 jest.mock('emails/index');
 jest.mock('utils/user');
 jest.mock('queue/queue');
 
-const mockMailQueueAdd = addToMailQueue as jest.Mock;
 const userData = generateUserData();
 
 /*
@@ -18,10 +16,6 @@ since we might have a test with prisma mocked in there.
 */
 
 describe('User service: ', () => {
-  beforeEach(() => {
-    mockMailQueueAdd.mockResolvedValue(undefined);
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
