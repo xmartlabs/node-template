@@ -1,3 +1,4 @@
+import * as bcrypt from 'bcryptjs';
 import { startOfYesterday } from 'date-fns';
 import { faker } from '@faker-js/faker';
 
@@ -5,38 +6,31 @@ import prisma from 'root/prisma/client';
 import { generateTokenData, generateUserData } from 'tests/utils/generateData';
 import { UserService } from 'services/user';
 import { sendUserWithoutPassword } from 'utils/user';
-import { addToMailQueue } from 'queue/queue';
+import * as queues from 'queue/queue';
 import { EmailTypes } from 'types';
 import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
-import { verifyToken, generateCodeAndHash } from 'utils/hash';
 
 jest.mock('utils/user');
 jest.mock('queue/queue');
-jest.mock('utils/hash');
 
-const mockMailQueueAdd = addToMailQueue as jest.Mock;
 const mockSendUserWithoutPassword = sendUserWithoutPassword as jest.Mock;
-const mockGenerateCodeAndHash = generateCodeAndHash as jest.Mock;
-const mockVerifyToken = verifyToken as jest.Mock;
 
 const mockCode = String(Math.floor(100000 + Math.random() * 900000));
 
 const userData = generateUserData();
+
 const tokenData = generateTokenData({
   userId: userData.id,
-  token: mockCode,
+  token: bcrypt.hashSync(mockCode, 8),
 });
 
 describe('User service: ', () => {
-  beforeEach(() => {
-    mockMailQueueAdd.mockResolvedValue(undefined);
-  });
-
   afterEach(jest.clearAllMocks);
 
   describe('create function', () => {
     test('should create a new user with email', async () => {
+      const spyAddToMailQueue = jest.spyOn(queues, 'addToMailQueue');
       const { password, ...userWithoutPassword } = userData;
       mockSendUserWithoutPassword.mockResolvedValue(userWithoutPassword);
 
@@ -44,7 +38,7 @@ describe('User service: ', () => {
         userWithoutPassword,
       );
 
-      expect(mockMailQueueAdd).toHaveBeenCalledWith('Sign up Email', {
+      expect(spyAddToMailQueue).toHaveBeenCalledWith('Sign up Email', {
         emailType: EmailTypes.SIGN_UP,
         email: userData.email,
       });
@@ -68,14 +62,12 @@ describe('User service: ', () => {
   });
 
   describe('Request reset password code', () => {
-    beforeEach(async () => {
-      mockGenerateCodeAndHash.mockResolvedValue({
-        code: mockCode,
-        hash: tokenData.token,
-      });
+    afterEach(() => {
+      jest.restoreAllMocks();
     });
 
     test('should create and return new hash', async () => {
+      const spyAddToMailQueue = jest.spyOn(queues, 'addToMailQueue');
       await prisma.user.create({
         data: userData,
       });
@@ -84,27 +76,22 @@ describe('User service: ', () => {
         UserService.requestResetPasswordCode(userData.email),
       ).resolves.toEqual(undefined);
 
-      expect(mockMailQueueAdd).toHaveBeenCalledWith('Reset password code', {
-        emailType: EmailTypes.RESET_PASSWORD_CODE,
-        email: userData.email,
-        code: mockCode,
-      });
+      expect(spyAddToMailQueue).toHaveBeenCalledTimes(1);
     });
 
     describe('invalid data', () => {
       test('user with email does not exist', async () => {
+        const spyAddToMailQueue = jest.spyOn(queues, 'addToMailQueue');
         await expect(
           UserService.requestResetPasswordCode(userData.email),
         ).resolves.toEqual(undefined);
 
-        expect(mockMailQueueAdd).toHaveBeenCalledTimes(0);
+        expect(spyAddToMailQueue).toHaveBeenCalledTimes(0);
       });
     });
   });
 
   describe('Reset Password', () => {
-    mockVerifyToken.mockResolvedValue(tokenData);
-
     test('should update the password successfully', async () => {
       await prisma.user.create({
         data: userData,
@@ -127,6 +114,20 @@ describe('User service: ', () => {
         ).resolves.toEqual(undefined);
       });
 
+      test('token does not exist', async () => {
+        await prisma.user.create({
+          data: userData,
+        });
+
+        await expect(
+          UserService.resetPassword(
+            userData.email,
+            mockCode,
+            userData.password,
+          ),
+        ).rejects.toThrow(new ApiError(errors.INVALID_CODE));
+      });
+
       test('code does not verify with hash', async () => {
         await prisma.user.create({
           data: userData,
@@ -137,10 +138,6 @@ describe('User service: ', () => {
             userId: userData.id,
           }),
         });
-
-        mockVerifyToken.mockRejectedValueOnce(
-          new ApiError(errors.INVALID_CODE),
-        );
 
         await expect(
           UserService.resetPassword(
@@ -162,10 +159,6 @@ describe('User service: ', () => {
             userId: userData.id,
           }),
         });
-
-        mockVerifyToken.mockRejectedValueOnce(
-          new ApiError(errors.CODE_EXPIRED),
-        );
 
         await expect(
           UserService.resetPassword(
