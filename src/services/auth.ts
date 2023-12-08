@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 import {
-  ReturnAuth,
+  ReturnAuthService,
   CreateUserParams,
   LoginParams,
   RefreshTokenParams,
@@ -12,7 +12,9 @@ import { generateAccessToken, generateRefreshToken } from 'utils/token';
 import { UserService } from '.';
 
 export class AuthService {
-  static register = async (userBody: CreateUserParams): Promise<ReturnAuth> => {
+  static register = async (
+    userBody: CreateUserParams,
+  ): Promise<ReturnAuthService> => {
     const user = await UserService.create(userBody);
     const accessToken = await generateAccessToken(user);
     const refreshToken = await generateRefreshToken(user);
@@ -21,14 +23,17 @@ export class AuthService {
       accessToken,
       refreshToken,
     };
-    await prisma.session.create({ data: sessionData });
+    const session = await prisma.session.create({ data: sessionData });
     return {
+      sessionId: session.id,
       accessToken,
       refreshToken,
     };
   };
 
-  static login = async (loginParams: LoginParams): Promise<ReturnAuth> => {
+  static login = async (
+    loginParams: LoginParams,
+  ): Promise<ReturnAuthService> => {
     const { email, password } = loginParams;
     const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
@@ -39,7 +44,7 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new ApiError(errors.INVALID_CREDENTIALS);
     }
-    const session = await prisma.session.findUnique({
+    let session = await prisma.session.findUnique({
       where: { userId: user.id },
     });
     const accessToken = await generateAccessToken(user);
@@ -49,6 +54,7 @@ export class AuthService {
         data: { accessToken },
       });
       return {
+        sessionId: session.id,
         accessToken,
         refreshToken: session.refreshToken,
       };
@@ -60,8 +66,9 @@ export class AuthService {
       accessToken,
       refreshToken,
     };
-    await prisma.session.create({ data: sessionData });
+    session = await prisma.session.create({ data: sessionData });
     return {
+      sessionId: session.id,
       accessToken,
       refreshToken,
     };
@@ -73,7 +80,7 @@ export class AuthService {
 
   static refresh = async (
     refreshTokenParams: RefreshTokenParams,
-  ): Promise<ReturnAuth> => {
+  ): Promise<ReturnAuthService> => {
     const { refreshToken } = refreshTokenParams;
     const session = await prisma.session.findUnique({
       where: { refreshToken },
@@ -94,6 +101,7 @@ export class AuthService {
       data: { accessToken },
     });
     return {
+      sessionId: session.id,
       accessToken,
       refreshToken,
     };

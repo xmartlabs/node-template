@@ -55,6 +55,16 @@ const envVarsSchema = z
         'OTP EXPIRATION TIME must be a number',
       ),
     ENABLE_RATE_LIMIT: z.string(),
+    COOKIE_SECRET: z.string(),
+    COOKIE_EXPIRATION_SECONDS: z
+      .string()
+      .transform((val) => Number(val))
+      .refine(
+        (val) => !Number.isNaN(val),
+        'COOKIE EXPIRATION SECONDS must be a number',
+      ),
+    ENABLE_COOKIE: z.string(),
+    ENABLE_JWT: z.string(),
   })
   .passthrough();
 
@@ -65,6 +75,8 @@ export const isTest = envVars.NODE_ENV === 'test';
 export const isProduction = envVars.NODE_ENV === 'production';
 export const hasToApplyRateLimit =
   envVars.ENABLE_RATE_LIMIT.toLocaleLowerCase() === 'true';
+export const cookieEnabled = envVars.ENABLE_COOKIE === 'true';
+export const JWTEnabled = envVars.ENABLE_JWT === 'true';
 
 export const config: Config = {
   env: envVars.NODE_ENV,
@@ -87,4 +99,6 @@ export const config: Config = {
   redisUsername: envVars.REDIS_USERNAME,
   jobsRetentionHours: envVars.JOBS_RETENTION_HOURS,
   otpExpirationMinutes: envVars.OTP_EXPIRATION_MINUTES,
+  cookieSecret: envVars.COOKIE_SECRET,
+  cookieExpirationSeconds: envVars.COOKIE_EXPIRATION_SECONDS,
 };

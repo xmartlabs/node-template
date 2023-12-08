@@ -8,7 +8,12 @@ export {
   ResetPassword,
 } from 'types/user';
 export { Wrapper } from 'types/middlewares';
-export { ReturnAuth, LoginParams, RefreshTokenParams } from 'types/auth';
+export {
+  ReturnAuth,
+  LoginParams,
+  RefreshTokenParams,
+  ReturnAuthService,
+} from 'types/auth';
 export { AuthenticatedRequest } from 'types/request';
 export { EmailTypes } from 'types/emails';
 export { WorkerQueues } from 'types/worker';
