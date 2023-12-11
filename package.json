@@ -11,8 +11,8 @@
     "lint": "npx eslint src --ext .ts",
     "build": "tsoa spec-and-routes && tsc --project tsconfig.json",
     "deploy": "prisma migrate deploy && concurrently \"npm run deploy-server\" \"npm run deploy-worker\"",
-    "deploy-server": "ts-node -T -r dotenv/config -r tsconfig-paths/register dist/src/index.js",
-    "deploy-worker": "ts-node -T -r dotenv/config -r tsconfig-paths/register dist/worker/worker.js",
+    "deploy-server": "node -r dotenv/config -r module-alias/register dist/src/index.js",
+    "deploy-worker": "node -r dotenv/config -r module-alias/register dist/worker/worker.js",
     "format": "prettier --write ."
   },
   "repository": {
@@ -29,6 +29,19 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/xmartlabs/node-template/issues"
+  },
+  "_moduleAliases": {
+    "config": "dist/src/config",
+    "controllers": "dist/src/controllers",
+    "emails": "dist/src/emails",
+    "middlewares": "dist/src/middlewares",
+    "queue": "dist/src/queue",
+    "routes": "dist/src/routes",
+    "services": "dist/src/services",
+    "tests": "dist/src/tests",
+    "types": "dist/src/types",
+    "utils": "dist/src/utils",
+    "root": "dist/"
   },
   "homepage": "https://github.com/xmartlabs/node-template#readme",
   "devDependencies": {
@@ -82,6 +95,7 @@
     "jest-mock-extended": "^3.0.4",
     "jest-node-exports-resolver": "^1.1.5",
     "jsonwebtoken": "^9.0.1",
+    "module-alias": "^2.2.3",
     "morgan": "^1.10.0",
     "node-cron": "^3.0.2",
     "nodemailer": "^6.9.4",
