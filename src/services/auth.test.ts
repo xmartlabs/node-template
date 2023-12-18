@@ -7,7 +7,6 @@ import {
   generateSessionData,
   generateUserData,
 } from 'tests/utils/generateData';
-import { generateAccessToken, generateRefreshToken } from 'utils/token';
 import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
 
@@ -18,6 +17,8 @@ const loginParams = {
   email: userData.email,
   password: userData.password,
 };
+
+const jwtREGEX = /^(\w|\d|\.)+/;
 
 const mockAccessToken = faker.string.alphanumeric({
   length: 50,
@@ -32,15 +33,8 @@ const sessionData = generateSessionData({
 });
 
 jest.mock('queue/queue');
-jest.mock('utils/token');
-
-const mockGenerateAccessToken = generateAccessToken as jest.Mock;
-const mockGenerateRefreshToken = generateRefreshToken as jest.Mock;
 
 describe('Auth service: ', () => {
-  mockGenerateAccessToken.mockResolvedValue(mockAccessToken);
-  mockGenerateRefreshToken.mockResolvedValue(mockRefreshToken);
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -48,9 +42,33 @@ describe('Auth service: ', () => {
   describe('register functionality', () => {
     test('should create new user', async () => {
       await expect(AuthService.register(registerBody)).resolves.toEqual({
-        accessToken: mockAccessToken,
-        refreshToken: mockRefreshToken,
+        accessToken: expect.stringMatching(jwtREGEX),
+        refreshToken: expect.stringMatching(jwtREGEX),
       });
+
+      await expect(
+        prisma.user.findUnique({
+          where: {
+            email: registerBody.email,
+          },
+        }),
+      ).resolves.not.toBeNull();
+
+      const testSession = async () => {
+        const user = await prisma.user.findUnique({
+          where: {
+            email: registerBody.email,
+          },
+        });
+
+        return prisma.session.findUnique({
+          where: {
+            userId: user?.id,
+          },
+        });
+      };
+
+      await expect(testSession()).resolves.not.toBeNull();
     });
 
     describe('User already exist', () => {
@@ -79,8 +97,8 @@ describe('Auth service: ', () => {
 
       test('should login successfully', async () => {
         await expect(AuthService.login(loginParams)).resolves.toEqual({
-          accessToken: mockAccessToken,
-          refreshToken: mockRefreshToken,
+          accessToken: expect.stringMatching(jwtREGEX),
+          refreshToken: expect.stringMatching(jwtREGEX),
         });
       });
 
@@ -115,8 +133,8 @@ describe('Auth service: ', () => {
           refreshToken: mockRefreshToken,
         }),
       ).resolves.toEqual({
-        accessToken: mockAccessToken,
-        refreshToken: mockRefreshToken,
+        accessToken: expect.stringMatching(jwtREGEX),
+        refreshToken: expect.stringMatching(jwtREGEX),
       });
     });
 

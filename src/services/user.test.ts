@@ -6,18 +6,15 @@ import prisma from 'root/prisma/client';
 import { generateTokenData, generateUserData } from 'tests/utils/generateData';
 import { UserService } from 'services/user';
 import { addToMailQueue } from 'queue/queue';
-import { sendUserWithoutPassword } from 'utils/user';
 import * as queues from 'queue/queue';
 import { EmailTypes } from 'types';
 import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
 
 jest.mock('emails/index');
-jest.mock('utils/user');
 jest.mock('queue/queue');
 
 const mockAddToMailQueue = addToMailQueue as jest.Mock;
-const mockSendUserWithoutPassword = sendUserWithoutPassword as jest.Mock;
 
 const mockCode = String(Math.floor(100000 + Math.random() * 900000));
 
@@ -34,12 +31,14 @@ describe('User service: ', () => {
   describe('create functionality', () => {
     test('should create a new user with email', async () => {
       mockAddToMailQueue.mockResolvedValue(undefined);
-      const { password, ...userWithoutPassword } = userData;
-      mockSendUserWithoutPassword.mockResolvedValue(userWithoutPassword);
 
-      await expect(UserService.create(userData)).resolves.toEqual(
-        userWithoutPassword,
-      );
+      await expect(UserService.create(userData)).resolves.toEqual({
+        createdAt: expect.anything(),
+        email: userData.email,
+        id: expect.stringMatching(/^(\d|\w|-)+/),
+        name: userData.name,
+        updatedAt: expect.anything(),
+      });
 
       expect(mockAddToMailQueue).toHaveBeenCalledWith('Sign up Email', {
         emailType: EmailTypes.SIGN_UP,
@@ -72,16 +71,43 @@ describe('User service: ', () => {
     });
 
     test('should create and return new hash', async () => {
-      const spyAddToMailQueue = jest.spyOn(queues, 'addToMailQueue');
+      await prisma.user.create({
+        data: userData,
+      });
+      const { password, ...userWithoutPassword } = userData;
+
+      await expect(UserService.find(userData.id)).resolves.toEqual(
+        userWithoutPassword,
+      );
+    });
+
+    test('user does not exist', async () => {
+      await expect(UserService.find(faker.string.uuid())).rejects.toThrow(
+        new ApiError(errors.NOT_FOUND_USER),
+      );
+    });
+  });
+
+  describe('update functionality', () => {
+    test('should update user', async () => {
+      const newName = faker.person.fullName();
+      const updatedUser = {
+        ...userData,
+        name: newName,
+      };
+
       await prisma.user.create({
         data: userData,
       });
 
-      await expect(
-        UserService.requestResetPasswordCode(userData.email),
-      ).resolves.toEqual(undefined);
+      const { password, ...userWithoutPassword } = userData;
 
-      expect(spyAddToMailQueue).toHaveBeenCalledTimes(1);
+      await expect(
+        UserService.update(userData.id, updatedUser),
+      ).resolves.toEqual({
+        ...userWithoutPassword,
+        name: newName,
+      });
     });
 
     describe('invalid data', () => {
@@ -180,7 +206,6 @@ describe('User service: ', () => {
           data: userData,
         });
         const { password, ...userWithoutPassword } = userData;
-        mockSendUserWithoutPassword.mockResolvedValue(userWithoutPassword);
 
         await expect(UserService.find(userData.id)).resolves.toEqual(
           userWithoutPassword,
@@ -206,7 +231,6 @@ describe('User service: ', () => {
         });
 
         const { password, ...userWithoutPassword } = userData;
-        mockSendUserWithoutPassword.mockResolvedValue(userWithoutPassword);
 
         await expect(
           UserService.update(userData.id, updatedUser),
