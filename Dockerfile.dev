@@ -1,0 +1,11 @@
+# Start with fully-featured Node.js base image
+FROM node:20.9.0 AS builder
+RUN npm i -g npm@10.1.0
+WORKDIR /home/node/app
+
+# Copy dependency information and install dependencies
+COPY *.json ./
+
+RUN npm install --ignore-scripts
+
+CMD [ "npm", "run", "docker-dev-cmd" ]

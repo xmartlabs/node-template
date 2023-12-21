@@ -21,6 +21,7 @@
       "routes/*": ["routes/*"],
       "services/*": ["services/*"],
       "tests/*": ["tests/*"],
+      "queue/*": ["queue/*"],
       "types/*": ["types/*"],
       "utils/*": ["utils/*"],
       "root/*": ["../*"]
