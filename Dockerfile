@@ -34,6 +34,7 @@ COPY --from=builder /home/node/app/prisma ./prisma
 # Copy runtime project
 COPY --from=builder /home/node/app/dist ./dist
 COPY --from=builder /home/node/app/package*.json ./
+COPY --from=builder /home/node/app/tsconfig.json ./
 
 EXPOSE 8080
 

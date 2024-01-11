@@ -11,8 +11,8 @@
     "lint": "npx eslint src --ext .ts",
     "build": "tsoa spec-and-routes && tsc --project tsconfig.json",
     "deploy": "prisma migrate deploy && concurrently \"npm run deploy-server\" \"npm run deploy-worker\"",
-    "deploy-server": "ts-node -T -r dotenv/config -r tsconfig-paths/register dist/src/index.js",
-    "deploy-worker": "ts-node -T -r dotenv/config -r tsconfig-paths/register dist/worker/worker.js",
+    "deploy-server": "TS_NODE_BASEURL=./dist/src node -r dotenv/config -r tsconfig-paths/register dist/src/index.js",
+    "deploy-worker": "TS_NODE_BASEURL=./dist/src node -r dotenv/config -r tsconfig-paths/register dist/worker/worker.js",
     "format": "prettier --write ."
   },
   "repository": {
@@ -49,7 +49,6 @@
     "@types/swagger-ui-express": "^4.1.3",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
-    "concurrently": "^8.2.0",
     "eslint": "^8.44.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
@@ -60,7 +59,6 @@
     "prettier": "^3.1.0",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.2.1",
-    "tsconfig-paths": "^4.1.2",
     "typescript": "^5.1.6"
   },
   "dependencies": {
@@ -69,6 +67,7 @@
     "body-parser": "^1.19.2",
     "bullmq": "^4.13.2",
     "compression": "^1.7.4",
+    "concurrently": "^8.2.0",
     "cors": "^2.8.5",
     "cross-spawn": "^7.0.3",
     "dotenv": "^16.0.0",
@@ -89,6 +88,7 @@
     "prisma": "^5.5.2",
     "pug": "^3.0.2",
     "swagger-ui-express": "^5.0.0",
+    "tsconfig-paths": "^4.1.2",
     "tsoa": "^5.1.1",
     "winston": "^3.6.0",
     "zod": "^3.22.4"

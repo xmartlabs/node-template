@@ -20,7 +20,9 @@
     "paths": {
       "config/*": ["config/*"],
       "controllers/*": ["controllers/*"],
+      "emails/*": ["emails/*"],
       "middlewares/*": ["middlewares/*"],
+      "queue/*": ["queue/*"],
       "routes/*": ["routes/*"],
       "services/*": ["services/*"],
       "tests/*": ["tests/*"],
