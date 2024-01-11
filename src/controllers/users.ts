@@ -5,13 +5,20 @@ import {
   Delete,
   Get,
   Path,
+  Post,
   Put,
   Request,
   Route,
   Security,
 } from 'tsoa';
 import { UserService } from 'services';
-import { ReturnUser, UpdateUserParams, AuthenticatedRequest } from 'types';
+import {
+  ReturnUser,
+  UpdateUserParams,
+  AuthenticatedRequest,
+  PasswordResetCodeRequest,
+  ResetPassword,
+} from 'types';
 
 @Route('v1/users')
 export class UsersControllerV1 extends Controller {
@@ -57,5 +64,22 @@ export class UsersControllerV1 extends Controller {
   public async destroy(@Path() id: string): Promise<void> {
     await UserService.destroy(id);
     this.setStatus(httpStatus.NO_CONTENT);
+  }
+
+  @Post('/requestResetPasswordCode')
+  public async requestResetPasswordCode(
+    @Body() requestBody: PasswordResetCodeRequest,
+  ): Promise<void> {
+    await UserService.requestResetPasswordCode(requestBody.email);
+    this.setStatus(httpStatus.OK);
+  }
+
+  @Post('/resetPassword')
+  public async resetPassword(
+    @Body() requestBody: ResetPassword,
+  ): Promise<void> {
+    const { email, code, newPassword } = requestBody;
+    await UserService.resetPassword(email, code, newPassword);
+    this.setStatus(httpStatus.OK);
   }
 }

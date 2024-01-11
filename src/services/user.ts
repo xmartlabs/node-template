@@ -1,5 +1,7 @@
 import * as bcrypt from 'bcryptjs';
-import { Prisma } from '@prisma/client';
+import { addMinutes } from 'date-fns';
+
+import { Prisma, TypeToken } from '@prisma/client';
 import prisma from 'root/prisma/client';
 import { ApiError } from 'utils/apiError';
 import {
@@ -13,6 +15,8 @@ import { sendUserWithoutPassword } from 'utils/user';
 import { emailRegex } from 'utils/constants';
 import { errors } from 'config/errors';
 import { addToMailQueue } from 'queue/queue';
+import { generateCodeAndHash, verifyToken } from 'utils/hash';
+import { config } from 'config/config';
 
 export class UserService {
   static find = async (id: string): Promise<ReturnUser | null> => {
@@ -96,5 +100,68 @@ export class UserService {
     }
 
     await prisma.user.delete({ where: { id } });
+  };
+
+  static requestResetPasswordCode = async (email: string) => {
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (!user) return;
+
+    const { code, hash } = await generateCodeAndHash();
+
+    const expirationDate = addMinutes(new Date(), config.otpExpirationMinutes);
+
+    await prisma.tokens.upsert({
+      create: {
+        userId: user.id,
+        token: hash,
+        expiresAt: expirationDate,
+        type: TypeToken.RESET_PASSWORD,
+      },
+      update: {
+        token: hash,
+        expiresAt: expirationDate,
+        userId: user.id,
+      },
+      where: {
+        userId_type: {
+          userId: user.id,
+          type: TypeToken.RESET_PASSWORD,
+        },
+      },
+    });
+
+    addToMailQueue('Reset password code', {
+      emailType: EmailTypes.RESET_PASSWORD_CODE,
+      email,
+      code,
+    });
+  };
+
+  static resetPassword = async (
+    email: string,
+    code: string,
+    newPassword: string,
+  ): Promise<void> => {
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (!user) return;
+
+    const token = await verifyToken(user.id, TypeToken.RESET_PASSWORD, code);
+    const hashedNewPassword = await bcrypt.hash(newPassword, 8);
+
+    await prisma.$transaction([
+      prisma.tokens.delete({ where: { id: token.id } }),
+      prisma.user.update({
+        where: { id: user.id },
+        data: { password: hashedNewPassword },
+      }),
+    ]);
   };
 }

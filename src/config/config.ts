@@ -47,6 +47,13 @@ const envVarsSchema = z
         'JOBS RETENTION HOURS must be a number',
       ),
     REDIS_USERNAME: z.string(),
+    OTP_EXPIRATION_MINUTES: z
+      .string()
+      .transform((val) => Number(val))
+      .refine(
+        (val) => !Number.isNaN(val),
+        'OTP EXPIRATION TIME must be a number',
+      ),
   })
   .passthrough();
 
@@ -76,4 +83,5 @@ export const config: Config = {
   redisPort: envVars.REDIS_PORT,
   redisUsername: envVars.REDIS_USERNAME,
   jobsRetentionHours: envVars.JOBS_RETENTION_HOURS,
+  otpExpirationMinutes: envVars.OTP_EXPIRATION_MINUTES,
 };

@@ -19,6 +19,11 @@ export const errors = {
     errorCode: 400_003,
     description: 'Invalid token',
   },
+  INVALID_CODE: {
+    httpCode: 400,
+    errorCode: 400_004,
+    description: 'Invalid code',
+  },
   UNAUTHENTICATED: {
     httpCode: 401,
     errorCode: 401_000,
@@ -28,6 +33,11 @@ export const errors = {
     httpCode: 401,
     errorCode: 401_001,
     description: 'Token expired',
+  },
+  CODE_EXPIRED: {
+    httpCode: 403,
+    errorCode: 403_001,
+    description: 'Code has expired',
   },
   NOT_FOUND: {
     httpCode: 404,

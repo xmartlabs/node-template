@@ -1,7 +1,6 @@
 import { Job, Worker } from 'bullmq';
-import { config } from 'config/config';
 import { appLogger } from 'config/logger';
-import { sendSignUpEmail } from 'emails';
+import { sendResetPasswordCode, sendSignUpEmail } from 'emails';
 import { EmailTypes, WorkerQueues } from 'types';
 import { redisConnection as connection } from 'utils/redis';
 
@@ -9,7 +8,10 @@ const mailWorkerJobHandler = async (job: Job) => {
   appLogger.info(`Handling job: [${job.id}]`);
   switch (job.data.emailType) {
     case EmailTypes.SIGN_UP:
-      sendSignUpEmail(config.appName, job.data.email);
+      sendSignUpEmail(job.data.email);
+      break;
+    case EmailTypes.RESET_PASSWORD_CODE:
+      sendResetPasswordCode(job.data.email, job.data.code);
       break;
     default:
   }
