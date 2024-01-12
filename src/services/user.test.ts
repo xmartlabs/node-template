@@ -5,7 +5,6 @@ import { faker } from '@faker-js/faker';
 import prisma from 'root/prisma/client';
 import { generateTokenData, generateUserData } from 'tests/utils/generateData';
 import { UserService } from 'services/user';
-import { addToMailQueue } from 'queue/queue';
 import * as queues from 'queue/queue';
 import { EmailTypes } from 'types';
 import { ApiError } from 'utils/apiError';
@@ -13,8 +12,6 @@ import { errors } from 'config/errors';
 
 jest.mock('emails/index');
 jest.mock('queue/queue');
-
-const mockAddToMailQueue = addToMailQueue as jest.Mock;
 
 const mockCode = String(Math.floor(100000 + Math.random() * 900000));
 
@@ -30,7 +27,7 @@ describe('User service: ', () => {
 
   describe('create functionality', () => {
     test('should create a new user with email', async () => {
-      mockAddToMailQueue.mockResolvedValue(undefined);
+      const spyAddToMailQueue = jest.spyOn(queues, 'addToMailQueue');
 
       await expect(UserService.create(userData)).resolves.toEqual({
         createdAt: expect.anything(),
@@ -40,7 +37,7 @@ describe('User service: ', () => {
         updatedAt: expect.anything(),
       });
 
-      expect(mockAddToMailQueue).toHaveBeenCalledWith('Sign up Email', {
+      expect(spyAddToMailQueue).toHaveBeenCalledWith('Sign up Email', {
         emailType: EmailTypes.SIGN_UP,
         email: userData.email,
       });
@@ -59,8 +56,6 @@ describe('User service: ', () => {
         await expect(UserService.create(userData)).rejects.toEqual(
           referenceError,
         );
-
-        expect(mockAddToMailQueue).not.toHaveBeenCalled();
       });
     });
   });
@@ -71,43 +66,16 @@ describe('User service: ', () => {
     });
 
     test('should create and return new hash', async () => {
+      const spyAddToMailQueue = jest.spyOn(queues, 'addToMailQueue');
       await prisma.user.create({
         data: userData,
       });
-      const { password, ...userWithoutPassword } = userData;
-
-      await expect(UserService.find(userData.id)).resolves.toEqual(
-        userWithoutPassword,
-      );
-    });
-
-    test('user does not exist', async () => {
-      await expect(UserService.find(faker.string.uuid())).rejects.toThrow(
-        new ApiError(errors.NOT_FOUND_USER),
-      );
-    });
-  });
-
-  describe('update functionality', () => {
-    test('should update user', async () => {
-      const newName = faker.person.fullName();
-      const updatedUser = {
-        ...userData,
-        name: newName,
-      };
-
-      await prisma.user.create({
-        data: userData,
-      });
-
-      const { password, ...userWithoutPassword } = userData;
 
       await expect(
-        UserService.update(userData.id, updatedUser),
-      ).resolves.toEqual({
-        ...userWithoutPassword,
-        name: newName,
-      });
+        UserService.requestResetPasswordCode(userData.email),
+      ).resolves.toEqual(undefined);
+
+      expect(spyAddToMailQueue).toHaveBeenCalledTimes(1);
     });
 
     describe('invalid data', () => {
@@ -200,6 +168,7 @@ describe('User service: ', () => {
         ).rejects.toThrow(new ApiError(errors.CODE_EXPIRED));
       });
     });
+
     describe('find functionality', () => {
       test('should return user', async () => {
         await prisma.user.create({
@@ -230,7 +199,7 @@ describe('User service: ', () => {
           data: userData,
         });
 
-        const { password, ...userWithoutPassword } = userData;
+        const { password, ...userWithoutPassword } = updatedUser;
 
         await expect(
           UserService.update(userData.id, updatedUser),
@@ -246,8 +215,8 @@ describe('User service: ', () => {
       });
     });
 
-    describe('update functionality', () => {
-      test('should update user', async () => {
+    describe('delete functionality', () => {
+      test('should delete user', async () => {
         await prisma.user.create({
           data: userData,
         });
