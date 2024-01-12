@@ -54,7 +54,7 @@ const envVarsSchema = z
         (val) => !Number.isNaN(val),
         'OTP EXPIRATION TIME must be a number',
       ),
-    APPLY_RATE_LIMIT: z.string(),
+    ENABLE_RATE_LIMIT: z.string(),
   })
   .passthrough();
 
@@ -63,7 +63,7 @@ const envVars = envVarsSchema.parse(process.env);
 export const isDevelopment = envVars.NODE_ENV === 'development';
 export const isTest = envVars.NODE_ENV === 'test';
 export const isProduction = envVars.NODE_ENV === 'production';
-export const hasToApplyRateLimit = envVars.APPLY_RATE_LIMIT === 'true';
+export const hasToApplyRateLimit = envVars.ENABLE_RATE_LIMIT === 'true';
 
 export const config: Config = {
   env: envVars.NODE_ENV,
