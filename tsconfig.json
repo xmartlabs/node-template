@@ -23,6 +23,7 @@
       "tests/*": ["tests/*"],
       "types/*": ["types/*"],
       "utils/*": ["utils/*"],
+      "validator/*": ["validator/*"],
       "root/*": ["../*"]
     }
   }
