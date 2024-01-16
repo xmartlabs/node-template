@@ -7,7 +7,6 @@ const workerConnectionOptions = {
   password: config.redisPassword,
   username: config.redisUsername,
   maxRetriesPerRequest: null,
-  enableOfflineQueue: false,
   showFriendlyErrorStack: !isProduction,
 } as RedisOptions;
 

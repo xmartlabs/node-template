@@ -95,3 +95,7 @@ In fact, the Dockerfile has instructions only for generating the production-read
 ### BullMQ worker
 * To add a new worker we just need to create a `new Worker()` object in the worker folder and pass a queue name to pick up tasks from.
 * To schedule a new job in the queue we need to create a `new Queue()` object in the queue folder and pass it a queue name to schedule tasks in. Any metadata for the task should be pass as a JSON, e.g `queue.add('job_name', { ...params }, options);`.
+
+### Rate limit
+* To use express rate limit set the `ENABLE_RATE_LIMIT` env var to true otherwise rate limits will dependant on the nginx configuration.
+* To add a new rate limit we need to create a new `rateLimit` object and then assign it to an endpoint e.g `app.use('v1/auth/register', rateLimit)`. For more info check out the [express-rate-limit docs](https://express-rate-limit.mintlify.app/overview).
