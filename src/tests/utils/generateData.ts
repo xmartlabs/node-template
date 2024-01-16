@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
-
-import { User, Tokens, TypeToken } from '@prisma/client';
+import { Session, User, Tokens, TypeToken } from '@prisma/client';
 import { endOfTomorrow } from 'date-fns';
 
 export const generateUserData = (opts?: Partial<User>) => ({
@@ -21,5 +20,15 @@ export const generateTokenData = (opts?: Partial<Tokens>) => ({
   type: TypeToken.RESET_PASSWORD,
   userId: faker.string.uuid(),
   token: faker.string.alphanumeric(),
+  ...opts,
+});
+
+export const generateSessionData = (opts?: Partial<Session>) => ({
+  id: faker.string.uuid(),
+  createdAt: faker.date.anytime(),
+  updatedAt: faker.date.anytime(),
+  accessToken: faker.string.alphanumeric(50),
+  refreshToken: faker.string.alphanumeric(50),
+  userId: faker.string.uuid(),
   ...opts,
 });
