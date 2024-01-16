@@ -18,7 +18,7 @@ const loginParams = {
   password: userData.password,
 };
 
-const jwtREGEX = /^(\w|\d|\.)+/;
+const jwtRegex = /^(\w|\d|\.)+/;
 
 const mockAccessToken = faker.string.alphanumeric({
   length: 50,
@@ -42,8 +42,8 @@ describe('Auth service: ', () => {
   describe('register functionality', () => {
     test('should create new user', async () => {
       await expect(AuthService.register(registerBody)).resolves.toEqual({
-        accessToken: expect.stringMatching(jwtREGEX),
-        refreshToken: expect.stringMatching(jwtREGEX),
+        accessToken: expect.stringMatching(jwtRegex),
+        refreshToken: expect.stringMatching(jwtRegex),
       });
 
       await expect(
@@ -97,8 +97,8 @@ describe('Auth service: ', () => {
 
       test('should login successfully', async () => {
         await expect(AuthService.login(loginParams)).resolves.toEqual({
-          accessToken: expect.stringMatching(jwtREGEX),
-          refreshToken: expect.stringMatching(jwtREGEX),
+          accessToken: expect.stringMatching(jwtRegex),
+          refreshToken: expect.stringMatching(jwtRegex),
         });
       });
 
@@ -133,8 +133,8 @@ describe('Auth service: ', () => {
           refreshToken: mockRefreshToken,
         }),
       ).resolves.toEqual({
-        accessToken: expect.stringMatching(jwtREGEX),
-        refreshToken: expect.stringMatching(jwtREGEX),
+        accessToken: expect.stringMatching(jwtRegex),
+        refreshToken: expect.stringMatching(jwtRegex),
       });
     });
 
