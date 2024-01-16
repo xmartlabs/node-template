@@ -19,7 +19,6 @@ import {
   PasswordResetCodeRequest,
   ResetPassword,
 } from 'types';
-import { cookieEnabled } from 'config/config';
 import { COOKIE_NAME } from 'utils/auth';
 
 @Route('v1/users')
@@ -74,7 +73,7 @@ export class UsersControllerV1 extends Controller {
   ): Promise<void> {
     const { user, res } = req;
     await UserService.destroy(id);
-    if (cookieEnabled && user.id === id) res?.clearCookie(COOKIE_NAME);
+    if (user.id === id) res?.clearCookie(COOKIE_NAME);
     this.setStatus(httpStatus.NO_CONTENT);
   }
 

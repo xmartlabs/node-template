@@ -25,8 +25,6 @@ x-common: &common
     - ENABLE_RATE_LIMIT=true
     - COOKIE_SECRET=secret
     - COOKIE_EXPIRATION_SECONDS=3600
-    - ENABLE_COOKIE=true
-    - ENABLE_JWT=true
 
 pipeline:
   setup:

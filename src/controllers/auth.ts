@@ -9,7 +9,6 @@ import {
   AuthenticatedRequest,
   LoginParams,
 } from 'types';
-import { cookieEnabled, JWTEnabled } from 'config/config';
 import { COOKIE_NAME, cookieConfig } from 'utils/auth';
 
 @Route('v1/auth')
@@ -20,13 +19,12 @@ export class AuthControllerV1 extends Controller {
     @Request() req: AuthenticatedRequest,
   ): Promise<ReturnAuth | null> {
     const { sessionId, ...authReturn } = await AuthService.register(user);
+
     const { res } = req;
-    if (cookieEnabled) {
-      res?.cookie(COOKIE_NAME, sessionId, cookieConfig);
-    }
+    res?.cookie(COOKIE_NAME, sessionId, cookieConfig);
+
     this.setStatus(httpStatus.CREATED);
-    if (JWTEnabled) return authReturn;
-    return null;
+    return authReturn;
   }
 
   @Post('/login')
@@ -36,12 +34,9 @@ export class AuthControllerV1 extends Controller {
   ): Promise<ReturnAuth | null> {
     const { sessionId, ...authReturn } = await AuthService.login(loginParams);
     const { res } = req;
-    if (cookieEnabled) {
-      res?.cookie(COOKIE_NAME, sessionId, cookieConfig);
-    }
+    res?.cookie(COOKIE_NAME, sessionId, cookieConfig);
     this.setStatus(httpStatus.OK);
-    if (JWTEnabled) return authReturn;
-    return null;
+    return authReturn;
   }
 
   @Post('/logout')

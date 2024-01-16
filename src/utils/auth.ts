@@ -2,22 +2,26 @@ import { CookieOptions } from 'express';
 
 import { errors } from 'config/errors';
 import prisma from 'root/prisma/client';
-import { cookieEnabled, config, isProduction } from 'config/config';
+import { config, isProduction } from 'config/config';
 import { ApiError } from './apiError';
 
 export const COOKIE_NAME = 'token';
 
 const SECONDS_TO_MILLISECONDS = 1000;
 
-export const cookieConfig = {
+type SignedCookie = {
+  token: string;
+};
+
+export const cookieConfig: CookieOptions = {
   signed: true,
   httpOnly: true,
   maxAge: config.cookieExpirationSeconds * SECONDS_TO_MILLISECONDS,
   secure: isProduction,
-} as CookieOptions;
+};
 
-export const verifyCookie = async (signedCookies: any) => {
-  if (!cookieEnabled || !signedCookies || !signedCookies.token) {
+export const verifyCookie = async (signedCookies: SignedCookie | null) => {
+  if (!signedCookies || !signedCookies.token) {
     throw new ApiError(errors.UNAUTHENTICATED);
   }
 

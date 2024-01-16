@@ -63,8 +63,6 @@ const envVarsSchema = z
         (val) => !Number.isNaN(val),
         'COOKIE EXPIRATION SECONDS must be a number',
       ),
-    ENABLE_COOKIE: z.string(),
-    ENABLE_JWT: z.string(),
   })
   .passthrough();
 
@@ -75,8 +73,6 @@ export const isTest = envVars.NODE_ENV === 'test';
 export const isProduction = envVars.NODE_ENV === 'production';
 export const hasToApplyRateLimit =
   envVars.ENABLE_RATE_LIMIT.toLocaleLowerCase() === 'true';
-export const cookieEnabled = envVars.ENABLE_COOKIE === 'true';
-export const JWTEnabled = envVars.ENABLE_JWT === 'true';
 
 export const config: Config = {
   env: envVars.NODE_ENV,
