@@ -28,7 +28,7 @@
       "tests/*": ["tests/*"],
       "types/*": ["types/*"],
       "utils/*": ["utils/*"],
-      "validator/*": ["validator/*"],
+      "data-schemas/*": ["data-schemas/*"],
       "root/*": ["../*"]
     }
   }

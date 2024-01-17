@@ -8,7 +8,7 @@ import {
   AuthenticatedRequest,
   LoginParams,
 } from 'types';
-import { validateLoginSchema, validateUserSchema } from 'validator/auth';
+import { validateLoginSchema, validateUserSchema } from 'data-schemas/auth';
 
 @Route('v1/auth')
 export class AuthControllerV1 extends Controller {
