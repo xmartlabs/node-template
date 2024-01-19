@@ -1,7 +1,8 @@
 import nodemailer from 'nodemailer';
 import pug from 'pug';
+import previewEmail from 'preview-email';
 
-import { config } from 'config/config';
+import { config, isProduction } from 'config/config';
 
 const emailTransporter = nodemailer.createTransport({
   host: config.smtpHost,
@@ -17,12 +18,20 @@ const sendEmail = async (
   subject: string,
   html: string,
 ): Promise<void> => {
-  await emailTransporter.sendMail({
-    from: config.emailFrom,
-    to: emailTo,
-    subject,
-    html,
-  });
+  if (isProduction)
+    await emailTransporter.sendMail({
+      from: config.emailFrom,
+      to: emailTo,
+      subject,
+      html,
+    });
+  else
+    previewEmail({
+      from: config.emailFrom,
+      to: emailTo,
+      subject,
+      html,
+    });
 };
 
 export async function sendSignUpEmail(emailTo: string): Promise<void> {
