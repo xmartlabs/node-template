@@ -25,24 +25,22 @@ const envVarsSchema = z
     ACCESS_TOKEN_EXPIRES_IN: z.string(),
     REFRESH_TOKEN_EXPIRES_IN: z.string(),
     EMAIL_FROM: z.string(),
-    SMTP_USER: z.string().refine((val) => {
-      if (process.env.NODE_ENV === 'production') return !!val;
-      return true;
-    }),
-    SMTP_PASSWORD: z.string().refine((val) => {
-      if (process.env.NODE_ENV === 'production') return !!val;
-      return true;
-    }),
-    SMTP_HOST: z.string().refine((val) => {
-      if (process.env.NODE_ENV === 'production') return !!val;
-      return true;
-    }),
+    SMTP_USER: z
+      .string()
+      .refine((val) => process.env.NODE_ENV !== 'production' || val),
+    SMTP_PASSWORD: z
+      .string()
+      .refine((val) => process.env.NODE_ENV !== 'production' || val),
+    SMTP_HOST: z
+      .string()
+      .refine((val) => process.env.NODE_ENV !== 'production' || val),
     SMTP_PORT: z
       .string()
       .transform((val) => Number(val))
-      .refine((val) => {
-        return process.env.NODE_ENV !== 'production' || val;
-      }, 'EMAIL PORT must be a number'),
+      .refine(
+        (val) => process.env.NODE_ENV !== 'production' || val,
+        'EMAIL PORT must be a number',
+      ),
     APP_NAME: z.string(),
     REDIS_HOST: z.string(),
     REDIS_PASSWORD: z.string(),
