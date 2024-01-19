@@ -41,8 +41,7 @@ const envVarsSchema = z
       .string()
       .transform((val) => Number(val))
       .refine((val) => {
-        if (process.env.NODE_ENV === 'production') return !Number.isNaN(val);
-        return true;
+        return process.env.NODE_ENV !== 'production' || val;
       }, 'EMAIL PORT must be a number'),
     APP_NAME: z.string(),
     REDIS_HOST: z.string(),

@@ -4,14 +4,16 @@ import previewEmail from 'preview-email';
 
 import { config, isProduction } from 'config/config';
 
-const emailTransporter = nodemailer.createTransport({
-  host: config.smtpHost,
-  port: config.smtpPort,
-  auth: {
-    user: config.smtpUser,
-    pass: config.smtpPassword,
-  },
-});
+const emailTransporter = isProduction
+  ? nodemailer.createTransport({
+      host: config.smtpHost,
+      port: config.smtpPort,
+      auth: {
+        user: config.smtpUser,
+        pass: config.smtpPassword,
+      },
+    })
+  : null;
 
 const sendEmail = async (
   emailTo: string,
@@ -19,12 +21,13 @@ const sendEmail = async (
   html: string,
 ): Promise<void> => {
   if (isProduction)
-    await emailTransporter.sendMail({
-      from: config.emailFrom,
-      to: emailTo,
-      subject,
-      html,
-    });
+    await (emailTransporter &&
+      emailTransporter.sendMail({
+        from: config.emailFrom,
+        to: emailTo,
+        subject,
+        html,
+      }));
   else
     previewEmail({
       from: config.emailFrom,
