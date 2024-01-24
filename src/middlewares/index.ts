@@ -2,10 +2,13 @@ import express, { Application } from 'express';
 import helmet from 'helmet';
 import compression from 'compression';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+
 import { applyRateLimit } from 'middlewares/rateLimiter';
 import { morganHandlers } from 'config/morgan';
 import { errorConverter, errorHandler } from 'middlewares/error';
 import { Wrapper } from 'types';
+import { config } from 'config/config';
 
 export const preRoutesMiddleware = (app: Application) => {
   // Set security HTTP headers
@@ -30,6 +33,8 @@ export const preRoutesMiddleware = (app: Application) => {
   app.use(morganHandlers.successHandler);
   app.use(morganHandlers.errorHandler);
   app.use(morganHandlers.debugHandler);
+
+  app.use(cookieParser(config.cookieSecret));
 };
 
 // Middleware separated to use our error handler when a route is not found

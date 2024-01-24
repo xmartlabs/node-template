@@ -19,6 +19,8 @@ export interface Config {
   redisUsername: string;
   jobsRetentionHours: number;
   otpExpirationMinutes: number;
+  cookieSecret: string;
+  cookieExpirationSeconds: number;
 }
 
 export interface ErrorInterface {
