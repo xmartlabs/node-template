@@ -34,12 +34,21 @@ npm test
 
 ## Project Setup
 
+There are currently two ways in which we can make the setup of the project, one would be running the whole setup with docker, and the other running everything but the backend project with docker.
+
+### Running the whole setup with docker
+You only need to install [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/). To start the containers, run `docker compose up`, and the `-d` flag if you want to run it in detached mode.
+Once the containers are running, you can go to `http://localhost:8080/docs` to see the API documentation.
+If you want to interact with the project container terminal you can run the command `docker compose exec backend bash` and then run e.g `npm run test`
+
+
+### Running only the db and Redis with docker
 * Install Node 20.9.0 (as documented on [`.node-version`](./.node-version))
 * Install the appropriate version of npm: `npm i -g npm@10.1.0`
 * Install packages with `npm install`
 * Create a new `.env` file using the `.env.example` as an example. for that run `$ cp .env.example .env`.
 * Set the variables in the new environment file `.env` you created above.
-* Start the redis container with `docker-compose up redis-server`
+* Start the db and redis container with `docker-compose up db redis-server`
 * Start the project with `npm start`
 
 ## Project structure
@@ -65,7 +74,7 @@ npm test
 [Prisma](https://www.prisma.io/docs/concepts/overview/what-is-prisma) is a next-generation ORM for Node.js.
 `prisma client` - Auto-generated and type-safe query builder for Node.js & TypeScript.
 `prisma migrate` - Prisma migration system.
-Requeriments:
+Requirements:
 * set a `DATABASE_URL` on .env - The format is specified in .env.example
 * Running database: There's a docker-compose file example: `docker-compose up -d`
 * Run database migrations: `npx prisma migrate dev`
@@ -90,7 +99,7 @@ TSOA uses decorators to define the API routes and docs. check out the [TSOA docs
 
 ## Docker Configuration
 A [`Dockerfile`](./Dockerfile) has been added to this project. The main reason to use Docker is to generate a production build, it is not intended for use for development.
-In fact, the Dockerfile has instructions only for generating the production-ready build. This is a multi-stage build that will build the project, run the migrations, and then run the server only with production dependiencies.
+In fact, the Dockerfile has instructions only for generating the production-ready build. This is a multi-stage build that will build the project, run the migrations, and then run the server only with production dependencies.
 
 ### BullMQ worker
 * To add a new worker we just need to create a `new Worker()` object in the worker folder and pass a queue name to pick up tasks from.

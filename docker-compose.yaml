@@ -1,3 +1,5 @@
+#This is for dev only
+
 version: '3.8'
 services:
   db:
@@ -30,6 +32,18 @@ services:
       POSTGRES_DB: 'nodeTemplateDBTesting'
     ports:
       - '5433:5432'
+  backend:
+    build:
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - db
+      - redis-server
+    volumes:
+      - .:/home/node/app
+    ports:
+      - '8080:8080'
+    stdin_open: true
+    tty: true
 volumes:
   db:
   redis-data:
