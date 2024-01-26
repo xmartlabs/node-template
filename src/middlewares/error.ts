@@ -21,7 +21,13 @@ export const errorConverter = (
   next(error);
 };
 
-export const errorHandler = (err: ApiError, req: Request, res: Response) => {
+export const errorHandler = (
+  err: ApiError,
+  req: Request,
+  res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  next: NextFunction,
+) => {
   let { httpCode, message } = err;
   if (!err.isOperational) {
     httpCode =

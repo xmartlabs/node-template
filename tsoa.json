@@ -28,6 +28,7 @@
       "tests/*": ["tests/*"],
       "types/*": ["types/*"],
       "utils/*": ["utils/*"],
+      "data-schemas/*": ["data-schemas/*"],
       "root/*": ["../*"]
     }
   }
