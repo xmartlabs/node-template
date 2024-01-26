@@ -12,13 +12,14 @@ datasource db {
 }
 
 model User {
-  id         String    @id @default(uuid())
-  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt  DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
-  email      String    @unique
-  password   String
-  name       String?
-  token      Tokens[]
+  id           String       @id @default(uuid())
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt    DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+  email        String       @unique
+  password     String
+  name         String?
+  token        Tokens[]
+  signUpMethod SignUpMethod @default(PASSWORD) @map("sign_up_method")
 }
 
 model Session {
@@ -45,4 +46,9 @@ model Tokens {
 
 enum TypeToken {
   RESET_PASSWORD
+}
+
+enum SignUpMethod {
+  PASSWORD
+  GOOGLE
 }

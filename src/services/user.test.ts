@@ -9,6 +9,7 @@ import * as queues from 'queue/queue';
 import { EmailTypes } from 'types';
 import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
+import { SignUpMethod } from '@prisma/client';
 
 jest.mock('emails/index');
 jest.mock('queue/queue');
@@ -34,6 +35,7 @@ describe('User service: ', () => {
         email: userData.email,
         id: expect.stringMatching(/^(\d|\w|-)+/),
         name: userData.name,
+        signUpMethod: SignUpMethod.PASSWORD,
         updatedAt: expect.anything(),
       });
 

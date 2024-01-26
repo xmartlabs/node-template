@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { Session, User, Tokens, TypeToken } from '@prisma/client';
+import { Session, User, Tokens, TypeToken, SignUpMethod } from '@prisma/client';
 import { endOfTomorrow } from 'date-fns';
 
 export const generateUserData = (opts?: Partial<User>) => ({
@@ -9,6 +9,7 @@ export const generateUserData = (opts?: Partial<User>) => ({
   password: faker.internet.password(),
   createdAt: faker.date.anytime(),
   updatedAt: faker.date.anytime(),
+  signUpMethod: SignUpMethod.PASSWORD,
   ...opts,
 });
 

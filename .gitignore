@@ -105,3 +105,6 @@ dist
 
 #TSOA generated files
 build/
+
+#Firebase credentials
+src/config/ServiceAccount.json
