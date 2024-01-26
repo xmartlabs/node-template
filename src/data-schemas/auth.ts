@@ -5,14 +5,14 @@ import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
 import { formatZodError } from 'utils/validator';
 
-const passwordLength = 10;
+const MINIMUM_PASSWORD_LENGTH = 10;
 
 const userCreationSchema = z.object({
   email: z.string().email({ message: 'Invalid email' }),
   name: z.string(),
   password: z
     .string()
-    .min(passwordLength, { message: "Can't be an empty password" }),
+    .min(MINIMUM_PASSWORD_LENGTH, { message: "Can't be an empty password" }),
 });
 
 export type UserCreationSchema = z.infer<typeof userCreationSchema>;
@@ -21,7 +21,7 @@ const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email' }),
   password: z
     .string()
-    .min(passwordLength, { message: "Can't be an empty password" }),
+    .min(MINIMUM_PASSWORD_LENGTH, { message: "Can't be an empty password" }),
 });
 
 export type UserLoginSchema = z.infer<typeof loginSchema>;
