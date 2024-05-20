@@ -8,10 +8,10 @@ const mailWorkerJobHandler = async (job: Job) => {
   appLogger.info(`Handling job: [${job.id}]`);
   switch (job.data.emailType) {
     case EmailTypes.SIGN_UP:
-      sendSignUpEmail(job.data.email);
+      await sendSignUpEmail(job.data.email);
       break;
     case EmailTypes.RESET_PASSWORD_CODE:
-      sendResetPasswordCode(job.data.email, job.data.code);
+      await sendResetPasswordCode(job.data.email, job.data.code);
       break;
     default:
   }
