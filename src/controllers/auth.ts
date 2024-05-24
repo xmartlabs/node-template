@@ -1,5 +1,6 @@
 import httpStatus from 'http-status';
 import { Body, Controller, Post, Request, Route, Security } from 'tsoa';
+
 import { AuthService } from 'services/auth';
 import {
   CreateUserParams,
@@ -7,6 +8,7 @@ import {
   RefreshTokenParams,
   AuthenticatedRequest,
   LoginParams,
+  SocialAuth,
 } from 'types';
 
 @Route('v1/auth')
@@ -15,6 +17,13 @@ export class AuthControllerV1 extends Controller {
   public async register(@Body() user: CreateUserParams): Promise<ReturnAuth> {
     const authReturn = await AuthService.register(user);
     this.setStatus(httpStatus.CREATED);
+    return authReturn;
+  }
+
+  @Post('/firebaseAuth')
+  public async firebaseAuth(@Body() idToken: SocialAuth) {
+    const authReturn = await AuthService.firebaseAuth(idToken);
+    this.setStatus(httpStatus.OK);
     return authReturn;
   }
 

@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcryptjs';
 import { addMinutes } from 'date-fns';
 
-import { Prisma, TypeToken } from '@prisma/client';
+import { Prisma, SignUpMethod, TypeToken } from '@prisma/client';
 import prisma from 'root/prisma/client';
 import { ApiError } from 'utils/apiError';
 import {
@@ -49,6 +49,7 @@ export class UserService {
       name,
       email,
       password: cryptPassword,
+      signUpMethod: SignUpMethod.PASSWORD,
     };
 
     try {

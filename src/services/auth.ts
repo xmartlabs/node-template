@@ -1,14 +1,22 @@
 import * as bcrypt from 'bcryptjs';
+import { getAuth } from 'firebase-admin/auth';
+import { Prisma, SignUpMethod } from '@prisma/client';
+import { faker } from '@faker-js/faker';
+
 import {
   ReturnAuth,
   CreateUserParams,
   LoginParams,
   RefreshTokenParams,
+  EmailTypes,
+  DatabaseUser,
 } from 'types';
 import prisma from 'root/prisma/client';
 import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
 import { generateAccessToken, generateRefreshToken } from 'utils/token';
+import { SocialAuth } from 'types/auth';
+import { addToMailQueue } from 'queue/queue';
 import { UserService } from '.';
 
 export class AuthService {
@@ -61,6 +69,82 @@ export class AuthService {
       refreshToken,
     };
     await prisma.session.create({ data: sessionData });
+    return {
+      accessToken,
+      refreshToken,
+    };
+  };
+
+  static firebaseAuth = async (idToken: SocialAuth): Promise<ReturnAuth> => {
+    const decodeValue = await getAuth().verifyIdToken(idToken.idToken);
+    const { email, name } = decodeValue;
+
+    if (!email) throw new ApiError(errors.INVALID_CREDENTIALS);
+
+    const cryptPassword = await bcrypt.hash(
+      faker.internet.password({ length: 30 }),
+      8,
+    );
+    const data = {
+      name,
+      email,
+      password: cryptPassword,
+      signUpMethod: SignUpMethod.GOOGLE,
+    };
+
+    let user: DatabaseUser | null = null;
+    let userAlreadyExist = false;
+
+    try {
+      user = await prisma.user.create({ data });
+    } catch (e) {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2002'
+      ) {
+        user = await prisma.user.findUnique({
+          where: {
+            email,
+          },
+        });
+        userAlreadyExist = true;
+      }
+
+      if (!user) throw e;
+    }
+
+    if (!userAlreadyExist) {
+      addToMailQueue('Sign up Email', {
+        emailType: EmailTypes.SIGN_UP,
+        email,
+      });
+    }
+
+    const session = await prisma.session.findUnique({
+      where: { userId: user.id },
+    });
+    const accessToken = await generateAccessToken(user);
+
+    if (session) {
+      await prisma.session.update({
+        where: { id: session.id },
+        data: { accessToken },
+      });
+
+      return {
+        accessToken,
+        refreshToken: session.refreshToken,
+      };
+    }
+
+    const refreshToken = await generateRefreshToken(user);
+    const sessionData = {
+      userId: user.id,
+      accessToken,
+      refreshToken,
+    };
+    await prisma.session.create({ data: sessionData });
+
     return {
       accessToken,
       refreshToken,
