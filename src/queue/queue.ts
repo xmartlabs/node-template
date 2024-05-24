@@ -25,6 +25,7 @@ export const options = {
 
 export const mailQueue = new Queue(WorkerQueues.MAIL_QUEUE, {
   connection,
+  defaultJobOptions: options,
 });
 
 mailQueue.on('error', (err) => {
