@@ -13,7 +13,8 @@
     "deploy": "prisma migrate deploy && concurrently \"npm run deploy-server\" \"npm run deploy-worker\"",
     "deploy-server": "TS_NODE_BASEURL=./dist/src node -r dotenv/config -r tsconfig-paths/register dist/src/index.js",
     "deploy-worker": "TS_NODE_BASEURL=./dist/src node -r dotenv/config -r tsconfig-paths/register dist/worker/worker.js",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "docker-dev-cmd": "prisma migrate deploy && prisma generate && npm start"
   },
   "repository": {
     "type": "git",
