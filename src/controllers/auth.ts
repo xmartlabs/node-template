@@ -8,11 +8,14 @@ import {
   AuthenticatedRequest,
   LoginParams,
 } from 'types';
+import { validateLoginSchema, validateUserSchema } from 'data-schemas/auth';
 
 @Route('v1/auth')
 export class AuthControllerV1 extends Controller {
   @Post('/register')
   public async register(@Body() user: CreateUserParams): Promise<ReturnAuth> {
+    validateUserSchema(user);
+
     const authReturn = await AuthService.register(user);
     this.setStatus(httpStatus.CREATED);
     return authReturn;
@@ -20,6 +23,8 @@ export class AuthControllerV1 extends Controller {
 
   @Post('/login')
   public async login(@Body() loginParams: LoginParams): Promise<ReturnAuth> {
+    validateLoginSchema(loginParams);
+
     const authReturn = await AuthService.login(loginParams);
     this.setStatus(httpStatus.OK);
     return authReturn;
