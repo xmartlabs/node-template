@@ -8,8 +8,8 @@ import { errors } from 'config/errors';
 
 export const errorConverter = (
   err: any,
-  req: Request,
-  res: Response,
+  _req: Request,
+  _res: Response,
   next: NextFunction,
 ) => {
   let error = err;
@@ -21,7 +21,13 @@ export const errorConverter = (
   next(error);
 };
 
-export const errorHandler = (err: ApiError, req: Request, res: Response) => {
+export const errorHandler = (
+  err: ApiError,
+  _req: Request,
+  res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _next: NextFunction,
+) => {
   let { httpCode, message } = err;
   if (!err.isOperational) {
     httpCode =
