@@ -11,10 +11,10 @@ x-common: &common
     - ACCESS_TOKEN_EXPIRES_IN=1d
     - REFRESH_TOKEN_EXPIRES_IN=1d
     - EMAIL_FROM=test-client
-    - SMTP_USER=test
-    - SMTP_PASSWORD=test
-    - SMTP_HOST=test
-    - SMTP_PORT=1111
+    - SMTP_USER=
+    - SMTP_PASSWORD=
+    - SMTP_HOST=
+    - SMTP_PORT=
     - APP_NAME=APPNAME
     - REDIS_HOST=redis-server
     - REDIS_PASSWORD=my-password

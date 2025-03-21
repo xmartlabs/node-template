@@ -25,13 +25,22 @@ const envVarsSchema = z
     ACCESS_TOKEN_EXPIRES_IN: z.string(),
     REFRESH_TOKEN_EXPIRES_IN: z.string(),
     EMAIL_FROM: z.string(),
-    SMTP_USER: z.string(),
-    SMTP_PASSWORD: z.string(),
-    SMTP_HOST: z.string(),
+    SMTP_USER: z
+      .string()
+      .refine((val) => process.env.NODE_ENV !== 'production' || val),
+    SMTP_PASSWORD: z
+      .string()
+      .refine((val) => process.env.NODE_ENV !== 'production' || val),
+    SMTP_HOST: z
+      .string()
+      .refine((val) => process.env.NODE_ENV !== 'production' || val),
     SMTP_PORT: z
       .string()
       .transform((val) => Number(val))
-      .refine((val) => !Number.isNaN(val), 'EMAIL PORT must be a number'),
+      .refine(
+        (val) => process.env.NODE_ENV !== 'production' || val,
+        'EMAIL PORT must be a number',
+      ),
     APP_NAME: z.string(),
     REDIS_HOST: z.string(),
     REDIS_PASSWORD: z.string(),
@@ -76,10 +85,10 @@ export const config: Config = {
   accessTokenExpiresIn: envVars.ACCESS_TOKEN_EXPIRES_IN,
   refreshTokenExpiresIn: envVars.REFRESH_TOKEN_EXPIRES_IN,
   emailFrom: envVars.EMAIL_FROM,
-  smtpUser: envVars.SMTP_USER,
-  smtpPassword: envVars.SMTP_PASSWORD,
-  smtpHost: envVars.SMTP_HOST,
-  smtpPort: envVars.SMTP_PORT,
+  smtpUser: isProduction ? envVars.SMTP_USER : '',
+  smtpPassword: isProduction ? envVars.SMTP_PASSWORD : '',
+  smtpHost: isProduction ? envVars.SMTP_HOST : '',
+  smtpPort: isProduction ? envVars.SMTP_PORT : 0,
   appName: envVars.APP_NAME,
   redisHost: envVars.REDIS_HOST,
   redisPassword: envVars.REDIS_PASSWORD,
