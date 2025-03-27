@@ -93,6 +93,7 @@
     "tsconfig-paths": "^4.1.2",
     "tsoa": "^5.1.1",
     "winston": "^3.6.0",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "zod-prisma-types": "^3.1.6"
   }
 }
