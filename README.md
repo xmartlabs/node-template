@@ -19,10 +19,10 @@ Then install the required packages:
 npm install
 ```
 
-To run tests you'll need to create a `.env.test` file. You can simply copy the example file (`.env.example`) and rename it. You can check config.ts file for valid values. Before using the command to run the test, you'll need to start the docker container for the database use for testing, you can do this by using the command: 
+To run tests you'll need to create a `.env.test` file. You can simply copy the example file (`.env.example`) and rename it. You can check config.ts file for valid values. Before using the command to run the test, you'll need to start the docker container for the database use for testing, you can do this by using the command:
 
 ```shell
-docker-compose up db-testing
+docker compose up db-testing
 ```
 
 Tests are run using the typical command:
@@ -39,7 +39,7 @@ npm test
 * Install packages with `npm install`
 * Create a new `.env` file using the `.env.example` as an example. for that run `$ cp .env.example .env`.
 * Set the variables in the new environment file `.env` you created above.
-* Start the redis container with `docker-compose up redis-server`
+* Start the redis container with `docker compose up redis-server`
 * Start the project with `npm start`
 
 ## Project structure
@@ -67,7 +67,7 @@ npm test
 `prisma migrate` - Prisma migration system.
 Requeriments:
 * set a `DATABASE_URL` on .env - The format is specified in .env.example
-* Running database: There's a docker-compose file example: `docker-compose up -d`
+* Running database: There's a docker-compose file example: `docker compose up -d`
 * Run database migrations: `npx prisma migrate dev`
 
 If you want to change the database schema, you just have to change the `prisma/schema.prisma` file and generate a new migration with `npx prisma migrate dev --name migration_name`
