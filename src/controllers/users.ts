@@ -19,11 +19,13 @@ import {
   PasswordResetCodeRequest,
   ResetPassword,
 } from 'types';
+import { COOKIE_NAME } from 'utils/auth';
 
 @Route('v1/users')
 export class UsersControllerV1 extends Controller {
   @Get()
   @Security('jwt')
+  @Security('cookie')
   public async index(): Promise<ReturnUser[]> {
     const users = await UserService.all();
     this.setStatus(httpStatus.OK);
@@ -32,6 +34,7 @@ export class UsersControllerV1 extends Controller {
 
   @Get('/me')
   @Security('jwt')
+  @Security('cookie')
   public async getMe(
     @Request() req: AuthenticatedRequest,
   ): Promise<ReturnUser | null> {
@@ -42,6 +45,7 @@ export class UsersControllerV1 extends Controller {
 
   @Get('{id}')
   @Security('jwt')
+  @Security('cookie')
   public async find(@Path() id: string): Promise<ReturnUser | null> {
     const user = await UserService.find(id);
     this.setStatus(httpStatus.OK);
@@ -50,6 +54,7 @@ export class UsersControllerV1 extends Controller {
 
   @Put('{id}')
   @Security('jwt')
+  @Security('cookie')
   public async update(
     @Path() id: string,
     @Body() requestBody: UpdateUserParams,
@@ -61,8 +66,14 @@ export class UsersControllerV1 extends Controller {
 
   @Delete('{id}')
   @Security('jwt')
-  public async destroy(@Path() id: string): Promise<void> {
+  @Security('cookie')
+  public async destroy(
+    @Path() id: string,
+    @Request() req: AuthenticatedRequest,
+  ): Promise<void> {
+    const { user, res } = req;
     await UserService.destroy(id);
+    if (user.id === id) res?.clearCookie(COOKIE_NAME);
     this.setStatus(httpStatus.NO_CONTENT);
   }
 

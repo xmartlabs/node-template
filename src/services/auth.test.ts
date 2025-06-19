@@ -20,6 +20,9 @@ const loginParams = {
 
 const jwtRegex = /^(\w|\d|\.)+/;
 
+const uuidRegex =
+  /^[\w\d]{8}\b-[\w\d]{4}\b-[\w\d]{4}\b-[\w\d]{4}\b-[\w\d]{12}$/;
+
 const mockAccessToken = faker.string.alphanumeric({
   length: 50,
 });
@@ -44,6 +47,7 @@ describe('Auth service: ', () => {
       await expect(AuthService.register(registerBody)).resolves.toEqual({
         accessToken: expect.stringMatching(jwtRegex),
         refreshToken: expect.stringMatching(jwtRegex),
+        sessionId: expect.stringMatching(uuidRegex),
       });
 
       await expect(
@@ -99,6 +103,7 @@ describe('Auth service: ', () => {
         await expect(AuthService.login(loginParams)).resolves.toEqual({
           accessToken: expect.stringMatching(jwtRegex),
           refreshToken: expect.stringMatching(jwtRegex),
+          sessionId: expect.stringMatching(uuidRegex),
         });
       });
 
@@ -135,6 +140,7 @@ describe('Auth service: ', () => {
       ).resolves.toEqual({
         accessToken: expect.stringMatching(jwtRegex),
         refreshToken: expect.stringMatching(jwtRegex),
+        sessionId: expect.stringMatching(uuidRegex),
       });
     });
 

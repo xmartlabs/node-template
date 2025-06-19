@@ -55,6 +55,14 @@ const envVarsSchema = z
         'OTP EXPIRATION TIME must be a number',
       ),
     ENABLE_RATE_LIMIT: z.string(),
+    COOKIE_SECRET: z.string(),
+    COOKIE_EXPIRATION_SECONDS: z
+      .string()
+      .transform((val) => Number(val))
+      .refine(
+        (val) => !Number.isNaN(val),
+        'COOKIE EXPIRATION SECONDS must be a number',
+      ),
   })
   .passthrough();
 
@@ -87,4 +95,6 @@ export const config: Config = {
   redisUsername: envVars.REDIS_USERNAME,
   jobsRetentionHours: envVars.JOBS_RETENTION_HOURS,
   otpExpirationMinutes: envVars.OTP_EXPIRATION_MINUTES,
+  cookieSecret: envVars.COOKIE_SECRET,
+  cookieExpirationSeconds: envVars.COOKIE_EXPIRATION_SECONDS,
 };

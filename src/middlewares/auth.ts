@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { config } from 'config/config';
 import { ApiError } from 'utils/apiError';
 import { errors } from 'config/errors';
+import { verifyCookie } from 'utils/auth';
 
 export function expressAuthentication(
   request: Request,
@@ -31,6 +32,11 @@ export function expressAuthentication(
         });
       });
     });
+  }
+  if (securityName === 'cookie') {
+    const { signedCookies } = request;
+
+    return verifyCookie(signedCookies);
   }
   return Promise.resolve(null);
 }
