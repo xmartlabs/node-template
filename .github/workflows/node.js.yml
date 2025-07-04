@@ -53,10 +53,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js 20.9.0
+      - name: Use Node.js 22.17.0
         uses: actions/setup-node@v3
         with:
-          node-version: 20.9.0
+          node-version: 22.17.0
           cache: 'npm'
       - name: Install libraries
         run: npm ci --prefer-offline
