@@ -35,7 +35,6 @@ npm test
 ## Project Setup
 
 * Install Node 22.17.0 (as documented on [`.node-version`](./.node-version))
-* Install the appropriate version of npm: `npm i -g npm@10.1.0`
 * Install packages with `npm install`
 * Create a new `.env` file using the `.env.example` as an example. for that run `$ cp .env.example .env`.
 * Set the variables in the new environment file `.env` you created above.
